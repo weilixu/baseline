@@ -512,6 +512,10 @@ public class IdfReader {
 	}
     }
     
+    /**
+     * clone the object for baseline generation
+     * @return
+     */
     public IdfReader cloneIdf(){
 	return new IdfReader(path,deepCopyMap());
     }

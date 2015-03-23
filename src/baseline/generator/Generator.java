@@ -25,8 +25,13 @@ public class Generator {
 	    //cannot read the design file, check directory
 	}
 	baselineModel = designModel.cloneIdf();
-
+	
+	processThermalZones();
 	processOpaqueEnvelope();
+    }
+    
+    private void processThermalZones(){
+	
     }
     
     private void processOpaqueEnvelope(){
