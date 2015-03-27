@@ -37,6 +37,7 @@ public class BaselineEnvelope {
     //EnergyPlus objects that relates to the construction changes
     private static final String BLDG_SURFACE = "BuildingSurface:Detailed";
     private static final String BLDG_FENE = "FenestrationSurface:Detailed";
+    private static final String BLDG_INTERNAL_MASS="InternalMass";
 
     public BaselineEnvelope(IdfReader m, ClimateZone c){
 	baselineModel = m;
@@ -66,8 +67,34 @@ public class BaselineEnvelope {
 	}
 	
 	//change the EnergyPlus object that relates to the constructions
+	System.out.println("Start replacing the building surfaces...");
 	replaceBuildingSurface();
+	System.out.println("Start replacing the fenestration surfaces...");
 	replaceFenestrationSurface();
+	System.out.println("Start replacing the internal mass...");
+	replaceInternalMass();
+    }
+    
+    /**
+     * replace the internal mass objects with updated constructions.
+     * So far this method only replace the constructions with internal walls (partitions)
+     * regard to the generated idf file from Asset Score Tool
+     */
+    private void replaceInternalMass(){
+	HashMap<String, HashMap<String, ArrayList<ValueNode>>> mass = baselineModel.getObjectList(BLDG_INTERNAL_MASS);
+	Set<String> elementCount = mass.get(BLDG_INTERNAL_MASS).keySet();
+	Iterator<String> elementIterator = elementCount.iterator();
+	while(elementIterator.hasNext()){
+	    String count = elementIterator.next();
+	    ArrayList<ValueNode> massList = mass.get(BLDG_INTERNAL_MASS).get(count);
+	    
+	    for(ValueNode v: massList){
+		if(v.getDescription().equalsIgnoreCase("CONSTRUCTION NAME")){
+		    v.setAttribute(PARTITION);
+		}
+	    }
+	}
+	baselineModel.replaceEnergyPlusObjects(mass);
     }
     
     /**
@@ -115,6 +142,7 @@ public class BaselineEnvelope {
 		}
 	    }
 	}
+	baselineModel.replaceEnergyPlusObjects(surfaces);
     }
     
     /**
@@ -154,7 +182,7 @@ public class BaselineEnvelope {
 		    constructionName = EXTERNAL_FLOOR;
 		}else if(surfaceType.equalsIgnoreCase("FLOOR")&&outsideBoundary.equalsIgnoreCase("GROUND")){
 		    constructionName = SOG_FLOOR;
-		}else if(surfaceType.equalsIgnoreCase("Ceiling")){
+		}else if(surfaceType.equalsIgnoreCase("CEILING")){
 		    constructionName = INTERNAL_FLOOR;
 		}else if(surfaceType.equalsIgnoreCase("ROOF")){
 		    constructionName = ROOF;
@@ -171,5 +199,7 @@ public class BaselineEnvelope {
 		}
 	    }
 	}
+	
+	baselineModel.replaceEnergyPlusObjects(surfaces);
     }
 }

@@ -21,89 +21,96 @@ import baseline.util.ClimateZone;
  *
  */
 public class OpaqueEnvelopeParser {
-    
+
     private final SAXBuilder builder;
     private final File envelope;
     private Document document;
-    
+
     private final ClimateZone cZone;
     private ArrayList<EplusObject> objects;
-    
+
     private static final String FILE_NAME = "envelope.xml";
-    
-    public OpaqueEnvelopeParser(ClimateZone zone){
+
+    public OpaqueEnvelopeParser(ClimateZone zone) {
 	cZone = zone;
-	
+
 	builder = new SAXBuilder();
 	envelope = new File(FILE_NAME);
-	//read the file
-	try{
-	    document = (Document)builder.build(envelope);
-	}catch(Exception e){
+	// read the file
+	try {
+	    document = (Document) builder.build(envelope);
+	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	
+
 	objects = new ArrayList<EplusObject>();
-	envelopBuilder(); //build the model
+	envelopBuilder(); // build the model
     }
-    
+
     /**
      * get the selected objects
+     * 
      * @return
      */
-    public ArrayList<EplusObject> getObjects(){
+    public ArrayList<EplusObject> getObjects() {
 	return objects;
     }
-    
-    private void envelopBuilder(){
+
+    private void envelopBuilder() {
 	Element root = document.getRootElement();
 	builderHelper(root);
     }
-    
+
     /**
      * this method focus on finding the correct climate zone dataset
+     * 
      * @param current
      */
-    private void builderHelper(Element current){
+    private void builderHelper(Element current) {
 	List<Element> children = current.getChildren();
 	Iterator<Element> iterator = children.iterator();
-	while(iterator.hasNext()){
+	while (iterator.hasNext()) {
 	    Element child = iterator.next();
-	    //if there is an object, find the correct climate dataset
-	    if(child.getName().equals("dataset") && child.getAttribute("category").equals(cZone.toString())){
+	    // if there is an object, find the correct climate dataset
+	    System.out.println(child.getName());
+	    if (child.getName().equals("dataset")
+		    && child.getAttributeValue("category").equals(cZone.toString())) {
 		buildObject(child);
 	    }
 	}
     }
-    
+
     /**
      * Build the arraylist of energyplus objects under one specific dataset
+     * 
      * @param current
      */
-    private void buildObject(Element current){
+    private void buildObject(Element current) {
 	List<Element> children = current.getChildren();
 	Iterator<Element> iterator = children.iterator();
-	while(iterator.hasNext()){
+	while (iterator.hasNext()) {
 	    Element child = iterator.next();
 	    String category = child.getAttributeValue("description");
 
-	   EplusObject ob = new EplusObject(category);
-	   processFields(child,ob);
-	   objects.add(ob);
+	    EplusObject ob = new EplusObject(category);
+	    processFields(child, ob);
+	    objects.add(ob);
 	}
     }
-    
+
     /**
      * process the fields under one specific object
+     * 
      * @param node
      * @param object
      */
-    private void processFields(Element node, EplusObject object){
+    private void processFields(Element node, EplusObject object) {
 	List<Element> children = node.getChildren();
 	Iterator<Element> iterator = children.iterator();
-	while(iterator.hasNext()){
+	while (iterator.hasNext()) {
 	    Element child = iterator.next();
-	    KeyValuePair pair = new KeyValuePair(child.getAttributeValue("description"),child.getText());
+	    KeyValuePair pair = new KeyValuePair(
+		    child.getAttributeValue("description"), child.getText());
 	    object.addField(pair);
 	}
     }

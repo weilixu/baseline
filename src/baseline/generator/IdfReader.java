@@ -372,9 +372,25 @@ public class IdfReader {
 	    Integer count = eplusMap.get(objectName).size();
 	    elementCount = count.toString();
 	} else {
+	    eplusMap.put(objectName, new HashMap<String, ArrayList<ValueNode>>());
 	    elementCount = "0";
 	}
 	eplusMap.get(objectName).put(elementCount, newObject);
+    }
+    
+    /**
+     * Remove the old objects in the EnergyPlus and replace them with a new set of objects.
+     * Error handling is not complete for this method...cannot detect the object missing in this method
+     * @param map
+     */
+    public void replaceEnergyPlusObjects(HashMap<String, HashMap<String, ArrayList<ValueNode>>> map){
+	Set<String> objectList = map.keySet();
+	Iterator<String> objectIterator = objectList.iterator();
+	while(objectIterator.hasNext()){
+	    String object = objectIterator.next();
+	    eplusMap.remove(object);
+	    eplusMap.put(object, map.get(object));
+	}
     }
 
     public String copyExistingEplusObject(String objectName, String elementCount) {

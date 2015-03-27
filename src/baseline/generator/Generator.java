@@ -15,6 +15,8 @@ public class Generator {
     private final ClimateZone cZone;
 
     private BaselineEnvelope envelopeProcessor;
+    
+    private final File energyplusFile;
 
     public Generator(File idfFile, File weatherFile, ClimateZone zone,
 	    boolean existing) {
@@ -23,8 +25,9 @@ public class Generator {
 	isExisting = existing;
 
 	// establish the design model
+	energyplusFile = idfFile;
 	designModel = new IdfReader();
-	designModel.setFilePath(idfFile.getAbsolutePath());
+	designModel.setFilePath(energyplusFile.getAbsolutePath());
 	try {
 	    designModel.readEplusFile();
 	} catch (IOException e) {
@@ -52,5 +55,10 @@ public class Generator {
 	if (!isExisting) {
 	    envelopeProcessor.execute();
 	}
+    }
+    
+    //simple write out method, needs to be update later
+    public void writeBaselineIdf(){
+	baselineModel.WriteIdf(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
     }
 }
