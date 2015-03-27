@@ -1,5 +1,10 @@
 package baseline.util;
-
+/**
+ * This represents the ASHRAE Climate Zones
+ * 
+ * @author Weili
+ *
+ */
 public enum ClimateZone {
     CLIMATEZONE1("Climate Zone 1"),
     CLIMATEZONE2("Climate Zone 2"),

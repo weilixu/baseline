@@ -1,5 +1,11 @@
 package baseline.generator;
-
+/**
+ * This class stores one key and value pair under an EnergyPlus object
+ * key indicates the variable's name
+ * value indicates the value of the variable.
+ * @author Weili
+ *
+ */
 public class KeyValuePair {
     
     private final String key;

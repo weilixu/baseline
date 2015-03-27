@@ -143,6 +143,21 @@
 				<field description = "Solar Absorptance" type = "Double">0.7</field>
 				<field description = "Visible Absorptance" type = "Double">0.7</field>
 			</object>
+			<object description="WindowMaterial:SimpleGlazingSystem" reference="Climate Zone 3">
+				<field description = "Name" type = "String">Simple Baseline</field>
+				<field description = "U-Factor" type="Double">3.69</field>
+				<field description = "Solar Heat Gain Coefficient" type="Double">0.25</field>
+			</object>
+			<object description="WindowMaterial:SimpleGlazingSystem" reference="Climate Zone 3">
+				<field description = "Name" type = "String">Simple Curtain Wall</field>
+				<field description = "U-Factor" type="Double">3.41</field>
+				<field description = "Solar Heat Gain Coefficient" type="Double">0.25</field>
+			</object>
+			<object description="WindowMaterial:SimpleGlazingSystem" reference="Climate Zone 3">
+				<field description = "Name" type = "String">Simple Skylight</field>
+				<field description = "U-Factor" type="Double">3.92</field>
+				<field description = "Solar Heat Gain Coefficient" type="Double">0.39</field>
+			</object>
 			<object description="Construction" reference = "Climate Zone 3">
 				<field description = "Name" type="String">Project Wall</field>
 				<field description = "Outside Layer" type="String">Stucco</field>
@@ -181,6 +196,18 @@
 				<field description = "Outside Layer" type="String">Slab On Grade Concrete</field>
 				<field description = "Layer 2" type="String">SOG Insulation</field>
 			</object>
+			<object description="Construction" reference = "Climate Zone 3">
+				<field description = "Name" type="String">Project Window</field>
+				<field description = "Outside Layer" type="String">Simple Baseline</field>
+			</object>
+			<object description="Construction" reference = "Climate Zone 3">
+				<field description = "Name" type="String">Project Curtain Wall</field>
+				<field description = "Outside Layer" type="String">Simple Curtain Wall</field>
+			</object>
+			<object description="Construction" reference = "Climate Zone 3">
+				<field description = "Name" type="String">Project Skylight</field>
+				<field description = "Outside Layer" type="String">Simple Skylight</field>
+			</object>			
 		</dataset>
 	</climatezone3>
 </envelope>

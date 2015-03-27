@@ -73,7 +73,6 @@ public class OpaqueEnvelopeParser {
 	    if(child.getName().equals("dataset") && child.getAttribute("category").equals(cZone.toString())){
 		buildObject(child);
 	    }
-	    
 	}
     }
     

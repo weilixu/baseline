@@ -1,7 +1,13 @@
 package baseline.generator;
 
 import java.util.ArrayList;
-
+/**
+ * This is the class stores the Energyplus object.
+ * objectName indicates the energyplus object name,
+ * <link>KeyValuePair<link> stores the values under this object
+ * @author Weili
+ *
+ */
 public class EplusObject {
     private final String objectName;
     private final ArrayList<KeyValuePair> objectValues;
@@ -25,7 +31,7 @@ public class EplusObject {
      * get the size of the object fields.
      * @return
      */
-    public int size(){
+    public int getSize(){
 	return size;
     }
     
@@ -37,5 +43,10 @@ public class EplusObject {
     public KeyValuePair getKeyValuePair(int index){
 	return objectValues.get(index);
     }
+    
+    public String getObjectName(){
+	return objectName;
+    }
+    
 
 }

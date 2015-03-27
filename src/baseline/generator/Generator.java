@@ -34,6 +34,12 @@ public class Generator {
 	
     }
     
+    /**
+     * process all the envelopes. This process includes:
+     * 1. Delete the original constructions
+     * 2. Replace with a standard set of baseline constructions with respect to the thermal zones
+     * 3. Replace the construction name in the buildingsurface:detailed and FenestrationSurface:Detailed objects
+     */
     private void processOpaqueEnvelope(){
 	
     }
