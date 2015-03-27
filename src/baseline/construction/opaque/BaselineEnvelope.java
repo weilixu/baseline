@@ -71,7 +71,10 @@ public class BaselineEnvelope {
     }
     
     /**
-     * replace the fenestration surface
+     * replace the fenestration surface.
+     * The checking algorithm depends on the name generated from asset score tool.
+     * fenestration --> windows
+     * skylight -->Skylight
      */
     private void replaceFenestrationSurface(){
 	HashMap<String, HashMap<String, ArrayList<ValueNode>>> surfaces = baselineModel.getObjectList(BLDG_FENE);
@@ -84,16 +87,23 @@ public class BaselineEnvelope {
 	    
 	    //first loop, find the criteria for the selection
 	    for(ValueNode v: fenestrationList){
-		if(v.getDescription().equalsIgnoreCase("SURFACE TYPE")){
-		    surfaceType = v.getAttribute();
+		if(v.getDescription().equalsIgnoreCase("CONSTRUCTION NAME")){
+		    String construction = v.getAttribute();
+		    if(construction.contains("fenestration")){
+			surfaceType = "window";
+		    }else if(construction.contains("skylight")){
+			surfaceType = "skylight";
+		    }
 		}
 	    }
 	    
 	    //set the construction name for the fenestration
 	    String constructionName = null;
 	    if(surfaceType!=null){
-		if(surfaceType.equalsIgnoreCase("WINDOW")){
+		if(surfaceType.equalsIgnoreCase("window")){
 		    constructionName = WINDOW;
+		}else if(surfaceType.equalsIgnoreCase("skylight")){
+		    constructionName = SKYLIGHT;
 		}
 	    }
 	    
