@@ -1,9 +1,13 @@
 package baseline.construction.opaque;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import baseline.generator.EplusObject;
 import baseline.generator.IdfReader;
+import baseline.generator.IdfReader.ValueNode;
 import baseline.util.ClimateZone;
 
 public class BaselineEnvelope {
@@ -62,10 +66,100 @@ public class BaselineEnvelope {
 	}
 	
 	//change the EnergyPlus object that relates to the constructions
-	
-
+	replaceBuildingSurface();
+	replaceFenestrationSurface();
     }
     
+    /**
+     * replace the fenestration surface
+     */
+    private void replaceFenestrationSurface(){
+	HashMap<String, HashMap<String, ArrayList<ValueNode>>> surfaces = baselineModel.getObjectList(BLDG_FENE);
+	Set<String> elementCount = surfaces.get(BLDG_FENE).keySet();
+	Iterator<String> elementIterator = elementCount.iterator();
+	while(elementIterator.hasNext()){
+	    String count = elementIterator.next();
+	    ArrayList<ValueNode> fenestrationList = surfaces.get(BLDG_FENE).get(count);
+	    String surfaceType = null;
+	    
+	    //first loop, find the criteria for the selection
+	    for(ValueNode v: fenestrationList){
+		if(v.getDescription().equalsIgnoreCase("SURFACE TYPE")){
+		    surfaceType = v.getAttribute();
+		}
+	    }
+	    
+	    //set the construction name for the fenestration
+	    String constructionName = null;
+	    if(surfaceType!=null){
+		if(surfaceType.equalsIgnoreCase("WINDOW")){
+		    constructionName = WINDOW;
+		}
+	    }
+	    
+	    //second loop, change the construction name
+	    for(ValueNode v: fenestrationList){
+		if(v.getDescription().equalsIgnoreCase("CONSTRUCTION NAME")){
+		    v.setAttribute(constructionName);
+		    break;
+		}
+	    }
+	}
+    }
     
+    /**
+     * replace the building surface constructions
+     */
+    private void replaceBuildingSurface(){
+	HashMap<String, HashMap<String, ArrayList<ValueNode>>> surfaces = baselineModel.getObjectList(BLDG_SURFACE);
+	Set<String> elementCount = surfaces.get(BLDG_SURFACE).keySet();
+	Iterator<String> elementIterator = elementCount.iterator();
+	while(elementIterator.hasNext()){
+	    String count = elementIterator.next();
+	    ArrayList<ValueNode> surfaceList = surfaces.get(BLDG_SURFACE).get(count);
+	    String surfaceType = null;
+	    String outsideBoundary = null;
+	    
+	    //first loop, find the criteria for the selection
+	    for(ValueNode v: surfaceList){
+		if(v.getDescription().equalsIgnoreCase("SURFACE TYPE")){
+		    surfaceType = v.getAttribute();
+		}
+		if(v.getDescription().equalsIgnoreCase("OUTSIDE BOUNDARY CONDITION")){
+		    outsideBoundary = v.getAttribute();
+		}
+	    }
+	    
+	    String constructionName = null;
+	    if(surfaceType!=null && outsideBoundary!=null){
+		if(surfaceType.equalsIgnoreCase("WALL")&&outsideBoundary.equalsIgnoreCase("OUTDOORS")){
+		    constructionName = EXTERNAL_WALL;
+		}else if(surfaceType.equalsIgnoreCase("WALL")&&outsideBoundary.equalsIgnoreCase("SURFACE")){
+		    constructionName = PARTITION;
+		}else if(surfaceType.equalsIgnoreCase("WALL")&&outsideBoundary.equalsIgnoreCase("GROUND")){
+		    constructionName = BG_WALL;
+		}else if(surfaceType.equalsIgnoreCase("FLOOR")&&outsideBoundary.equalsIgnoreCase("SURFACE")){
+		    constructionName = INTERNAL_FLOOR;
+		}else if(surfaceType.equalsIgnoreCase("FLOOR")&&outsideBoundary.equalsIgnoreCase("OUTDOORS")){
+		    constructionName = EXTERNAL_FLOOR;
+		}else if(surfaceType.equalsIgnoreCase("FLOOR")&&outsideBoundary.equalsIgnoreCase("GROUND")){
+		    constructionName = SOG_FLOOR;
+		}else if(surfaceType.equalsIgnoreCase("Ceiling")){
+		    constructionName = INTERNAL_FLOOR;
+		}else if(surfaceType.equalsIgnoreCase("ROOF")){
+		    constructionName = ROOF;
+		}else{
+		    constructionName = ""; //hopefully never gets to this point
+		}
+	    }
 
+	    //second loop, modify the construction name
+	    for(ValueNode v: surfaceList){
+		if(v.getDescription().equalsIgnoreCase("CONSTRUCTION NAME")){
+		    v.setAttribute(constructionName);
+		    break;
+		}
+	    }
+	}
+    }
 }

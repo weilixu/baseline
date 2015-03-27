@@ -3,6 +3,7 @@ package baseline.generator;
 import java.io.File;
 import java.io.IOException;
 
+import baseline.construction.opaque.BaselineEnvelope;
 import baseline.util.ClimateZone;
 
 public class Generator {
@@ -10,6 +11,8 @@ public class Generator {
     private final IdfReader designModel;
     private final IdfReader baselineModel;
     private final ClimateZone cZone;
+    
+    private BaselineEnvelope envelopeProcessor;
     
     public Generator(File idfFile, File weatherFile,ClimateZone zone){
 	//identify the climate zone
@@ -27,6 +30,8 @@ public class Generator {
 	baselineModel = designModel.cloneIdf();
 	
 	processThermalZones();
+	
+	envelopeProcessor = new BaselineEnvelope(baselineModel,cZone);
 	processOpaqueEnvelope();
     }
     
@@ -41,7 +46,7 @@ public class Generator {
      * 3. Replace the construction name in the buildingsurface:detailed and FenestrationSurface:Detailed objects
      */
     private void processOpaqueEnvelope(){
-	
+	envelopeProcessor.execute();
     }
     
     

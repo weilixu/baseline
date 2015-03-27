@@ -255,7 +255,7 @@ public class IdfReader {
 	return list;
     }
 
-    protected HashMap<String, HashMap<String, ArrayList<ValueNode>>> getObjectList(
+    public HashMap<String, HashMap<String, ArrayList<ValueNode>>> getObjectList(
 	    String object) {
 	if (eplusMap.get(object) == null) {
 	    return null;
