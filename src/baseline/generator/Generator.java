@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import baseline.construction.opaque.BaselineEnvelope;
+import baseline.runeplus.SizingRun;
 import baseline.util.ClimateZone;
 
 public class Generator {
@@ -13,12 +14,14 @@ public class Generator {
     private final IdfReader designModel;
     private final IdfReader baselineModel;
     private final ClimateZone cZone;
+    private final SizingRun eplusSizing;
 
     private BaselineEnvelope envelopeProcessor;
     
     private final File energyplusFile;
+    private final File weatherFile;
 
-    public Generator(File idfFile, File weatherFile, ClimateZone zone,
+    public Generator(File idfFile, File wea, ClimateZone zone,
 	    boolean existing) {
 	// identify the climate zone
 	cZone = zone;
@@ -26,6 +29,8 @@ public class Generator {
 
 	// establish the design model
 	energyplusFile = idfFile;
+	weatherFile = wea;
+	
 	designModel = new IdfReader();
 	designModel.setFilePath(energyplusFile.getAbsolutePath());
 	try {
@@ -34,15 +39,28 @@ public class Generator {
 	    e.printStackTrace();
 	    // cannot read the design file, check directory
 	}
+	//set-up sizing simulator
+	
 	baselineModel = designModel.cloneIdf();
-	processThermalZones();
+	
+	eplusSizing = new SizingRun(weatherFile);
+	modifyOutput();
 
 	envelopeProcessor = new BaselineEnvelope(baselineModel, cZone);
 	processOpaqueEnvelope();
     }
-
-    private void processThermalZones() {
-
+    
+    private void modifyOutput(){
+	//change output units
+	baselineModel.removeEnergyPlusObject("OutputControl:Table:Style");
+	String[] objectValue = {"HTML","JtoKWH"};
+	String[] objectDes = {"Column Separator","Unit Conversion"};
+	baselineModel.addNewEnergyPlusObject("OutputControl:Table:Style",objectValue,objectDes);
+	
+	//change the reporting tolerances
+	String[] toleranceValue = {"0.556","0.556"};
+	String[] toleranceDes = {"Tolerance for Time Heating Setpoint Not Met", "Tolerance for Time Cooling Setpoint Not Met"};
+	baselineModel.addNewEnergyPlusObject("OutputControl:ReportingTolerances",toleranceValue,toleranceDes);
     }
 
     /**
@@ -58,7 +76,9 @@ public class Generator {
     }
     
     //simple write out method, needs to be update later
-    public void writeBaselineIdf(){
+    public void writeBaselineIdf() throws IOException{
 	baselineModel.WriteIdf(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
+	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));
+	File results = eplusSizing.runEnergyPlus();
     }
 }

@@ -199,7 +199,6 @@ public class BaselineEnvelope {
 		}
 	    }
 	}
-	
 	baselineModel.replaceEnergyPlusObjects(surfaces);
     }
 }
