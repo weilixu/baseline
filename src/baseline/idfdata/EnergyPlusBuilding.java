@@ -24,6 +24,16 @@ public class EnergyPlusBuilding {
 	totalCoolingLoad = 0.0;
 	totalHeatingLoad = 0.0;
     }
+    
+    /**
+     * Reload the data from energyplus output.
+     */
+    public void initializeBuildingData(){
+	thermalZoneList.clear();
+	floorMap.clear();
+	totalCoolingLoad = 0.0;
+	totalHeatingLoad = 0.0;
+    }
 
     /*
      * All Setter Methods

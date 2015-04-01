@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import baseline.construction.opaque.BaselineEnvelope;
+import baseline.htmlparser.SizingHTMLParser;
+import baseline.idfdata.EnergyPlusBuilding;
 import baseline.runeplus.SizingRun;
 import baseline.util.ClimateZone;
 
@@ -20,6 +22,10 @@ public class Generator {
     
     private final File energyplusFile;
     private final File weatherFile;
+    
+    private File htmlOutput;
+    
+    private EnergyPlusBuilding building;
 
     public Generator(File idfFile, File wea, ClimateZone zone,
 	    boolean existing) {
@@ -47,7 +53,20 @@ public class Generator {
 	modifyOutput();
 
 	envelopeProcessor = new BaselineEnvelope(baselineModel, cZone);
+	//change the envelope materials and lighting power densities
 	processOpaqueEnvelope();
+	processLighting();
+	
+	//run sizing simulations
+	try {
+	    sizingRun();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	
+	SizingHTMLParser.processOutputs(htmlOutput);
+	SizingHTMLParser.extractBldgBasicInfo(building);
+	SizingHTMLParser.extractThermalZones(building);
     }
     
     private void modifyOutput(){
@@ -75,10 +94,18 @@ public class Generator {
 	}
     }
     
+    /**
+     * Process all the lighting power densities according to table 9.5.1 or table 9.6.1
+     * This will implement later...
+     */
+    private void processLighting(){
+	
+    }
+    
     //simple write out method, needs to be update later
-    public void writeBaselineIdf() throws IOException{
+    private void sizingRun() throws IOException{
 	baselineModel.WriteIdf(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));
-	File results = eplusSizing.runEnergyPlus();
+	htmlOutput = eplusSizing.runEnergyPlus();
     }
 }

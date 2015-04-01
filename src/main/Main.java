@@ -15,7 +15,6 @@ public class Main {
 	ClimateZone zone = ClimateZone.CLIMATEZONE3A;
 	
 	Generator generator = new Generator(energyplusFile,weatherFile,zone,false);
-	generator.writeBaselineIdf();
 	System.out.println("done!");
     }
 }

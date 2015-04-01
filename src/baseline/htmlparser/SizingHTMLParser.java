@@ -60,6 +60,7 @@ public final class SizingHTMLParser {
      * Can be expanded to add floor area etc.
      */
     public static void extractThermalZones(EnergyPlusBuilding building){
+	building.initializeBuildingData();
 	Elements thermalZoneSummary = doc.getElementsByAttributeValue("tableID", "Input Verification and Results Summary:Zone Summary");
 	Elements zoneList = thermalZoneSummary.get(0).getElementsByTag("tr");
 	//jump the first <tr> which contains the meta data
@@ -75,7 +76,6 @@ public final class SizingHTMLParser {
 	    }
 	}
     }
-    
     
     private static void extractBuildingFloorArea(EnergyPlusBuilding building){
 	int areaIndex = 1; //floor area is at index 1 of each column
