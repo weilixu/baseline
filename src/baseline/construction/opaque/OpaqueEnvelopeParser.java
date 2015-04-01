@@ -74,7 +74,7 @@ public class OpaqueEnvelopeParser {
 	    // if there is an object, find the correct climate dataset
 	    System.out.println(child.getName());
 	    if (child.getName().equals("dataset")
-		    && child.getAttributeValue("category").equals(cZone.toString())) {
+		    && cZone.toString().contains(child.getAttributeValue("category"))) {
 		buildObject(child);
 	    }
 	}

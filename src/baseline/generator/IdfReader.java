@@ -745,7 +745,11 @@ public class IdfReader {
 		attribute = originalAttribute.substring(0,
 			originalAttribute.indexOf(";"));
 		isEnd = true;
-	    } else if (originalAttribute.indexOf(",") > -1) {
+		//this is accomdation to the open studio generated buildingsurface:detail object where
+		//coordinates for one point are listed in a line. 35.6615996952, 10.6679966472, 32.9184,  !- X,Y,Z Vertex 1 {m}
+	    } else if(originalAttribute.split(",").length>1){
+		attribute = originalAttribute.substring(0,originalAttribute.length()-1);
+	    }else if (originalAttribute.indexOf(",") > -1) {
 		attribute = originalAttribute.substring(0,
 			originalAttribute.indexOf(","));
 	    } else {

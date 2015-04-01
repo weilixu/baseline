@@ -20,9 +20,14 @@ public class AssetScoreThermalZone implements ThermalZone{
     private String floor;
     private String zoneIdentification;
     private String hvac;
+    private String originalZoneName;
+    
+    private Double coolingLoad;
+    private Double heatingLoad;
     
     
     public AssetScoreThermalZone(String zoneName){
+	originalZoneName = zoneName;
 	String[] zoneCharacters = zoneName.split("_");
 	block = zoneCharacters[blockIndex];
 	zoneType = zoneCharacters[zoneTypeIndex];
@@ -38,19 +43,16 @@ public class AssetScoreThermalZone implements ThermalZone{
     @Override
     public void setFloor(String floor) {
 	this.floor = floor;
-	
     }
 
     @Override
     public void setZoneType(String zoneType) {
 	this.zoneType = zoneType;
-	
     }
 
     @Override
     public void setZoneIdentification(String zoneIdentification) {
 	this.zoneIdentification = zoneIdentification;
-	
     }
 
     @Override
@@ -82,5 +84,30 @@ public class AssetScoreThermalZone implements ThermalZone{
     @Override
     public String getHVACZone() {
 	return hvac;
+    }
+
+    @Override
+    public String getFullName() {
+	return originalZoneName;
+    }
+
+    @Override
+    public void setCoolingLoad(Double load) {
+	coolingLoad = load;
+    }
+
+    @Override
+    public void setHeaingLoad(Double load) {
+	heatingLoad = load;
+    }
+
+    @Override
+    public Double getCoolingLoad() {
+	return coolingLoad;
+    }
+
+    @Override
+    public Double getHeatingLoad() {
+	return heatingLoad;
     }
 }
