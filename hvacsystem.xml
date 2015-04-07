@@ -1210,7 +1210,7 @@
 			<field description = "Zone Heating Design Supply Air Temperature Difference" type = "Double">11.0</field>
 			<field description = "Zone Cooling Design Supply Air Humidity Ratio" type = "Double">0.0103</field>
 			<field description = "Zone Heating Design Supply Air Humidity Ratio" type = "Double">0.0066</field>
-			<field description = "Design Specification Outdoor Air Object Name" type = "String">OutdoorAir</field>
+			<field description = "Design Specification Outdoor Air Object Name" type = "String">Zone_ OutdoorAir</field>
 			<field description = "Zone Heating Sizing Factor" type = "Double">1.25</field>
 			<field description = "Zone Cooling Sizing Factor" type = "Double">1.15</field>
 			<field description = "Cooling Design Air Flow Method" type = "String">DesignDay</field>

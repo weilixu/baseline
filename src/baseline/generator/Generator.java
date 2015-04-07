@@ -67,6 +67,8 @@ public class Generator {
 	SizingHTMLParser.processOutputs(htmlOutput);
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);
+	
+	//buildingHVAC();
     }
     
     private void modifyOutput(){
@@ -99,6 +101,10 @@ public class Generator {
      * This will implement later...
      */
     private void processLighting(){
+	
+    }
+    
+    private void buildHVAC(){
 	
     }
     
