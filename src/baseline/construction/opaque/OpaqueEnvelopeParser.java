@@ -91,8 +91,9 @@ public class OpaqueEnvelopeParser {
 	while (iterator.hasNext()) {
 	    Element child = iterator.next();
 	    String category = child.getAttributeValue("description");
+	    String reference = child.getAttributeValue("reference");
 
-	    EplusObject ob = new EplusObject(category);
+	    EplusObject ob = new EplusObject(category,reference);
 	    processFields(child, ob);
 	    objects.add(ob);
 	}

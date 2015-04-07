@@ -9,7 +9,7 @@ package baseline.generator;
 public class KeyValuePair {
     
     private final String key;
-    private final String value;
+    private String value;
     
     public KeyValuePair(String k, String v){
 	key = k;
@@ -22,5 +22,13 @@ public class KeyValuePair {
     
     public String getValue(){
 	return value;
+    }
+    
+    public void setValue(String v){
+	value = v;
+    }
+    
+    public KeyValuePair clone(){
+	return new KeyValuePair(key,value);
     }
 }

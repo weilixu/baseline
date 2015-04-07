@@ -10,12 +10,24 @@ import java.util.ArrayList;
  */
 public class EplusObject {
     private final String objectName;
+    private final String reference;
     private final ArrayList<KeyValuePair> objectValues;
     private int size = 0;
     
-    public EplusObject(String n){
+    public EplusObject(String n, String r){
 	objectName = n;
+	reference = r;
 	objectValues = new ArrayList<KeyValuePair>();
+    }
+    
+    /**
+     * insert a keyvaluepair into the database
+     * @param i
+     * @param field
+     */
+    public void insertFiled(int i, KeyValuePair field){
+	objectValues.add(i, field);
+	size++;
     }
     
     /**
@@ -48,5 +60,19 @@ public class EplusObject {
 	return objectName;
     }
     
+    public String getReference(){
+	return reference;
+    }
+    
+    /**
+     * clone the whole eplusobject
+     */
+    public EplusObject clone(){
+	EplusObject temp = new EplusObject(objectName,reference);
+	for(KeyValuePair kvp: objectValues){
+	    temp.addField(kvp.clone());
+	}
+	return temp;
+    }
 
 }
