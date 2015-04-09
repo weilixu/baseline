@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import baseline.construction.opaque.BaselineEnvelope;
 import baseline.htmlparser.SizingHTMLParser;
+import baseline.hvac.BaselineHVAC;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.runeplus.SizingRun;
+import baseline.util.BuildingType;
 import baseline.util.ClimateZone;
 
 public class Generator {
@@ -19,6 +21,7 @@ public class Generator {
     private final SizingRun eplusSizing;
 
     private BaselineEnvelope envelopeProcessor;
+    private BaselineHVAC baselineHVAC;
     
     private final File energyplusFile;
     private final File weatherFile;
@@ -58,19 +61,25 @@ public class Generator {
 	processLighting();
 	
 	//run sizing simulations
-	try {
-	    sizingRun();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+//	try {
+//	    sizingRun();
+//	} catch (IOException e) {
+//	    e.printStackTrace();
+//	}
+	System.out.println("Finish sizing round");
+	building = new EnergyPlusBuilding(cZone, baselineModel);
 	
-	building = new EnergyPlusBuilding(cZone, baselineModel);	
+	//for test only
+	htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
+	
 	SizingHTMLParser.processOutputs(htmlOutput);
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);
+	building.getThermalZoneInfo();
 	
-	//buildingHVAC();
+	buildingHVAC();
     }
+
     
     private void modifyOutput(){
 	//change output units
@@ -105,8 +114,18 @@ public class Generator {
 	
     }
     
-    private void buildHVAC(){
-	
+    private void buildingHVAC(){
+	BuildingType bldgType = BuildingType.NONRESIDENTIAL;
+	baselineHVAC = new BaselineHVAC(bldgType,building);
+	baselineHVAC.selectSystem();
+	try{
+		baselineHVAC.replaceHVACObjects();
+		baselineHVAC.getBaseline().WriteIdf(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
+		eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));
+		htmlOutput = eplusSizing.runEnergyPlus();
+	}catch(IOException e){
+	    e.printStackTrace();
+	}
     }
     
     //simple write out method, needs to be update later

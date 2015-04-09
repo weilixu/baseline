@@ -1,9 +1,5 @@
 package baseline.hvac.system7;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import baseline.generator.EplusObject;
 import baseline.hvac.HVACSystem;
 
 /**
@@ -13,7 +9,6 @@ import baseline.hvac.HVACSystem;
  */
 public interface SystemType7 extends HVACSystem{
     
-    public HashMap<String, ArrayList<EplusObject>> getSystemData();
     
 
 }

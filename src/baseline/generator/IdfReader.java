@@ -727,11 +727,13 @@ public class IdfReader {
 	private boolean isCriticalLine = false;
 
 	public ValueNode(String att, String des) {
-	    if (des.indexOf("{") > -1) {
-		description = des.substring(0, des.indexOf(" {"));
-		unit = des.substring(des.indexOf("{"));
-	    } else {
-		description = des;
+	    if(des!=null){
+		    if (des.indexOf("{") > -1) {
+			description = des.substring(0, des.indexOf(" {"));
+			unit = des.substring(des.indexOf("{"));
+		    } else {
+			description = des;
+		    }
 	    }
 	    originalAttribute = att;
 

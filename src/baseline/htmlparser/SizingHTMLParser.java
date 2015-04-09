@@ -70,8 +70,10 @@ public final class SizingHTMLParser {
 	    if(info.get(conditionIndex).text().equalsIgnoreCase("YES")){
 		String zoneName = info.get(0).text();
 		ThermalZone temp = new AssetScoreThermalZone(zoneName);
-		temp.setCoolingLoad(getZoneCoolingLoad(zoneName));
-		temp.setHeaingLoad(getZoneHeatingLoad(zoneName));
+		double coolLoad = getZoneCoolingLoad(zoneName);
+		double heatLoad = getZoneHeatingLoad(zoneName);
+		temp.setCoolingLoad(coolLoad);
+		temp.setHeaingLoad(heatLoad);
 		building.addThermalZone(temp);
 	    }
 	}

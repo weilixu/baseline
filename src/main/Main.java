@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import baseline.generator.Generator;
+import baseline.util.BuildingType;
 import baseline.util.ClimateZone;
 
 public class Main {

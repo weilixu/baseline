@@ -83,7 +83,6 @@ public class EnergyPlusBuilding {
      * @return
      */
     public void getThermalZoneInfo() {
-
 	// building the thermal zones
 	for (ThermalZone zone : thermalZoneList) {
 	    String block = zone.getBlock();
@@ -93,7 +92,7 @@ public class EnergyPlusBuilding {
 	    if (!floorMap.containsKey(level)) {
 		floorMap.put(level, new ArrayList<ThermalZone>());
 	    }
-	    floorMap.get(zone.getFloor()).add(zone);
+	    floorMap.get(level).add(zone);
 	    totalCoolingLoad += zone.getCoolingLoad();
 	    totalHeatingLoad += zone.getHeatingLoad();
 	}

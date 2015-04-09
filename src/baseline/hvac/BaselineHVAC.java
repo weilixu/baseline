@@ -5,7 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
+import baseline.generator.EplusObject;
 import baseline.generator.IdfReader;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.util.BuildingType;
@@ -32,10 +36,14 @@ public class BaselineHVAC {
     private static final int smallFloorNumber=3;
     private static final int mediumFloorNumber=5;
 
-    public BaselineHVAC(IdfReader m, BuildingType type, EnergyPlusBuilding bldg) {
+    public BaselineHVAC(BuildingType type, EnergyPlusBuilding bldg) {
 	building = bldg;
-	baselineModel = m;
+	baselineModel = building.getBaselineModel();
 	bldgType = type;
+    }
+    
+    public IdfReader getBaseline(){
+	return baselineModel;
     }
 
     /**
@@ -43,10 +51,34 @@ public class BaselineHVAC {
      * 
      * @throws IOException
      */
-    public void removeHVACObjects() throws IOException {
+    public void replaceHVACObjects() throws IOException {
 	processObjectLists();
 	for (String s : objectList) {
 	    baselineModel.removeEnergyPlusObject(s);
+	}
+	mergeSystem();
+    }
+    
+    /**
+     * Merge the system with baseline model, this should be called after removeHVACObjects
+     */
+    private void mergeSystem(){
+	HashMap<String, ArrayList<EplusObject>> hvac = system.getSystemData();
+	Set<String> hvacSet = hvac.keySet();
+	Iterator<String> hvacIterator = hvacSet.iterator();
+	while(hvacIterator.hasNext()){
+	    ArrayList<EplusObject> objectList = hvac.get(hvacIterator.next());
+	    for(EplusObject eo: objectList){
+		String[] objectValues = new String[eo.getSize()];
+		String[] objectDes = new String[eo.getSize()];
+		//loop over the key-value pairs
+		for(int i=0; i<objectValues.length; i++){
+		    objectValues[i] = eo.getKeyValuePair(i).getValue();
+		    objectDes[i] = eo.getKeyValuePair(i).getKey();
+		}
+		//add the object to the baseline model
+		baselineModel.addNewEnergyPlusObject(eo.getObjectName(),objectValues,objectDes);
+	    }
 	}
     }
 
@@ -61,6 +93,7 @@ public class BaselineHVAC {
 	//first, exam the building type
 	if(bldgType.toString().equalsIgnoreCase("NONRESIDENTIAL")){
 	    //second exam the floor size and area
+		System.out.println(floorNumber+ " "+floorSize);
 	    if(floorNumber>mediumFloorNumber && floorSize>=mediumFloorArea){
 		factory = new HVACSystemFactory("System Type 7", building);
 		system = factory.createSystem();
@@ -78,10 +111,10 @@ public class BaselineHVAC {
 
 	    while (line != null) {
 		sb.append(line);
-		sb.append(":");
+		sb.append("%");
 		line = br.readLine();
 	    }
-	    objectList = sb.toString().split(":");
+	    objectList = sb.toString().split("%");
 	} finally {
 	    br.close();
 	}

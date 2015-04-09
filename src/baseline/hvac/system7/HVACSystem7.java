@@ -36,6 +36,10 @@ public class HVACSystem7 implements SystemType7 {
     private String heatingPump;
     private String coolingPump;
 
+    private boolean changedBoiler;
+    private boolean changedChiller;
+    private boolean changedTower;
+
     private static final double heatingFloorThreshold = 11150; // m2
     private static final double heatingBoilerThreshold = 1393.55;// m2
     private static final double coolingLoadThreshold = 10550558;// watt
@@ -54,9 +58,14 @@ public class HVACSystem7 implements SystemType7 {
 	zoneHeatingCoilList = new ArrayList<String>();
 	boilerList = new ArrayList<String>();
 	chillerList = new ArrayList<String>();
+	towerList = new ArrayList<String>();
 
 	heatingPump = "HeaderedPumps:ConstantSpeed";
 	coolingPump = "HeaderedPumps:ConstantSpeed";
+
+	changedBoiler = false;
+	changedChiller = false;
+	changedTower = false;
 
 	processSystems();
     }
@@ -98,6 +107,7 @@ public class HVACSystem7 implements SystemType7 {
 	if (floorArea > heatingBoilerThreshold) {
 	    numberOfBoiler = 2;
 	}
+	System.out.println("We Found " + numberOfBoiler + "Boilers");
 
 	// calculate the number of chillers
 	int numberOfChiller = 1;
@@ -107,6 +117,8 @@ public class HVACSystem7 implements SystemType7 {
 	} else if (coolingLoad >= coolingChillerLargeThreshold) {
 	    numberOfChiller = chillerCalculator(coolingLoad);
 	}
+
+	System.out.println("We Found " + numberOfChiller + " Chillers");
 
 	ArrayList<EplusObject> plantTemp = new ArrayList<EplusObject>();
 
@@ -125,12 +137,14 @@ public class HVACSystem7 implements SystemType7 {
 		    if (temp.getObjectName().equalsIgnoreCase(
 			    "HeaderedPumps:VariableSpeed")) {
 			eoIterator.remove();
+			continue;
 		    }
 		} else {
 		    if (temp.getObjectName().equalsIgnoreCase(
 			    "HeaderedPumps:ConstantSpeed")) {
 			eoIterator.remove();
 			heatingPump = "HeaderedPumps:VariableSpeed";
+			continue;
 		    }
 		}
 	    }
@@ -143,11 +157,13 @@ public class HVACSystem7 implements SystemType7 {
 			    "HeaderedPumps:VariableSpeed")) {
 			eoIterator.remove();
 			coolingPump = "HeaderedPumps:ConstantSpeed";
+			continue;
 		    }
 		} else {
 		    if (temp.getObjectName().equalsIgnoreCase(
 			    "HeaderedPumps:ConstantSpeed")) {
 			eoIterator.remove();
+			continue;
 		    }
 		}
 	    }
@@ -168,55 +184,76 @@ public class HVACSystem7 implements SystemType7 {
 
 	    // decide the number of boiler. It possibly add more boilers
 	    if (numberOfBoiler > 1) {
-		processBoilers(temp, plantTemp);
+		plantTemp.addAll(processBoilers(temp));
+		if (changedBoiler) {
+		    temp.replaceSpecialCharacters("Boiler1");
+		}
 	    }
 
 	    if (numberOfChiller > 1) {
-		processChillers(numberOfChiller, temp, plantTemp);
+		plantTemp.addAll(processChillers(numberOfChiller, temp));
+		// change the template to the real chiller name
+		if (changedChiller) {
+		    temp.replaceSpecialCharacters("Chiller1");
+		}
 		// decide the number of tower
-		processTowers(temp, plantTemp);
+		plantTemp.addAll(processTowers(temp));
+		if (changedTower) {
+		    temp.replaceSpecialCharacters("Tower1");
+		}
 	    }
-
-	    processAirToPlantConnections(temp);
 	    plantTemp.add(temp);
 	}
 	return plantTemp;
     }
 
     /**
-     * Precondition, Chiller is processed and chillerList is not empty.
+     * Precondition, Chiller is processed and chillerList is not empty. process
+     * towers and their branches.
      * 
      * @param temp
      * @param plantTemp
      */
-    private void processTowers(EplusObject temp,
-	    ArrayList<EplusObject> plantTemp) {
-	if (temp.getObjectName().equalsIgnoreCase("CoolingTower:TwoSpeed")) {
-	    towerList.add("Tower1 CndW Branch");
+    private ArrayList<EplusObject> processTowers(EplusObject temp) {
+	ArrayList<EplusObject> tempList = new ArrayList<EplusObject>();
+
+	String name = temp.getKeyValuePair(0).getValue();
+	if (temp.getObjectName().equalsIgnoreCase("CoolingTower:TwoSpeed")
+		|| name.equalsIgnoreCase("Tower% CndW Branch")
+		|| name.equals("Tower% Cooling Tower Outdoor Air Inlet Node")) {
+	    changedTower = true;
+	    towerList.add("Tower1");
 	    for (int i = 1; i < chillerList.size(); i++) {
 		EplusObject anotherTower = temp.clone();
 		String towerCount = i + 1 + "";
-		String towerName = "Tower"+towerCount;
+		String towerName = "Tower" + towerCount;
 		anotherTower.replaceSpecialCharacters(towerName);
-		towerList.add(towerName + " CndW Branch");
-		plantTemp.add(anotherTower);
+		towerList.add(towerName);
+		tempList.add(anotherTower);
 	    }
-	    temp.replaceSpecialCharacters("Tower1");
+	} else {
+	    changedTower = false;
 	}
+	return tempList;
     }
 
     /**
-     * This method process chillers
+     * This method process chillers and their branches
      * 
      * @param coolingLoad
      * @param temp
      * @param plantTemp
      */
-    private void processChillers(int numberOfChiller, EplusObject temp,
-	    ArrayList<EplusObject> plantTemp) {
+    private ArrayList<EplusObject> processChillers(int numberOfChiller,
+	    EplusObject temp) {
+	ArrayList<EplusObject> tempList = new ArrayList<EplusObject>();
 	// insert Chiller 1 branch into the chiller list first
-	if (temp.getObjectName().equalsIgnoreCase("Chiller:Electric:EIR")) {
-	    chillerList.add("Chiller1 ChW Branch");
+	String name = temp.getKeyValuePair(0).getValue();
+	if (temp.getObjectName().equalsIgnoreCase("Chiller:Electric:EIR")
+		|| name.equalsIgnoreCase("Chiller% ChW Branch")
+		|| name.equalsIgnoreCase("Chiller% CndW Branch")) {
+	    chillerList.add("Chiller1");
+	    changedChiller = true;
 	    for (int i = 1; i < numberOfChiller; i++) {
 		// clone the template
 		EplusObject anotherChiller = temp.clone();
@@ -226,13 +263,14 @@ public class HVACSystem7 implements SystemType7 {
 		// fix the chiller name from the template
 		anotherChiller.replaceSpecialCharacters(chillerName);
 		// add the branch into the chiller list
-		chillerList.add(chillerName + " ChW Branch");
+		chillerList.add(chillerName);
 		// add it to the plant plant temp list
-		plantTemp.add(anotherChiller);
+		tempList.add(anotherChiller);
 	    }
-	    // change the template to the real chiller name
-	    temp.replaceSpecialCharacters("Chiller1");
+	} else {
+	    changedChiller = false;
 	}
+	return tempList;
     }
 
     /**
@@ -246,66 +284,29 @@ public class HVACSystem7 implements SystemType7 {
      * @param heatingLoad
      * @param temp
      */
-    private void processBoilers(EplusObject temp,
-	    ArrayList<EplusObject> plantTemp) {
+    private ArrayList<EplusObject> processBoilers(EplusObject temp) {
+	ArrayList<EplusObject> tempList = new ArrayList<EplusObject>();
 	if (temp.getObjectName().equalsIgnoreCase("Boiler:HotWater")) {
 	    // if greater than the threshold, increase the number of boiler
 	    // to 2
+	    changedBoiler = true;
 	    EplusObject anotherBoiler = temp.clone();
-	    temp.replaceSpecialCharacters("Boiler1");
 	    anotherBoiler.replaceSpecialCharacters("Boiler2");
-	    plantTemp.add(anotherBoiler);
-	    boilerList.add("Boiler1 HW Branch");
-	    boilerList.add("Boiler2 HW Branch");
+	    tempList.add(anotherBoiler);
+	    boilerList.add("Boiler1");
+	    boilerList.add("Boiler2");
+	} else if (temp.getObjectName().equalsIgnoreCase("Branch")
+		&& temp.getKeyValuePair(0).getValue()
+			.equals("Boiler% HW Branch")) {
+	    changedBoiler = true;
+	    EplusObject anotherBoilerBranch = temp.clone();
+	    temp.replaceSpecialCharacters("Boiler1");
+	    anotherBoilerBranch.replaceSpecialCharacters("Boiler2");
+	    tempList.add(anotherBoilerBranch);
+	} else {
+	    changedBoiler = false;
 	}
-    }
-
-    /**
-     * Write the branch elements in the plant, connecting the coils from supply
-     * and demand system at air side
-     * 
-     * @param eo
-     */
-    private void processAirToPlantConnections(EplusObject eo) {
-	if (eo.getObjectName().equalsIgnoreCase("Connector:Splitter")
-		|| eo.getObjectName().equalsIgnoreCase("Connector:Mixer")) {
-	    String name = eo.getKeyValuePair(0).getValue();
-	    if (name.equals("Hot Water Loop HW Demand Splitter")
-		    || name.equals("Hot Water Loop HW Demand Mixer")) {
-		for (String s : systemHeatingCoilList) {
-		    KeyValuePair newPair = new KeyValuePair("Outlet Branch", s);
-		    eo.addField(newPair);
-		}
-		for (String s : zoneHeatingCoilList) {
-		    KeyValuePair newPair = new KeyValuePair("Outlet Branch", s);
-		    eo.addField(newPair);
-		}
-	    } else if (name.equals("Chilled Water Loop ChW Demand Splitter")
-		    || name.equals("Chilled Water Loop ChW Demand Mixer")) {
-		for (String s : systemCoolingCoilList) {
-		    KeyValuePair newPair = new KeyValuePair("Outlet Branch", s);
-		    eo.addField(newPair);
-		}
-	    }
-	} else if (eo.getObjectName().equalsIgnoreCase("BranchList")) {
-	    String branchName = eo.getKeyValuePair(0).getValue();
-	    if (branchName.equals("Hot Water Loop HW Demand Side Branches")) {
-		for (String s : zoneHeatingCoilList) {
-		    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
-		    eo.insertFiled(2, newPair);
-		}
-		for (String s : systemHeatingCoilList) {
-		    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
-		    eo.insertFiled(2, newPair);
-		}
-	    } else if (branchName
-		    .equals("Chilled Water Loop ChW Demand Side Branches")) {
-		for (String s : systemCoolingCoilList) {
-		    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
-		    eo.insertFiled(2, newPair);
-		}
-	    }
-	}
+	return tempList;
     }
 
     /**
@@ -325,18 +326,19 @@ public class HVACSystem7 implements SystemType7 {
 	    if (temp.hasSpecialCharacters()) {
 		temp.replaceSpecialCharacters(zone);
 	    }
-	    // record the connection links in the HVAC system
-	    String zoneSplitter = zone + " Zone Equip Inlet";
-	    String zoneMixer = zone + " Return Outlet";
-	    // this is only for system type 7
-	    String reheatCoil = zone + " Reheat Coil HW Branch";
-
-	    // add the connection links to another data lists for later
-	    // processing
-	    zoneSplitterList.add(zoneSplitter);
-	    zoneMixerList.add(zoneMixer);
-	    zoneHeatingCoilList.add(reheatCoil);
+	    demandTemp.add(temp);
 	}
+	// record the connection links in the HVAC system
+	String zoneSplitter = zone + " Zone Equip Inlet";
+	String zoneMixer = zone + " Return Outlet";
+	// this is only for system type 7
+	String reheatCoil = zone + " Reheat Coil HW Branch";
+
+	// add the connection links to another data lists for later
+	// processing
+	zoneSplitterList.add(zoneSplitter);
+	zoneMixerList.add(zoneMixer);
+	zoneHeatingCoilList.add(reheatCoil);
 	return demandTemp;
     }
 
@@ -392,6 +394,7 @@ public class HVACSystem7 implements SystemType7 {
 		    temp.addField(mixerPair);
 		}
 	    }
+	    supplyTemp.add(temp);
 	}
 	return supplyTemp;
     }
@@ -412,6 +415,7 @@ public class HVACSystem7 implements SystemType7 {
 	Set<String> floorMapSet = floorMap.keySet();
 	Iterator<String> floorMapIterator = floorMapSet.iterator();
 
+	int roomCounter = 0;
 	while (floorMapIterator.hasNext()) {
 	    String floor = floorMapIterator.next();
 	    // first process the demand side system and their connection to
@@ -420,6 +424,7 @@ public class HVACSystem7 implements SystemType7 {
 	    for (ThermalZone zone : zones) {
 		demandSideSystem.addAll(processDemandTemp(zone.getFullName(),
 			demandSideSystemTemplate));
+		roomCounter++;
 	    }
 	    // then process the supply side system and their connections to
 	    // plant
@@ -428,9 +433,179 @@ public class HVACSystem7 implements SystemType7 {
 	}
 
 	plantSystem.addAll(processPlantTemp(plantSystemTemplate));
-
+	System.out.println("Counting the rooms: " + roomCounter);
 	objectLists.put("Supply Side System", supplySideSystem);
 	objectLists.put("Demand Side System", demandSideSystem);
 	objectLists.put("Plant", plantSystem);
+	processConnections();
+    }
+
+    /**
+     * A method to process the system connections
+     */
+    private void processConnections() {
+	ArrayList<EplusObject> plantSystem = objectLists.get("Plant");
+	plantConnectionProcessing(plantSystem);
+    }
+
+    /**
+     * A helper method to process the system connections
+     * 
+     * @param plantSystem
+     */
+    private void plantConnectionProcessing(ArrayList<EplusObject> plantSystem) {
+	// use for additional eplus objects
+	for (EplusObject eo : plantSystem) {
+	    String name = eo.getKeyValuePair(0).getValue();
+	    if (name.equals("Hot Water Loop HW Demand Side Branches")) {
+		insertHeatingCoils(2, eo);
+	    } else if (name.equals("Hot Water Loop HW Demand Splitter")
+		    || name.equals("Hot Water Loop HW Demand Mixer")) {
+		insertHeatingCoils(eo.getSize(), eo);// insert to the last index
+	    } else if (name
+		    .equals("Chilled Water Loop ChW Demand Side Branches")) {
+		insertCoolingCoils(2, eo);
+	    } else if (name.equals("Chilled Water Loop ChW Demand Splitter")
+		    || name.equals("Chilled Water Loop ChW Demand Mixer")) {
+		insertCoolingCoils(eo.getSize(), eo);
+	    } else if (name.equals("Hot Water Loop HW Supply Side Branches")
+		    || name.equals("Hot Water Loop HW Supply Splitter")
+		    || name.equals("Hot Water Loop HW Supply Mixer")) {
+		insertBoilerRelatedInputs(2, eo, " HW Branch");
+	    } else if (name
+		    .equals("Chilled Water Loop ChW Supply Side Branches")) {
+		insertChillerRelatedInputs(2, eo, " ChW Branch");
+	    } else if (name.equals("Chilled Water Loop ChW Supply Splitter")
+		    || name.equals("Chilled Water Loop ChW Supply Mixer")) {
+		insertChillerRelatedInputs(3, eo, " ChW Branch");
+	    } else if (name
+		    .equals("Chilled Water Loop CndW Demand Side Branches")) {
+		insertChillerRelatedInputs(2, eo, " CndW Branch");
+	    } else if (name.equals("Chilled Water Loop CndW Demand Splitter")
+		    || name.equals("Chilled Water Loop CndW Demand Mixer")) {
+		insertChillerRelatedInputs(3, eo, " CndW Branch");
+	    } else if (name
+		    .equals("Chilled Water Loop CndW Supply Side Branches")) {
+		insertTowerRelatedInputs(2, eo, " CndW Branch");
+	    } else if (name.equals("Chilled Water Loop CndW Supply Splitter")
+		    || name.equals("Chilled Water Loop CndW Supply Mixer")) {
+		insertTowerRelatedInputs(3, eo, " CndW Branch");
+	    } else if (name.equals("Hot Water Loop HW Supply Setpoint Nodes")) {
+		insertBoilerRelatedInputs(1, eo, " HW Outlet");
+	    } else if (name
+		    .equals("Chilled Water Loop ChW Supply Setpoint Nodes")) {
+		insertChillerRelatedInputs(1, eo, " ChW Outlet");
+	    } else if (name
+		    .equals("Chilled Water Loop CndW Supply Setpoint Nodes")) {
+		insertChillerRelatedInputs(1, eo, " CndW Outlet");
+	    } else if (name.equals("Hot Water Loop All Equipment")) {
+		insertBoilerEquipmentList(eo);
+	    } else if (name.equals("Chilled Water Loop All Chillers")) {
+		insertChillerEquipmentList(eo);
+	    } else if (name.equals("Chilled Water Loop All Condensers")) {
+		insertTowerEquipmentList(eo);
+	    }
+	}
+    }
+
+    /*
+     * Group of helper functions which inserts the systems connections to the
+     * specified fields
+     */
+    private void insertTowerEquipmentList(EplusObject eo) {
+	if (towerList.isEmpty()) {
+	    KeyValuePair objectType = new KeyValuePair("Equipment Object Type",
+		    "CoolingTower:TwoSpeed");
+	    KeyValuePair name = new KeyValuePair("Equipment Name", "Tower%");
+	    eo.addField(objectType);
+	    eo.addField(name);
+	} else {
+	    for (String s : towerList) {
+		KeyValuePair objectType = new KeyValuePair(
+			"Equipment Object Type", "CoolingTower:TwoSpeed");
+		KeyValuePair name = new KeyValuePair("Equipment Name", s);
+		eo.addField(objectType);
+		eo.addField(name);
+	    }
+	}
+    }
+
+    private void insertChillerEquipmentList(EplusObject eo) {
+	if (chillerList.isEmpty()) {
+	    KeyValuePair objectType = new KeyValuePair("Equipment Object Type",
+		    "Chiller:Electric:EIR");
+	    KeyValuePair name = new KeyValuePair("Equipment Name", "Chiller%");
+	    eo.addField(objectType);
+	    eo.addField(name);
+	} else {
+	    for (String s : chillerList) {
+		KeyValuePair objectType = new KeyValuePair(
+			"Equipment Object Type", "Chiller:Electric:EIR");
+		KeyValuePair name = new KeyValuePair("Equipment Name", s);
+		eo.addField(objectType);
+		eo.addField(name);
+	    }
+	}
+    }
+
+    private void insertBoilerEquipmentList(EplusObject eo) {
+	if (boilerList.isEmpty()) {
+	    KeyValuePair objectType = new KeyValuePair("Equipment Object Type",
+		    "Boiler:HotWater");
+	    KeyValuePair name = new KeyValuePair("Equipment Name", "Boiler%");
+	    eo.addField(objectType);
+	    eo.addField(name);
+	} else {
+	    for (String s : boilerList) {
+		KeyValuePair objectType = new KeyValuePair(
+			"Equipment Object Type", "Boiler:HotWater");
+		KeyValuePair name = new KeyValuePair("Equipment Name", s);
+		eo.addField(objectType);
+		eo.addField(name);
+	    }
+	}
+    }
+
+    private void insertTowerRelatedInputs(int index, EplusObject eo,
+	    String postfix) {
+	for (String s : towerList) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", s + postfix);
+	    eo.insertFiled(index, newPair);
+	}
+    }
+
+    private void insertChillerRelatedInputs(int index, EplusObject eo,
+	    String postfix) {
+	for (String s : chillerList) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", s + postfix);
+	    eo.insertFiled(index, newPair);
+	}
+    }
+
+    private void insertBoilerRelatedInputs(int index, EplusObject eo,
+	    String postfix) {
+	for (String s : boilerList) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", s + postfix);
+	    eo.insertFiled(index, newPair);
+	}
+    }
+
+    private void insertCoolingCoils(int index, EplusObject eo) {
+	for (String s : systemCoolingCoilList) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
+	    eo.insertFiled(index, newPair);
+	}
+    }
+
+    private void insertHeatingCoils(int index, EplusObject eo) {
+	for (String s : zoneHeatingCoilList) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
+	    eo.insertFiled(index, newPair);
+	}
+
+	for (String s : systemHeatingCoilList) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
+	    eo.insertFiled(index, newPair);
+	}
     }
 }
