@@ -2,27 +2,39 @@ package baseline.idfdata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import baseline.generator.IdfReader;
+import baseline.util.ClimateZone;
 
 public class EnergyPlusBuilding {
 
     private Double totalFloorArea;
     private Double conditionedFloorArea;
+    private Set<String> floorSet;
 
     private Double heatingSetPointNotMet;
     private Double coolingSetPointNotMet;
 
     private Double totalCoolingLoad;
     private Double totalHeatingLoad;
+    
+    private ClimateZone cZone;
 
     private List<ThermalZone> thermalZoneList;
     private HashMap<String, ArrayList<ThermalZone>> floorMap;
+    
+    private IdfReader baselineModel;
 
-    public EnergyPlusBuilding() {
+    public EnergyPlusBuilding(ClimateZone zone, IdfReader baselineModel) {
 	thermalZoneList = new ArrayList<ThermalZone>();
 	floorMap = new HashMap<String, ArrayList<ThermalZone>>();
 	totalCoolingLoad = 0.0;
 	totalHeatingLoad = 0.0;
+	cZone = zone;
+	this.baselineModel = baselineModel;
     }
     
     /**
@@ -31,6 +43,7 @@ public class EnergyPlusBuilding {
     public void initializeBuildingData(){
 	thermalZoneList.clear();
 	floorMap.clear();
+	floorSet = new HashSet<String>();
 	totalCoolingLoad = 0.0;
 	totalHeatingLoad = 0.0;
     }
@@ -70,10 +83,15 @@ public class EnergyPlusBuilding {
      * @return
      */
     public void getThermalZoneInfo() {
+
 	// building the thermal zones
 	for (ThermalZone zone : thermalZoneList) {
-	    if (!floorMap.containsKey(zone.getFloor())) {
-		floorMap.put(zone.getFloor(), new ArrayList<ThermalZone>());
+	    String block = zone.getBlock();
+	    String floor = zone.getFloor();
+	    floorSet.add(floor);
+	    String level = block+":"+floor;
+	    if (!floorMap.containsKey(level)) {
+		floorMap.put(level, new ArrayList<ThermalZone>());
 	    }
 	    floorMap.get(zone.getFloor()).add(zone);
 	    totalCoolingLoad += zone.getCoolingLoad();
@@ -87,6 +105,14 @@ public class EnergyPlusBuilding {
      */
     public HashMap<String, ArrayList<ThermalZone>> getFloorMap(){
 	return floorMap;
+    }
+    
+    public IdfReader getBaselineModel(){
+	return baselineModel;
+    }
+    
+    public ClimateZone getClimateZone(){
+	return cZone;
     }
     
     /**
@@ -114,6 +140,10 @@ public class EnergyPlusBuilding {
 
     public Double getConditionedFloorArea() {
 	return conditionedFloorArea;
+    }
+    
+    public Integer getNumberOfFloor(){
+	return floorSet.size();
     }
 
     public Double getHeatingSetPointNotMet() {

@@ -69,6 +69,10 @@ public class SystemParser {
 	}
     }
     
+    /**
+     * object objects in the database that represents Energyplus objects
+     * @param current
+     */
     private void buildObject(Element current){
 	List<Element> children = current.getChildren();
 	Iterator<Element> iterator = children.iterator();
@@ -80,10 +84,14 @@ public class SystemParser {
 	    EplusObject ob = new EplusObject(category,reference);
 	    processFields(child,ob);
 	    objects.add(ob);
-	    
 	}
     }
     
+    /**
+     * Fields objects in the database that represents EnergyPlus object's fields.
+     * @param node
+     * @param object
+     */
     private void processFields(Element node, EplusObject object){
 	List<Element> children = node.getChildren();
 	Iterator<Element> iterator = children.iterator();

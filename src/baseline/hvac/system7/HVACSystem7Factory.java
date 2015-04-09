@@ -29,7 +29,15 @@ public class HVACSystem7Factory {
      * @return
      */
     public SystemType7 getSystem(){
+	processSystem();
 	return systemType7;
+    }
+    
+    private void processSystem(){
+	//judge if it is purchased heat or not
+	if(building.getBaselineModel().getObjectList("DistrictHeating")!=null){
+	    
+	}
     }
     
     

@@ -152,11 +152,11 @@ public class IdfReader {
 		    }
 
 		    // add the special character to the variableList
-		    if (element.indexOf("$") > -1) {
-
-			String[] keyPair = { startToken, elementCount,
-				description };
-		    }
+//		    if (element.indexOf("$") > -1) {
+//
+//			String[] keyPair = { startToken, elementCount,
+//				description };
+//		    }
 
 		    // put element into the map
 		    eplusMap.get(startToken).get(elementCount)

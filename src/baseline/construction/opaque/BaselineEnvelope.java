@@ -31,7 +31,7 @@ public class BaselineEnvelope {
     private static final String EXTERNAL_FLOOR = "Project External Floor";
     private static final String SOG_FLOOR = "Project Slab On Grade Floor";
     private static final String WINDOW = "Project Window";
-    private static final String CURTAIN_WALL = "Project Curtain Wall";
+//    private static final String CURTAIN_WALL = "Project Curtain Wall";
     private static final String SKYLIGHT = "Project Skylight";
 
     // EnergyPlus objects that relates to the construction changes

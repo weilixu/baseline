@@ -64,6 +64,7 @@ public class Generator {
 	    e.printStackTrace();
 	}
 	
+	building = new EnergyPlusBuilding(cZone, baselineModel);	
 	SizingHTMLParser.processOutputs(htmlOutput);
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);
