@@ -277,6 +277,8 @@ Sizing:Parameters
 Sizing:Plant
 Sizing:System
 Sizing:Zone
+DesignSpecification:ZoneAirDistribution
+DesignSpecification:OutdoorAir
 SolarCollector:FlatPlate:PhotovoltaicThermal
 SolarCollector:FlatPlate:Water
 SolarCollector:IntegralCollectorStorage

@@ -1,5 +1,10 @@
 <hvac>
 	<dataset setname="System Type 7" category="Supply Side System">
+		<object description = "Sizing:Parameters" reference = "Supply Side System">
+			<field description = "Heating Sizing Factor" type = "Double">1.25</field>
+			<field description = "Cooling Sizing Factor" type = "Double">1.15</field>
+			<field description = "Timesteps in Averaging Window" type = "Double">1</field>
+		</object>
 		<object description = "Sizing:System" reference = "Supply Side System">
 			<field description = "AirLoop Name" type="String">Floor% VAV</field>
 			<field description = "Type of Load to Size On" type="String">Sensible</field>
@@ -103,20 +108,13 @@
 			<field description = "Minimum Outdoor Air Schedule Name" type = "String">OAMinFracSch</field>
 			<field description = "Minimum Fraction of Outdoor Air Schedule Name" type = "String"/>
 			<field description = "Maximum Fraction of Outdoor Air Schedule Name" type = "String"/>
-			<field description = "Mechanical Ventilation Controller Name" type = "String">Floor% Mechanical Ventilation</field>
+			<field description = "Mechanical Ventilation Controller Name" type = "String"/>
 			<field description = "Time of Day Economizer Control Schedule Name" type = "String"/>
 			<field description = "High Humidity Control" type = "String">No</field>
 			<field description = "Humidistat Control Zone Name" type = "String"/>
 			<field description = "High Humidity Outdoor Air Flow Ratio" type = "Double"/>
 			<field description = "Control High Indoor Humidity Based on Outdoor Humidity Ratio" type = "String">Yes</field>
 			<field description = "Heat Recovery Bypass Control Type" type = "String">BypassWhenOAFlowGreaterThanMinimum</field>
-		</object>
-		<object description = "Controller:MechanicalVentilation" reference = "Supply Side System">
-			<field description = "Name" type = "String">Floor% Mechanical Ventilation</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
-			<field description = "Demand Controlled Ventilation" type = "String">No</field>
-			<field description = "System Outdoor Air Method" type = "String">zoneSum</field>
-			<field description = "Zone Maximum Outdoor Air Fraction" type = "Double"/>
 		</object>
 		<object description = "AirLoopHVAC:ControllerList" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Controllers</field>
@@ -1211,7 +1209,22 @@
 			<field description = "Heating Design Air Flow Rate" type = "Double">0.0</field>
 			<field description = "Heating Maximum Air Flow per Zone Floor Area" type = "Double">0.002032</field>
 			<field description = "Heating Maximum Air Flow" type = "Double">0.1415762</field>
-			<field description = "Heating Maximum Air Flow Fraction" type = "Double">0.3</field>			
+			<field description = "Heating Maximum Air Flow Fraction" type = "Double">0.3</field>
+			<field description = "Design Specification Zone Air Distribution Object Name" type = "String">Zone% Air Distribution</field>			
+		</object>
+		<object description = "DesignSpecification:ZoneAirDistribution" reference = "Demand Side System">
+			<field description = "Name" type = "String">Zone% Air Distribution</field>
+			<field description = "Zone Air Distribution Effectiveness in Cooling Mode" type = "Double">1</field>
+			<field description = "Zone Air Distribution Effectiveness in Heating Mode" type = "Double">0.8</field>
+		</object>
+		<object description = "DesignSpecification:OutdoorAir" reference = "Demand Side System">
+			<field description = "Name" type = "String">Zone% OutdoorAir</field>
+			<field description = "Outdoor Air Method" type = "String">Sum</field>
+			<field description = "Outdoor Air Flow per Person" type = "Double">0</field>
+			<field description = "Outdoor Air Flow per Zone Floor Area" type = "Double">0</field>
+			<field description = "Outdoor Air Flow per Zone" type = "Double">0</field>
+			<field description = "Outdoor Air Flow Air Changes per Hour" type = "Double">0</field>
+			<field description = "Outdoor Air Flow Rate Fraction Schedule Name" type = "String"/>
 		</object>
 		<object description = "ZoneHVAC:EquipmentConnections" reference="Demand Side System">
 			<field description = "Zone Name" type="String">Zone%</field>

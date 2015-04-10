@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import baseline.generator.EplusObject;
 import baseline.generator.IdfReader;
 import baseline.util.ClimateZone;
 
@@ -92,10 +93,15 @@ public class EnergyPlusBuilding {
 	    if (!floorMap.containsKey(level)) {
 		floorMap.put(level, new ArrayList<ThermalZone>());
 	    }
+	    
 	    floorMap.get(level).add(zone);
 	    totalCoolingLoad += zone.getCoolingLoad();
 	    totalHeatingLoad += zone.getHeatingLoad();
 	}
+    }
+    
+    private void getDesignOutdoorAir(String zoneName){
+	EplusObject zoneVentilation = new EplusObject("DesignSpecification:OutdoorAir",zoneName);
     }
     
     /**

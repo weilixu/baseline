@@ -60,7 +60,7 @@ public class BaselineHVAC {
     }
     
     /**
-     * Merge the system with baseline model, this should be called after removeHVACObjects
+     * Merge the system with baseline model, this should be called after
      */
     private void mergeSystem(){
 	HashMap<String, ArrayList<EplusObject>> hvac = system.getSystemData();

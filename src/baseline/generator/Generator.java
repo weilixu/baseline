@@ -66,6 +66,7 @@ public class Generator {
 //	} catch (IOException e) {
 //	    e.printStackTrace();
 //	}
+	
 	System.out.println("Finish sizing round");
 	building = new EnergyPlusBuilding(cZone, baselineModel);
 	
