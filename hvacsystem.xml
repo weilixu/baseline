@@ -101,6 +101,22 @@
 			<field description = "Lockout Type" type = "String">NoLockout</field>
 			<field description = "Minimum Limit Type" type = "String">FixedMinimum</field>
 			<field description = "Minimum Outdoor Air Schedule Name" type = "String">OAMinFracSch</field>
+			<field description = "Minimum Fraction of Outdoor Air Schedule Name" type = "String"/>
+			<field description = "Maximum Fraction of Outdoor Air Schedule Name" type = "String"/>
+			<field description = "Mechanical Ventilation Controller Name" type = "String">Floor% Mechanical Ventilation</field>
+			<field description = "Time of Day Economizer Control Schedule Name" type = "String"/>
+			<field description = "High Humidity Control" type = "String">No</field>
+			<field description = "Humidistat Control Zone Name" type = "String"/>
+			<field description = "High Humidity Outdoor Air Flow Ratio" type = "Double"/>
+			<field description = "Control High Indoor Humidity Based on Outdoor Humidity Ratio" type = "String">Yes</field>
+			<field description = "Heat Recovery Bypass Control Type" type = "String">BypassWhenOAFlowGreaterThanMinimum</field>
+		</object>
+		<object description = "Controller:MechanicalVentilation" reference = "Supply Side System">
+			<field description = "Name" type = "String">Floor% Mechanical Ventilation</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Demand Controlled Ventilation" type = "String">No</field>
+			<field description = "System Outdoor Air Method" type = "String">zoneSum</field>
+			<field description = "Zone Maximum Outdoor Air Fraction" type = "Double"/>
 		</object>
 		<object description = "AirLoopHVAC:ControllerList" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Controllers</field>

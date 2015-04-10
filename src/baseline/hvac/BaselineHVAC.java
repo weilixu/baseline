@@ -30,7 +30,7 @@ public class BaselineHVAC {
     private static final String FILE_NAME = "HVACObjects.txt";
     private String[] objectList;
     
-    //threasholds for the system selection
+    //thresholds for the system selection
     private static final double smallFloorArea = 2300.0;
     private static final double mediumFloorArea = 14000.0;
     private static final int smallFloorNumber=3;

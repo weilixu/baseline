@@ -1,7 +1,12 @@
 package baseline.idfdata;
 
+import baseline.generator.EplusObject;
+
 /**
  * a generic thermal zone interface that represents different types of thermal zone representations defined in EnergyPlus
+ * The thermal zone contains most of a space's thermal related information (exclude coordinates) including:
+ * zone full name, the block / floor the zone belongs to, zone type, zone identification, HVAC zone, zone cooling load
+ * zone heating load, and zone outdoor ventilation requirement
  * 
  * @author Weili
  *
@@ -57,6 +62,20 @@ public interface ThermalZone {
     public void setHeaingLoad(Double load);
     
     /**
+     * Set the ventilaiton method, currently, methods only includes Sum, Maximum
+     * Flow/Person, Flow/Area, Flow/Zone and AirChange/Hour
+     * @param method
+     */
+    public void setVentilationMethod(String method);
+    
+    /**
+     * Set the ventilation rate for the thermal zone
+     * @param method
+     * @param rate
+     */
+    public void setVentilationRate(String method, String rate);
+    
+    /**
      * get the block of the thermal zone
      * @param block
      */
@@ -97,5 +116,11 @@ public interface ThermalZone {
      * @return
      */
     public Double getHeatingLoad();
+    
+    /**
+     * get the built outdoor air ventilation object in EnergyPlus
+     * @return
+     */
+    public EplusObject getOutdoorAirObject();
 
 }

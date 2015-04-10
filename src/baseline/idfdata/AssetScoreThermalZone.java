@@ -1,5 +1,8 @@
 package baseline.idfdata;
 
+import baseline.generator.EplusObject;
+import baseline.generator.KeyValuePair;
+
 /**
  * This class represents the Asset score thermal zone (conditioned zones) naming convention.
  * 
@@ -21,6 +24,7 @@ public class AssetScoreThermalZone implements ThermalZone{
     private String zoneIdentification;
     private String hvac;
     private String originalZoneName;
+    private EplusObject mechanicalVentilationRequirement;
     
     private Double coolingLoad;
     private Double heatingLoad;
@@ -33,6 +37,10 @@ public class AssetScoreThermalZone implements ThermalZone{
 	zoneType = zoneCharacters[zoneTypeIndex];
 	floor = zoneCharacters[floorIndex];
 	zoneIdentification = zoneCharacters[zoneIdentificationIndex];
+	//initiate the mechanical ventional requirements for the thermal zone
+	mechanicalVentilationRequirement = new EplusObject("DesignSpecification:OutdoorAir",zoneName);
+	mechanicalVentilationRequirement.addField(new KeyValuePair("Name",zoneName+" OutdoorAir"));//add the name of the eplus object
+	
     }
 
     @Override
@@ -109,5 +117,20 @@ public class AssetScoreThermalZone implements ThermalZone{
     @Override
     public Double getHeatingLoad() {
 	return heatingLoad;
+    }
+
+    @Override
+    public void setVentilationMethod(String method) {
+	mechanicalVentilationRequirement.addField(new KeyValuePair("Outdoor Air Method",method));
+    }
+
+    @Override
+    public void setVentilationRate(String method, String rate) {
+	mechanicalVentilationRequirement.addField(new KeyValuePair(method,rate));
+    }
+
+    @Override
+    public EplusObject getOutdoorAirObject() {
+	return mechanicalVentilationRequirement;
     }
 }
