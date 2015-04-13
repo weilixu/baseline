@@ -58,7 +58,7 @@ public class BaselineHVAC {
 	}
 	mergeSystem();
     }
-    
+
     /**
      * Merge the system with baseline model, this should be called after
      */

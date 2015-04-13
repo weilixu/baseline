@@ -215,6 +215,8 @@ HVACTemplate:Zone:VAV:FanPowered
 HVACTemplate:Zone:VAV:HeatAndCool
 HVACTemplate:Zone:VRF
 HVACTemplate:Zone:WaterToAirHeatPump
+NodeList
+OutdoorAir:Mixer
 PhotovoltaicPerformance:EquivalentOne-Diode
 PhotovoltaicPerformance:Sandia
 PhotovoltaicPerformance:Simple

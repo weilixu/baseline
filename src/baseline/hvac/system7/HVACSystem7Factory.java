@@ -40,7 +40,6 @@ public class HVACSystem7Factory {
 	}
     }
     
-    
     /**
      * Separate the three systems into three data lists.
      */
@@ -67,6 +66,11 @@ public class HVACSystem7Factory {
 		    systemObjects.put("Schedule", new ArrayList<EplusObject>());
 		}
 		systemObjects.get("Schedule").add(eo);
+	    }else if(eo.getReference().equals("Global")){
+		if(!systemObjects.containsKey("Global")){
+		    systemObjects.put("Global", new ArrayList<EplusObject>());
+		}
+		systemObjects.get("Global").add(eo);
 	    }
 	}
     }

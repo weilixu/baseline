@@ -1,10 +1,5 @@
 <hvac>
 	<dataset setname="System Type 7" category="Supply Side System">
-		<object description = "Sizing:Parameters" reference = "Supply Side System">
-			<field description = "Heating Sizing Factor" type = "Double">1.25</field>
-			<field description = "Cooling Sizing Factor" type = "Double">1.15</field>
-			<field description = "Timesteps in Averaging Window" type = "Double">1</field>
-		</object>
 		<object description = "Sizing:System" reference = "Supply Side System">
 			<field description = "AirLoop Name" type="String">Floor% VAV</field>
 			<field description = "Type of Load to Size On" type="String">Sensible</field>
@@ -83,7 +78,7 @@
 			<field description = "Action" type = "String">Normal</field>
 			<field description = "Actuator Variable" type = "String">Flow</field>
 			<field description = "Sensor Node Name" type = "String">Floor% Heating Coil Outlet</field>
-			<field description = "Actuator Node Name" type = "String">Floor% Heating Coil ChW Inlet</field>
+			<field description = "Actuator Node Name" type = "String">Floor% Heating Coil HW Inlet</field>
 			<field description = "Controller Convergence Tolerance" type = "Double or String">autosize</field>
 			<field description = "Maximum Actuated Flow" type = "Double or String">autosize</field>
 			<field description = "Minimum Actuated Flow" type = "Double">0.0</field>	
@@ -91,7 +86,7 @@
 		<object description = "Controller:OutdoorAir" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% OA Controller</field>
 			<field description = "Relief Air Outlet Node Name" type = "String">Floor% Relief Air Outlet</field>
-			<field description = "Return Air Node Name" type = "String">Floor% Return Fan Outlet</field>
+			<field description = "Return Air Node Name" type = "String">Floor% Air Loop Inlet</field>
 			<field description = "Mixed Air Node Name" type = "String">Floor% Mixed Air Outlet</field>
 			<field description = "Actuator Node Name" type = "String">Floor% Outside Air Inlet</field>
 			<field description = "Minimum Outdoor Air Flow Rate" type = "Double or String">autosize</field>
@@ -158,7 +153,7 @@
 			<field description = "Mixed Air Node Name" type = "String">Floor% Mixed Air Outlet</field>
 			<field description = "Outdoor Air Stream Node Name" type = "String">Floor% Heat Recovery Supply Outlet</field>
 			<field description = "Relief Air Stream Node Name" type = "String">Floor% Relief Air Outlet</field>
-			<field description = "Return Air Stream Node Name" type = "String">Fllor_Return Fan Outlet</field>
+			<field description = "Return Air Stream Node Name" type = "String">Floor% Air Loop Inlet</field>
 		</object>
 		<object description = "AirLoopHVAC:ZoneSplitter" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Zone Splitter</field>
@@ -184,31 +179,26 @@
 			<field description = "Name" type = "String">Floor% Main Branch</field>
 			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Pressure Drop Curve Name" type = "String"/>
-			<field description = "Component 1 Object Type" type = "String">Fan:VariableVolume</field>
-			<field description = "Component 1 Name" type = "String">Floor% Return Fan</field>
+			<field description = "Component 1 Object Type" type = "String">AirLoopHVAC:OutdoorAirSystem</field>
+			<field description = "Component 1 Name" type = "String">Floor% OA System</field>
 			<field description = "Component 1 Inlet Node Name" type = "String">Floor% Air Loop Inlet</field>
-			<field description = "Component 1 Outlet Node Name" type = "String">Floor% Return Fan Outlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Floor% Mixed Air Outlet</field>
 			<field description = "Component 1 Branch Control Type" type = "String">Passive</field>
-			<field description = "Component 2 Object Type" type = "String">AirLoopHVAC:OutdoorAirSystem</field>
-			<field description = "Component 2 Name" type = "String">Floor% OA System</field>
-			<field description = "Component 2 Inlet Node Name" type = "String">Floor% Return Fan Outlet</field>
-			<field description = "Component 2 Outlet Node Name" type = "String">Floor% Mixed Air Outlet</field>
+			<field description = "Component 2 Object Type" type = "String">Coil:Cooling:Water</field>
+			<field description = "Component 2 Name" type = "String">Floor% Cooling Coil</field>
+			<field description = "Component 2 Inlet Node Name" type = "String">Floor% Mixed Air Outlet</field>
+			<field description = "Component 2 Outlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
 			<field description = "Component 2 Branch Control Type" type = "String">Passive</field>
-			<field description = "Component 3 Object Type" type = "String">Coil:Cooling:Water</field>
-			<field description = "Component 3 Name" type = "String">Floor% Cooling Coil</field>
-			<field description = "Component 3 Inlet Node Name" type = "String">Floor% Mxed Air Outlet</field>
-			<field description = "Component 3 Outlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
-			<field description = "Component 3 Branch Control Type" type = "String">Passive</field>
-			<field description = "Component 4 Object Type" type = "String">Coil:Heating:Water</field>
-			<field description = "Component 4 Name" type = "String">Floor% Heating Coil</field>
-			<field description = "Component 4 Inlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
-			<field description = "Component 4 Outlet Node Name" type = "String">Floor% Heating Coil Outlet</field>
-			<field description = "Component 4 Branch Control Type" type = "String">Passive</field>	
-			<field description = "Component 5 Object Type" type = "String">Fan:VariableVolume</field>
-			<field description = "Component 5 Name" type = "String">Floor% Supply Fan</field>
-			<field description = "Component 5 Inlet Node Name" type = "String">Floor% Heating Coil Outlet</field>
-			<field description = "Component 5 Outlet Node Name" type = "String">Floor% Supply Fan Outlet</field>
-			<field description = "Component 5 Branch Control Type" type = "String">Active</field>		
+			<field description = "Component 3 Object Type" type = "String">Coil:Heating:Water</field>
+			<field description = "Component 3 Name" type = "String">Floor% Heating Coil</field>
+			<field description = "Component 3 Inlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
+			<field description = "Component 3 Outlet Node Name" type = "String">Floor% Heating Coil Outlet</field>
+			<field description = "Component 3 Branch Control Type" type = "String">Passive</field>	
+			<field description = "Component 4 Object Type" type = "String">Fan:VariableVolume</field>
+			<field description = "Component 4 Name" type = "String">Floor% Supply Fan</field>
+			<field description = "Component 4 Inlet Node Name" type = "String">Floor% Heating Coil Outlet</field>
+			<field description = "Component 4 Outlet Node Name" type = "String">Floor% Supply Fan Outlet</field>
+			<field description = "Component 4 Branch Control Type" type = "String">Active</field>		
 		</object>
 		<object description = "Branch" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Cooling Coil ChW Branch</field>
@@ -226,8 +216,8 @@
 			<field description = "Pressure Drop Curve Name" type = "Double or String"/>
 			<field description = "Component 1 Object Type" type = "String">Coil:Heating:Water</field>
 			<field description = "Component 1 Name" type = "String">Floor% Heating Coil</field>
-			<field description = "Component 1 Inlet Node Name" type = "String">Floor% Heating Coil ChW Inlet</field>
-			<field description = "Component 1 Outlet Node Name" type = "String">Floor% Heating Coil ChW Outlet</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">Floor% Heating Coil HW Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Floor% Heating Coil HW Outlet</field>
 			<field description = "Component 1 Branch Control Type" type = "String">Active</field>
 		</object>
 		<object description = "BranchList" reference = "Supply Side System">
@@ -235,7 +225,7 @@
 			<field description = "Branch 1 Name" type = "String">Floor% Main Branch</field>
 		</object>
 		<object description = "NodeList" reference = "Supply Side System">
-			<field description = "Name" type="String">Floor% Mixed Air Node</field>
+			<field description = "Name" type="String">Floor% Mixed Air Nodes</field>
 			<field description = "Node 1 Name" type = "String">Floor% Cooling Coil Outlet</field>
 			<field description = "Node 2 Name" type = "String">Floor% Mixed Air Outlet</field>
 		</object>
@@ -260,25 +250,6 @@
 			<field description = "Fan Power Coefficient 5" type = "Double">0</field>
 			<field description = "Air Inlet Node Name" type = "String">Floor% Heating Coil Outlet</field>
 			<field description = "Air Outlet Node Name" type = "String">Floor% Supply Fan Outlet</field>
-		</object>
-		<object description = "Fan:VariableVolume" reference = "Supply Side System">
-			<field description = "Name" type = "String">Floor% Return Fan</field>
-			<field description = "Availability Schedule Name" type = "String">Off</field>
-			<field description = "Fan Total Efficiency" type = "Double">0.7</field>
-			<field description = "Pressure Rise" type = "Double">2000</field>
-			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
-			<field description = "Fan Power Minimum Flow Rate Input Method" type = "String">Fraction</field>
-			<field description = "Fan Power Minimum Flow Fraction" type = "Double">0.0</field>
-			<field description = "Fan Power Minimum Air Flow Rate" type = "Double"/>
-			<field description = "Motor Efficiency" type = "Double">0.95</field>
-			<field description = "Motor In Airstream Fraction" type = "Double">1.0</field>
-			<field description = "Fan Power Coefficient 1" type = "Double">0.0013</field>
-			<field description = "Fan Power Coefficient 2" type = "Double">0.147</field>
-			<field description = "Fan Power Coefficient 3" type = "Double">0.9506</field>
-			<field description = "Fan Power Coefficient 4" type = "Double">-0.0998</field>
-			<field description = "Fan Power Coefficient 5" type = "Double">0</field>
-			<field description = "Air Inlet Node Name" type = "String">Floor% Air Loop Inlet</field>
-			<field description = "Air Outlet Node Name" type = "String">Floor% Return Fan Outlet</field>
 		</object>
 		<object description = "Coil:Cooling:Water" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Cooling Coil</field>
@@ -683,6 +654,12 @@
 			<field description = "Control Scheme 1 Name" type = "String">Chilled Water Loop Condenser Operation All Hours</field>
 			<field description = "Control Scheme 1 Schedule Name" type = "String">Always 1</field>
 		</object>
+		<object description = "SetpointManager:Scheduled" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CndW Temp Manager</field>
+			<field description = "Control Variable" type = "String">Temperature</field>
+			<field description = "Schedule Name" type = "String">Always 29</field>
+			<field description = "Setpoint Node or NodeList Name">Chilled Water Loop CndW Supply Setpoint Nodes</field>
+		</object>
 		<object description = "SetpointManager:OutdoorAirReset" reference = "Plant">
 			<field description = "Name" type = "String">Hot Water Loop HW Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
@@ -1007,6 +984,7 @@
 		<object description = "Connector:Splitter" reference = "Plant">
 			<field description = "Name" type = "String">Hot Water Loop HW Demand Splitter</field>
 			<field description = "Inlet Branch Name" type ="String">Hot Water Loop HW Demand Inlet Branch</field>
+			<field description = "Outlet Branch Name" type = "String">Hot Water Loop HW Demand Bypass Branch</field>
 		</object>
 		<object description = "Connector:Splitter" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop ChW Supply Splitter</field>
@@ -1022,7 +1000,6 @@
 			<field description = "Name" type = "String">Chilled Water Loop CndW Supply Splitter</field>
 			<field description = "Inlet Branch Name" type ="String">Chilled Water Loop CndW Supply Inlet Branch</field>
 			<field description = "Outlet Branch 1 Name" type = "String">Chilled Water Loop CndW Supply Bypass Branch</field>
-			<field description = "Outlet Branch 2 Name" type = "String">Tower% CndW Branch</field>
 		</object>
 		<object description = "Connector:Splitter" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop CndW Demand Splitter</field>
@@ -1217,15 +1194,6 @@
 			<field description = "Zone Air Distribution Effectiveness in Cooling Mode" type = "Double">1</field>
 			<field description = "Zone Air Distribution Effectiveness in Heating Mode" type = "Double">0.8</field>
 		</object>
-		<object description = "DesignSpecification:OutdoorAir" reference = "Demand Side System">
-			<field description = "Name" type = "String">Zone% OutdoorAir</field>
-			<field description = "Outdoor Air Method" type = "String">Sum</field>
-			<field description = "Outdoor Air Flow per Person" type = "Double">0</field>
-			<field description = "Outdoor Air Flow per Zone Floor Area" type = "Double">0</field>
-			<field description = "Outdoor Air Flow per Zone" type = "Double">0</field>
-			<field description = "Outdoor Air Flow Air Changes per Hour" type = "Double">0</field>
-			<field description = "Outdoor Air Flow Rate Fraction Schedule Name" type = "String"/>
-		</object>
 		<object description = "ZoneHVAC:EquipmentConnections" reference="Demand Side System">
 			<field description = "Zone Name" type="String">Zone%</field>
 			<field description = "Zone Conditioning Equipment List Name" type="String">Zone% Equipment</field>
@@ -1255,7 +1223,7 @@
 			<field description = "Damper Air Outlet Node Name" type = "String">Zone% Damper Outlet</field>
 			<field description = "Air Inlet Node Name" type = "String">Zone% Zone Equip Inlet</field>
 			<field description = "Maximum Air Flow Rate" type = "Double or String">autosize</field>
-			<field description = "Zone Minimum Air Flow Input Method" type = "String">FixedFlowRate</field>
+			<field description = "Zone Minimum Air Flow Input Method" type = "String">Constant</field>
 			<field description = "Constant Minimum Air Flow Fraction" type = "Double">0.3</field>
 			<field description = "Fixed Minimum Air Flow Rate" type = "Double">0.0</field>
 			<field description = "Minimum Air Flow Fraction Schedule Name"/>
@@ -1315,7 +1283,7 @@
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
 			<field description = "Name" type ="String">Always 1</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
@@ -1338,12 +1306,25 @@
 			<field description = "Field 4" type = "String">12.8</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
+			<field description = "Name" type ="String">Always 29</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Field 1" type = "String">Through:12/31</field>
+			<field description = "Field 2" type = "String">For: AllDays</field>
+			<field description = "Field 3" type = "String">Until: 24:00</field>
+			<field description = "Field 4" type = "String">29</field>
+		</object>		
+		<object description = "Schedule:Compact" reference = "Schedule">
 			<field description = "Name" type ="String">OAMinFracSch</field>
 			<field description = "Schedule Type Limits Name" type = "String">Fractional</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">0.25</field>
+		</object>
+		<object description = "Sizing:Parameters" reference = "Global">
+			<field description = "Heating Sizing Factor" type = "Double">1.25</field>
+			<field description = "Cooling Sizing Factor" type = "Double">1.15</field>
+			<field description = "Timesteps in Averaging Window" type = "Double">1</field>
 		</object>		
 	</dataset>
 </hvac>

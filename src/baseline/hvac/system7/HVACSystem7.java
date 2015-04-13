@@ -352,6 +352,7 @@ public class HVACSystem7 implements SystemType7 {
     private ArrayList<EplusObject> processSupplyTemp(String floor,
 	    ArrayList<EplusObject> supplySideSystemTemplate) {
 	ArrayList<EplusObject> supplyTemp = new ArrayList<EplusObject>();
+	
 	for (EplusObject eo : supplySideSystemTemplate) {
 	    EplusObject temp = eo.clone();
 
@@ -417,6 +418,8 @@ public class HVACSystem7 implements SystemType7 {
 
 	int roomCounter = 0;
 	while (floorMapIterator.hasNext()) {
+	    zoneSplitterList.clear();
+	    zoneMixerList.clear();
 	    String floor = floorMapIterator.next();
 	    // first process the demand side system and their connection to
 	    // plant and supply side system
@@ -424,6 +427,8 @@ public class HVACSystem7 implements SystemType7 {
 	    for (ThermalZone zone : zones) {
 		demandSideSystem.addAll(processDemandTemp(zone.getFullName(),
 			demandSideSystemTemplate));
+		// add the outdoor air object for demand zone
+		demandSideSystem.add(zone.getOutdoorAirObject());
 		roomCounter++;
 	    }
 	    // then process the supply side system and their connections to
@@ -497,7 +502,7 @@ public class HVACSystem7 implements SystemType7 {
 		insertChillerRelatedInputs(1, eo, " ChW Outlet");
 	    } else if (name
 		    .equals("Chilled Water Loop CndW Supply Setpoint Nodes")) {
-		insertChillerRelatedInputs(1, eo, " CndW Outlet");
+		insertTowerRelatedInputs(1, eo, " CndW Outlet");
 	    } else if (name.equals("Hot Water Loop All Equipment")) {
 		insertBoilerEquipmentList(eo);
 	    } else if (name.equals("Chilled Water Loop All Chillers")) {
@@ -568,25 +573,46 @@ public class HVACSystem7 implements SystemType7 {
 
     private void insertTowerRelatedInputs(int index, EplusObject eo,
 	    String postfix) {
-	for (String s : towerList) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", s + postfix);
+	if (towerList.isEmpty()) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", "TOWER%"
+		    + postfix);
 	    eo.insertFiled(index, newPair);
+	} else {
+	    for (String s : towerList) {
+		KeyValuePair newPair = new KeyValuePair("Branch Name", s
+			+ postfix);
+		eo.insertFiled(index, newPair);
+	    }
 	}
     }
 
     private void insertChillerRelatedInputs(int index, EplusObject eo,
 	    String postfix) {
-	for (String s : chillerList) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", s + postfix);
+	if (chillerList.isEmpty()) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", "Chiller%"
+		    + postfix);
 	    eo.insertFiled(index, newPair);
+	} else {
+	    for (String s : chillerList) {
+		KeyValuePair newPair = new KeyValuePair("Branch Name", s
+			+ postfix);
+		eo.insertFiled(index, newPair);
+	    }
 	}
     }
 
     private void insertBoilerRelatedInputs(int index, EplusObject eo,
 	    String postfix) {
-	for (String s : boilerList) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", s + postfix);
+	if (boilerList.isEmpty()) {
+	    KeyValuePair newPair = new KeyValuePair("Branch Name", "Boiler%"
+		    + postfix);
 	    eo.insertFiled(index, newPair);
+	} else {
+	    for (String s : boilerList) {
+		KeyValuePair newPair = new KeyValuePair("Branch Name", s
+			+ postfix);
+		eo.insertFiled(index, newPair);
+	    }
 	}
     }
 

@@ -61,17 +61,17 @@ public class Generator {
 	processLighting();
 	
 	//run sizing simulations
-//	try {
-//	    sizingRun();
-//	} catch (IOException e) {
-//	    e.printStackTrace();
-//	}
+	try {
+	    sizingRun();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
 	
 	System.out.println("Finish sizing round");
 	building = new EnergyPlusBuilding(cZone, baselineModel);
 	
 	//for test only
-	htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
+	//htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
 	
 	SizingHTMLParser.processOutputs(htmlOutput);
 	SizingHTMLParser.extractBldgBasicInfo(building);

@@ -62,18 +62,10 @@ public interface ThermalZone {
     public void setHeaingLoad(Double load);
     
     /**
-     * Set the ventilaiton method, currently, methods only includes Sum, Maximum
-     * Flow/Person, Flow/Area, Flow/Zone and AirChange/Hour
-     * @param method
+     * set the out door air ventilation requirement for this thermal zone
+     * @param OAObject
      */
-    public void setVentilationMethod(String method);
-    
-    /**
-     * Set the ventilation rate for the thermal zone
-     * @param method
-     * @param rate
-     */
-    public void setVentilationRate(String method, String rate);
+    public void setOAVentilation(EplusObject OAObject);
     
     /**
      * get the block of the thermal zone

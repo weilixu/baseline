@@ -196,6 +196,32 @@ public class IdfReader {
 	    eplusMap.remove(objectName);
 	}
     }
+    
+    /**
+     * get the zone list name that contains the zone
+     * @param zoneName
+     * @return
+     */
+    public String getZoneListName(String zoneName){
+	HashMap<String,ArrayList<ValueNode>>zoneList = eplusMap.get("ZoneList");
+	String zoneListName = null;
+	if(zoneList!=null){
+	    Set<String> zoneListSet = zoneList.keySet();
+	    Iterator<String> zoneListIterator = zoneListSet.iterator();
+	    while(zoneListIterator.hasNext()){
+		String zoneListCount = zoneListIterator.next();
+		ArrayList<ValueNode> zoneListField = zoneList.get(zoneListCount);
+		zoneListName = zoneListField.get(0).getAttribute();//first field is the zonelist name
+		for(ValueNode vn: zoneListField){
+		    if(vn.getAttribute().equalsIgnoreCase(zoneName)){
+			return zoneListName;
+		    }
+		}
+	    }
+	}
+	//if cannot found, return null
+	return null;
+    }
 
     /**
      * get value from the database. This method will extract the value according
@@ -288,7 +314,7 @@ public class IdfReader {
 	    String elementCount = iterator.next();
 	    ArrayList<ValueNode> vnList = temp.get(elementCount);
 	    for (ValueNode vn : vnList) {
-		if (vn.getAttribute().equals(name)) {
+		if (vn.getAttribute().equalsIgnoreCase(name)) {
 		    targetList = vnList;
 		    break;
 		}

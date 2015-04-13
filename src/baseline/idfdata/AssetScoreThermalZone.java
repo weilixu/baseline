@@ -37,10 +37,6 @@ public class AssetScoreThermalZone implements ThermalZone{
 	zoneType = zoneCharacters[zoneTypeIndex];
 	floor = zoneCharacters[floorIndex];
 	zoneIdentification = zoneCharacters[zoneIdentificationIndex];
-	//initiate the mechanical ventional requirements for the thermal zone
-	mechanicalVentilationRequirement = new EplusObject("DesignSpecification:OutdoorAir",zoneName);
-	mechanicalVentilationRequirement.addField(new KeyValuePair("Name",zoneName+" OutdoorAir"));//add the name of the eplus object
-	
     }
 
     @Override
@@ -120,17 +116,16 @@ public class AssetScoreThermalZone implements ThermalZone{
     }
 
     @Override
-    public void setVentilationMethod(String method) {
-	mechanicalVentilationRequirement.addField(new KeyValuePair("Outdoor Air Method",method));
-    }
-
-    @Override
-    public void setVentilationRate(String method, String rate) {
-	mechanicalVentilationRequirement.addField(new KeyValuePair(method,rate));
-    }
-
-    @Override
     public EplusObject getOutdoorAirObject() {
+	if(mechanicalVentilationRequirement==null){
+	    return null;
+	}
 	return mechanicalVentilationRequirement;
+    }
+
+    @Override
+    public void setOAVentilation(EplusObject OAObject) {
+	mechanicalVentilationRequirement = OAObject;
+	
     }
 }
