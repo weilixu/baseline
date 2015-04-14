@@ -72,6 +72,8 @@ public final class SizingHTMLParser {
 		ThermalZone temp = new AssetScoreThermalZone(zoneName);
 		double coolLoad = getZoneCoolingLoad(zoneName);
 		double heatLoad = getZoneHeatingLoad(zoneName);
+		double coolAirFlow = getZoneCoolingAirFlow(zoneName);
+		double heatAirFlow = getZoneHeatingAirFlow(zoneName);
 		temp.setCoolingLoad(coolLoad);
 		temp.setHeaingLoad(heatLoad);
 		building.addThermalZone(temp);
@@ -107,6 +109,16 @@ public final class SizingHTMLParser {
 		building.setCoolTimeSetPointNotMet(coolHr);
 	    }
 	}
+    }
+    
+    private static Double getZoneHeatingAirFlow(String zone){
+	Double airFlow = Double.parseDouble(heatingLoad.getUserDefinedHeatingAirFlow(zone));
+	return airFlow;
+    }
+    
+    private static Double getZoneCoolingAirFlow(String zone){
+	Double airFlow = Double.parseDouble(coolingLoad.getUserDefinedCoolingAirFlow(zone));
+	return airFlow;
     }
     
     /**

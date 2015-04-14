@@ -62,6 +62,18 @@ public interface ThermalZone {
     public void setHeaingLoad(Double load);
     
     /**
+     * Set the cooling air flow rate for this thermal zone
+     * @param airflow
+     */
+    public void setCoolingAirFlow(Double airflow);
+    
+    /**
+     * Set the heating air flow rate for this thermal zone
+     * @param airflow
+     */
+    public void setHeatingAirFlow(Double airflow);
+    
+    /**
      * set the out door air ventilation requirement for this thermal zone
      * @param OAObject
      */
@@ -108,6 +120,18 @@ public interface ThermalZone {
      * @return
      */
     public Double getHeatingLoad();
+    
+    /**
+     * get the cooling air flow rate of this thermal zone
+     * @return
+     */
+    public Double getCoolingAirFlow();
+    
+    /**
+     * get the heating air flow rate of this thermal zone
+     * @return
+     */
+    public Double getHeatingAirFlow();
     
     /**
      * get the built outdoor air ventilation object in EnergyPlus

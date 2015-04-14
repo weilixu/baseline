@@ -13,21 +13,40 @@ import baseline.util.ClimateZone;
 
 public class EnergyPlusBuilding {
 
+    /**
+     * basic information about the building
+     */
     private Double totalFloorArea;
     private Double conditionedFloorArea;
     private Set<String> floorSet;
-
+    
+    /**
+     * set point not met
+     */
     private Double heatingSetPointNotMet;
     private Double coolingSetPointNotMet;
-
+    
+    /**
+     * the required cooling and heating loads
+     */
     private Double totalCoolingLoad;
     private Double totalHeatingLoad;
-
+    
+    /**
+     * climate zone
+     */
     private ClimateZone cZone;
-
+    
+    /**
+     * the building thermal zone lists
+     */
     private List<ThermalZone> thermalZoneList;
+    //for creating HVAC system
     private HashMap<String, ArrayList<ThermalZone>> floorMap;
-
+    
+    /**
+     * EnergyPlus data
+     */
     private IdfReader baselineModel;
 
     public EnergyPlusBuilding(ClimateZone zone, IdfReader baselineModel) {

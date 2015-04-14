@@ -442,7 +442,17 @@ public class HVACSystem7 implements SystemType7 {
 	objectLists.put("Supply Side System", supplySideSystem);
 	objectLists.put("Demand Side System", demandSideSystem);
 	objectLists.put("Plant", plantSystem);
+	System.out.println("Re-tunning the supply side system...");
+	checkSupplySideSystem();
+	System.out.println("Connect plans");
 	processConnections();
+    }
+    
+    private void checkSupplySideSystem(){
+	ArrayList<EplusObject> supplySystem = objectLists.get("Supply Side System");
+	//determine the economizers.
+	double economizer = building.getClimateZone().getEconomizerShutoffLimit();
+	
     }
 
     /**
