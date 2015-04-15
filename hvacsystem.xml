@@ -93,7 +93,7 @@
 			<field description = "Maximum Outdoor Air Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Economizer Control Type" type = "String">NoEconomizer</field>
 			<field description = "Economizer Control Action Type" type = "String">MinimumFlowWithBypass</field>
-			<field description = "Economizer Maximum LImit Dry-Bulb Temperature" type = "Double">24.0</field>
+			<field description = "Economizer Maximum Limit Dry-Bulb Temperature" type = "Double">24.0</field>
 			<field description = "Economizer Maximum Limit Enthalpy" type = "Double"/>
 			<field description = "Economizer Maximum Limit Dewpoint Temperature" type = "Double"/>
 			<field description = "Electronic Enthalpy Limit Curve Name" type = "String"/>

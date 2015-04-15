@@ -76,6 +76,8 @@ public final class SizingHTMLParser {
 		double heatAirFlow = getZoneHeatingAirFlow(zoneName);
 		temp.setCoolingLoad(coolLoad);
 		temp.setHeaingLoad(heatLoad);
+		temp.setCoolingAirFlow(coolAirFlow);
+		temp.setHeatingAirFlow(heatAirFlow);
 		building.addThermalZone(temp);
 	    }
 	}

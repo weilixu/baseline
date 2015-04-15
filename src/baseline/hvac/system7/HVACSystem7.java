@@ -7,6 +7,7 @@ import java.util.Set;
 
 import baseline.generator.EplusObject;
 import baseline.generator.KeyValuePair;
+import baseline.hvac.FanPowerCalculation;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.idfdata.ThermalZone;
 
@@ -448,13 +449,56 @@ public class HVACSystem7 implements SystemType7 {
 	processConnections();
     }
     
+    /**
+     * updates the supply side system parameters.
+     * Check economizer, fan power
+     */
     private void checkSupplySideSystem(){
 	ArrayList<EplusObject> supplySystem = objectLists.get("Supply Side System");
 	//determine the economizers.
 	double economizer = building.getClimateZone().getEconomizerShutoffLimit();
-	
+	for(EplusObject eo:supplySystem){
+	    if(eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")){
+		if(economizer>-1){
+		    turnOnEconomizer(eo,economizer);
+		}
+	    }else if(eo.getObjectName().equalsIgnoreCase("Fan:VariableVolume")){
+		updateFanPower(eo);
+	    }
+	}
     }
-
+    
+    private void updateFanPower(EplusObject eo){
+	String floor = eo.getKeyValuePair(0).getValue().split(" ")[0];//get the floor name
+	Double airflowRate = building.getFloorMaximumFlowRate(floor);
+	Double fanPower = FanPowerCalculation.getFanPowerForSystem5To8(airflowRate);
+	Double pressureDrop = fanPower/airflowRate*0.7; //0.7 is assumed fan total efficiency
+	Double motorEff = FanPowerCalculation.getFanMotorEffciencyForSystem5To8(airflowRate);
+	for(int i=0; i<eo.getSize(); i++){
+	    if(eo.getKeyValuePair(i).getKey().equalsIgnoreCase("Pressure Rise")){
+		eo.getKeyValuePair(i).setValue(""+pressureDrop);
+	    }else if(eo.getKeyValuePair(i).getKey().equalsIgnoreCase("Motor Efficiency")){
+		eo.getKeyValuePair(i).setValue(""+motorEff/100);
+	    }
+	}
+    }
+    
+    /**
+     * switch the economizer on if it is specified by Table G3.1.2.6A and G3.1.2.6B
+     * @param eo
+     * @param temperature
+     */
+    private void turnOnEconomizer(EplusObject eo, double temperature){
+	int numOfFields = eo.getSize();
+	for(int i=0; i<numOfFields; i++){
+	    if(eo.getKeyValuePair(i).getKey().equals("Economizer Control Type")){
+		eo.getKeyValuePair(i).setValue("FixedDryBulb");
+	    }else if(eo.getKeyValuePair(i).getKey().equals("Economizer Maximum Limit Dry-Bulb Temperature")){
+		eo.getKeyValuePair(i).setValue(""+temperature);
+	    }
+	}
+    }
+    
     /**
      * A method to process the system connections
      */

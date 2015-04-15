@@ -119,6 +119,22 @@ public class EnergyPlusBuilding {
 	    totalHeatingLoad += zone.getHeatingLoad();
 	}
     }
+    
+    /**
+     * get the floor maximum flow rate from the database
+     * @param floor
+     * @return
+     */
+    public Double getFloorMaximumFlowRate(String floor){
+	ArrayList<ThermalZone> zoneList = floorMap.get(floor);
+	Double coolingFlowRate = 0.0;
+	Double heatingFlowRate = 0.0;
+	for(ThermalZone zone:zoneList){
+	    coolingFlowRate += zone.getCoolingAirFlow();
+	    heatingFlowRate += zone.getHeatingAirFlow();
+	}
+	return Math.max(coolingFlowRate, heatingFlowRate);
+    }
 
     /**
      * get the floor map
