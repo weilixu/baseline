@@ -17,8 +17,6 @@ public class DistrictHeatHVACSystem7 implements SystemType7{
 	this.system = system;
     }
     
-    
-    
     @Override
     public HashMap<String, ArrayList<EplusObject>> getSystemData() {
 	

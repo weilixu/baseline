@@ -8,7 +8,5 @@ import baseline.hvac.HVACSystem;
  *
  */
 public interface SystemType7 extends HVACSystem{
-    
-    
 
 }

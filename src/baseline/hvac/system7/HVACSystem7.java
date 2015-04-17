@@ -19,39 +19,48 @@ import baseline.idfdata.ThermalZone;
  *
  */
 public class HVACSystem7 implements SystemType7 {
+    //recording all the required data for HVAC system type 7
     private HashMap<String, ArrayList<EplusObject>> objectLists;
+    //building object contains building information and energyplus data
     private EnergyPlusBuilding building;
-
+    
+    //supply air connection list
     private ArrayList<String> zoneSplitterList;
     private ArrayList<String> zoneMixerList;
-
+    
+    //plant demand side list
     private ArrayList<String> systemCoolingCoilList;
     private ArrayList<String> systemHeatingCoilList;
-
     private ArrayList<String> zoneHeatingCoilList;
-
+    
+    //plant supply side list
     private ArrayList<String> boilerList;
     private ArrayList<String> chillerList;
     private ArrayList<String> towerList;
-
+    
+    //pump selection
     private String heatingPump;
     private String coolingPump;
-
+    
+    //flag indicates whether boiler, chiller or tower have been modified in the chekcing system
     private boolean changedBoiler;
     private boolean changedChiller;
     private boolean changedTower;
-
+    
+    //threshold for determine the HVAC components.
     private static final double heatingFloorThreshold = 11150; // m2
     private static final double heatingBoilerThreshold = 1393.55;// m2
     private static final double coolingLoadThreshold = 10550558;// watt
     private static final double coolingChillerSmallThreshold = 10550558;// watt
     private static final double coolingChillerLargeThreshold = 21101115;// watt
+    private static final double chillerCapacityThreshold = 28134820;
 
     public HVACSystem7(HashMap<String, ArrayList<EplusObject>> objects,
 	    EnergyPlusBuilding bldg) {
 	objectLists = objects;
 	building = bldg;
-
+	
+	//Set-up all the data structures
 	zoneSplitterList = new ArrayList<String>();
 	zoneMixerList = new ArrayList<String>();
 	systemCoolingCoilList = new ArrayList<String>();
@@ -60,7 +69,7 @@ public class HVACSystem7 implements SystemType7 {
 	boilerList = new ArrayList<String>();
 	chillerList = new ArrayList<String>();
 	towerList = new ArrayList<String>();
-
+	//initialize pump name
 	heatingPump = "HeaderedPumps:ConstantSpeed";
 	coolingPump = "HeaderedPumps:ConstantSpeed";
 
@@ -77,12 +86,11 @@ public class HVACSystem7 implements SystemType7 {
     }
 
     private int chillerCalculator(double coolingLoad) {
-	double singleChillerLimit = 28134820;// watt
 	int numberOfChiller = 2; // minimum is two chillers;
 	boolean converged = false;
 	while (!converged) {
 	    double singleChillerCapacity = coolingLoad / numberOfChiller;
-	    if (singleChillerCapacity < singleChillerLimit) {
+	    if (singleChillerCapacity < chillerCapacityThreshold) {
 		converged = true;
 	    } else {
 		numberOfChiller++;
