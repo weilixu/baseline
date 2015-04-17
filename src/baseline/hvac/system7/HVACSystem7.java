@@ -478,7 +478,7 @@ public class HVACSystem7 implements SystemType7 {
 	    if(eo.getKeyValuePair(i).getKey().equalsIgnoreCase("Pressure Rise")){
 		eo.getKeyValuePair(i).setValue(""+pressureDrop);
 	    }else if(eo.getKeyValuePair(i).getKey().equalsIgnoreCase("Motor Efficiency")){
-		eo.getKeyValuePair(i).setValue(""+motorEff/100);
+		eo.getKeyValuePair(i).setValue(""+motorEff);
 	    }
 	}
     }

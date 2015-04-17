@@ -89,27 +89,27 @@ public final class FanPowerCalculation {
      */
     private static double selectMotorEff(double bhp){
 	if(bhp<=1){
-	    return 82.5;
+	    return 0.825;
 	}else if(bhp<=2){
-	    return 84.0;
+	    return 0.84;
 	}else if(bhp<=5){
-	    return 87.5;
+	    return 0.875;
 	}else if(bhp<=10){
-	    return 89.5;
+	    return 0.895;
 	}else if(bhp<=20){
-	    return 91.0;
+	    return 0.910;
 	}else if(bhp<=30){
-	    return 92.4;
+	    return 0.924;
 	}else if(bhp<=50){
-	    return 93.0;
+	    return 0.930;
 	}else if(bhp<=60){
-	    return 93.6;
+	    return 0.936;
 	}else if(bhp<=75){
-	    return 94.1;
+	    return 0.941;
 	}else if(bhp<=125){
-	    return 94.5;
+	    return 0.945;
 	}else{
-	    return 95.0;
+	    return 0.950;
 	}
     }
 
