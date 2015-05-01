@@ -8,6 +8,7 @@ import java.util.Set;
 import baseline.generator.EplusObject;
 import baseline.generator.KeyValuePair;
 import baseline.hvac.FanPowerCalculation;
+import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.idfdata.ThermalZone;
 
@@ -19,48 +20,45 @@ import baseline.idfdata.ThermalZone;
  *
  */
 public class HVACSystem7 implements SystemType7 {
-    //recording all the required data for HVAC system type 7
+    // recording all the required data for HVAC system type 7
     private HashMap<String, ArrayList<EplusObject>> objectLists;
-    //building object contains building information and energyplus data
+    // building object contains building information and energyplus data
     private EnergyPlusBuilding building;
-    
-    //supply air connection list
+
+    // supply air connection list
     private ArrayList<String> zoneSplitterList;
     private ArrayList<String> zoneMixerList;
-    
-    //plant demand side list
+
+    // plant demand side list
     private ArrayList<String> systemCoolingCoilList;
     private ArrayList<String> systemHeatingCoilList;
     private ArrayList<String> zoneHeatingCoilList;
-    
-    //plant supply side list
+
+    // plant supply side list
     private ArrayList<String> boilerList;
     private ArrayList<String> chillerList;
     private ArrayList<String> towerList;
-    
-    //pump selection
+
+    // pump selection
     private String heatingPump;
     private String coolingPump;
-    
-    //flag indicates whether boiler, chiller or tower have been modified in the chekcing system
+
+    // flag indicates whether boiler, chiller or tower have been modified in the
+    // chekcing system
     private boolean changedBoiler;
     private boolean changedChiller;
     private boolean changedTower;
-    
-    //threshold for determine the HVAC components.
+
+    // threshold for determine the HVAC components.
     private static final double heatingFloorThreshold = 11150; // m2
-    private static final double heatingBoilerThreshold = 1393.55;// m2
     private static final double coolingLoadThreshold = 10550558;// watt
-    private static final double coolingChillerSmallThreshold = 10550558;// watt
-    private static final double coolingChillerLargeThreshold = 21101115;// watt
-    private static final double chillerCapacityThreshold = 28134820;
 
     public HVACSystem7(HashMap<String, ArrayList<EplusObject>> objects,
 	    EnergyPlusBuilding bldg) {
 	objectLists = objects;
 	building = bldg;
-	
-	//Set-up all the data structures
+
+	// Set-up all the data structures
 	zoneSplitterList = new ArrayList<String>();
 	zoneMixerList = new ArrayList<String>();
 	systemCoolingCoilList = new ArrayList<String>();
@@ -69,7 +67,7 @@ public class HVACSystem7 implements SystemType7 {
 	boilerList = new ArrayList<String>();
 	chillerList = new ArrayList<String>();
 	towerList = new ArrayList<String>();
-	//initialize pump name
+	// initialize pump name
 	heatingPump = "HeaderedPumps:ConstantSpeed";
 	coolingPump = "HeaderedPumps:ConstantSpeed";
 
@@ -85,20 +83,6 @@ public class HVACSystem7 implements SystemType7 {
 	return objectLists;
     }
 
-    private int chillerCalculator(double coolingLoad) {
-	int numberOfChiller = 2; // minimum is two chillers;
-	boolean converged = false;
-	while (!converged) {
-	    double singleChillerCapacity = coolingLoad / numberOfChiller;
-	    if (singleChillerCapacity < chillerCapacityThreshold) {
-		converged = true;
-	    } else {
-		numberOfChiller++;
-	    }
-	}
-	return numberOfChiller;
-    }
-
     /**
      * process the HVAC plant side system
      * 
@@ -112,20 +96,12 @@ public class HVACSystem7 implements SystemType7 {
 	double coolingLoad = building.getTotalCoolingLoad();// G3.1.3.7
 
 	// calculate the number of boilers
-	int numberOfBoiler = 1;
-	if (floorArea > heatingBoilerThreshold) {
-	    numberOfBoiler = 2;
-	}
+	int numberOfBoiler = HVACSystemImplUtil.boilerNumberCalculation(floorArea);
 	System.out.println("We Found " + numberOfBoiler + "Boilers");
 
 	// calculate the number of chillers
-	int numberOfChiller = 1;
-	if (coolingLoad > coolingChillerSmallThreshold
-		&& coolingLoad < coolingChillerLargeThreshold) {
-	    numberOfChiller = 2;
-	} else if (coolingLoad >= coolingChillerLargeThreshold) {
-	    numberOfChiller = chillerCalculator(coolingLoad);
-	}
+	int numberOfChiller = HVACSystemImplUtil
+		    .chillerNumberCalculation(coolingLoad);;
 
 	System.out.println("We Found " + numberOfChiller + " Chillers");
 
@@ -361,7 +337,7 @@ public class HVACSystem7 implements SystemType7 {
     private ArrayList<EplusObject> processSupplyTemp(String floor,
 	    ArrayList<EplusObject> supplySideSystemTemplate) {
 	ArrayList<EplusObject> supplyTemp = new ArrayList<EplusObject>();
-	
+
 	for (EplusObject eo : supplySideSystemTemplate) {
 	    EplusObject temp = eo.clone();
 
@@ -456,244 +432,38 @@ public class HVACSystem7 implements SystemType7 {
 	System.out.println("Connect plans");
 	processConnections();
     }
-    
+
     /**
-     * updates the supply side system parameters.
-     * Check economizer, fan power
+     * updates the supply side system parameters. Check economizer, fan power
      */
-    private void checkSupplySideSystem(){
-	ArrayList<EplusObject> supplySystem = objectLists.get("Supply Side System");
-	//determine the economizers.
-	double economizer = building.getClimateZone().getEconomizerShutoffLimit();
-	for(EplusObject eo:supplySystem){
-	    if(eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")){
-		if(economizer>-1){
-		    turnOnEconomizer(eo,economizer);
+    private void checkSupplySideSystem() {
+	ArrayList<EplusObject> supplySystem = objectLists
+		.get("Supply Side System");
+	// determine the economizers.
+	double economizer = building.getClimateZone()
+		.getEconomizerShutoffLimit();
+	for (EplusObject eo : supplySystem) {
+	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {
+		if (economizer > -1) {
+		    HVACSystemImplUtil.economizer(eo, economizer);
 		}
-	    }else if(eo.getObjectName().equalsIgnoreCase("Fan:VariableVolume")){
-		updateFanPower(eo);
+	    } else if (eo.getObjectName()
+		    .equalsIgnoreCase("Fan:VariableVolume")) {
+		//get the floor name
+		String floor = eo.getKeyValuePair(0).getValue().split(" ")[0];
+		HVACSystemImplUtil.updateFanPowerforSystem5To8(eo,
+			building.getFloorMaximumFlowRate(floor));
 	    }
 	}
     }
-    
-    private void updateFanPower(EplusObject eo){
-	String floor = eo.getKeyValuePair(0).getValue().split(" ")[0];//get the floor name
-	Double airflowRate = building.getFloorMaximumFlowRate(floor);
-	Double fanPower = FanPowerCalculation.getFanPowerForSystem5To8(airflowRate);
-	Double pressureDrop = fanPower/airflowRate*0.7; //0.7 is assumed fan total efficiency
-	Double motorEff = FanPowerCalculation.getFanMotorEffciencyForSystem5To8(airflowRate);
-	for(int i=0; i<eo.getSize(); i++){
-	    if(eo.getKeyValuePair(i).getKey().equalsIgnoreCase("Pressure Rise")){
-		eo.getKeyValuePair(i).setValue(""+pressureDrop);
-	    }else if(eo.getKeyValuePair(i).getKey().equalsIgnoreCase("Motor Efficiency")){
-		eo.getKeyValuePair(i).setValue(""+motorEff);
-	    }
-	}
-    }
-    
-    /**
-     * switch the economizer on if it is specified by Table G3.1.2.6A and G3.1.2.6B
-     * @param eo
-     * @param temperature
-     */
-    private void turnOnEconomizer(EplusObject eo, double temperature){
-	int numOfFields = eo.getSize();
-	for(int i=0; i<numOfFields; i++){
-	    if(eo.getKeyValuePair(i).getKey().equals("Economizer Control Type")){
-		eo.getKeyValuePair(i).setValue("FixedDryBulb");
-	    }else if(eo.getKeyValuePair(i).getKey().equals("Economizer Maximum Limit Dry-Bulb Temperature")){
-		eo.getKeyValuePair(i).setValue(""+temperature);
-	    }
-	}
-    }
-    
+
     /**
      * A method to process the system connections
      */
     private void processConnections() {
 	ArrayList<EplusObject> plantSystem = objectLists.get("Plant");
-	plantConnectionProcessing(plantSystem);
-    }
-
-    /**
-     * A helper method to process the system connections
-     * 
-     * @param plantSystem
-     */
-    private void plantConnectionProcessing(ArrayList<EplusObject> plantSystem) {
-	// use for additional eplus objects
-	for (EplusObject eo : plantSystem) {
-	    String name = eo.getKeyValuePair(0).getValue();
-	    if (name.equals("Hot Water Loop HW Demand Side Branches")) {
-		insertHeatingCoils(2, eo);
-	    } else if (name.equals("Hot Water Loop HW Demand Splitter")
-		    || name.equals("Hot Water Loop HW Demand Mixer")) {
-		insertHeatingCoils(eo.getSize(), eo);// insert to the last index
-	    } else if (name
-		    .equals("Chilled Water Loop ChW Demand Side Branches")) {
-		insertCoolingCoils(2, eo);
-	    } else if (name.equals("Chilled Water Loop ChW Demand Splitter")
-		    || name.equals("Chilled Water Loop ChW Demand Mixer")) {
-		insertCoolingCoils(eo.getSize(), eo);
-	    } else if (name.equals("Hot Water Loop HW Supply Side Branches")
-		    || name.equals("Hot Water Loop HW Supply Splitter")
-		    || name.equals("Hot Water Loop HW Supply Mixer")) {
-		insertBoilerRelatedInputs(2, eo, " HW Branch");
-	    } else if (name
-		    .equals("Chilled Water Loop ChW Supply Side Branches")) {
-		insertChillerRelatedInputs(2, eo, " ChW Branch");
-	    } else if (name.equals("Chilled Water Loop ChW Supply Splitter")
-		    || name.equals("Chilled Water Loop ChW Supply Mixer")) {
-		insertChillerRelatedInputs(3, eo, " ChW Branch");
-	    } else if (name
-		    .equals("Chilled Water Loop CndW Demand Side Branches")) {
-		insertChillerRelatedInputs(2, eo, " CndW Branch");
-	    } else if (name.equals("Chilled Water Loop CndW Demand Splitter")
-		    || name.equals("Chilled Water Loop CndW Demand Mixer")) {
-		insertChillerRelatedInputs(3, eo, " CndW Branch");
-	    } else if (name
-		    .equals("Chilled Water Loop CndW Supply Side Branches")) {
-		insertTowerRelatedInputs(2, eo, " CndW Branch");
-	    } else if (name.equals("Chilled Water Loop CndW Supply Splitter")
-		    || name.equals("Chilled Water Loop CndW Supply Mixer")) {
-		insertTowerRelatedInputs(3, eo, " CndW Branch");
-	    } else if (name.equals("Hot Water Loop HW Supply Setpoint Nodes")) {
-		insertBoilerRelatedInputs(1, eo, " HW Outlet");
-	    } else if (name
-		    .equals("Chilled Water Loop ChW Supply Setpoint Nodes")) {
-		insertChillerRelatedInputs(1, eo, " ChW Outlet");
-	    } else if (name
-		    .equals("Chilled Water Loop CndW Supply Setpoint Nodes")) {
-		insertTowerRelatedInputs(1, eo, " CndW Outlet");
-	    } else if (name.equals("Hot Water Loop All Equipment")) {
-		insertBoilerEquipmentList(eo);
-	    } else if (name.equals("Chilled Water Loop All Chillers")) {
-		insertChillerEquipmentList(eo);
-	    } else if (name.equals("Chilled Water Loop All Condensers")) {
-		insertTowerEquipmentList(eo);
-	    }
-	}
-    }
-
-    /*
-     * Group of helper functions which inserts the systems connections to the
-     * specified fields
-     */
-    private void insertTowerEquipmentList(EplusObject eo) {
-	if (towerList.isEmpty()) {
-	    KeyValuePair objectType = new KeyValuePair("Equipment Object Type",
-		    "CoolingTower:TwoSpeed");
-	    KeyValuePair name = new KeyValuePair("Equipment Name", "Tower%");
-	    eo.addField(objectType);
-	    eo.addField(name);
-	} else {
-	    for (String s : towerList) {
-		KeyValuePair objectType = new KeyValuePair(
-			"Equipment Object Type", "CoolingTower:TwoSpeed");
-		KeyValuePair name = new KeyValuePair("Equipment Name", s);
-		eo.addField(objectType);
-		eo.addField(name);
-	    }
-	}
-    }
-
-    private void insertChillerEquipmentList(EplusObject eo) {
-	if (chillerList.isEmpty()) {
-	    KeyValuePair objectType = new KeyValuePair("Equipment Object Type",
-		    "Chiller:Electric:EIR");
-	    KeyValuePair name = new KeyValuePair("Equipment Name", "Chiller%");
-	    eo.addField(objectType);
-	    eo.addField(name);
-	} else {
-	    for (String s : chillerList) {
-		KeyValuePair objectType = new KeyValuePair(
-			"Equipment Object Type", "Chiller:Electric:EIR");
-		KeyValuePair name = new KeyValuePair("Equipment Name", s);
-		eo.addField(objectType);
-		eo.addField(name);
-	    }
-	}
-    }
-
-    private void insertBoilerEquipmentList(EplusObject eo) {
-	if (boilerList.isEmpty()) {
-	    KeyValuePair objectType = new KeyValuePair("Equipment Object Type",
-		    "Boiler:HotWater");
-	    KeyValuePair name = new KeyValuePair("Equipment Name", "Boiler%");
-	    eo.addField(objectType);
-	    eo.addField(name);
-	} else {
-	    for (String s : boilerList) {
-		KeyValuePair objectType = new KeyValuePair(
-			"Equipment Object Type", "Boiler:HotWater");
-		KeyValuePair name = new KeyValuePair("Equipment Name", s);
-		eo.addField(objectType);
-		eo.addField(name);
-	    }
-	}
-    }
-
-    private void insertTowerRelatedInputs(int index, EplusObject eo,
-	    String postfix) {
-	if (towerList.isEmpty()) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", "TOWER%"
-		    + postfix);
-	    eo.insertFiled(index, newPair);
-	} else {
-	    for (String s : towerList) {
-		KeyValuePair newPair = new KeyValuePair("Branch Name", s
-			+ postfix);
-		eo.insertFiled(index, newPair);
-	    }
-	}
-    }
-
-    private void insertChillerRelatedInputs(int index, EplusObject eo,
-	    String postfix) {
-	if (chillerList.isEmpty()) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", "Chiller%"
-		    + postfix);
-	    eo.insertFiled(index, newPair);
-	} else {
-	    for (String s : chillerList) {
-		KeyValuePair newPair = new KeyValuePair("Branch Name", s
-			+ postfix);
-		eo.insertFiled(index, newPair);
-	    }
-	}
-    }
-
-    private void insertBoilerRelatedInputs(int index, EplusObject eo,
-	    String postfix) {
-	if (boilerList.isEmpty()) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", "Boiler%"
-		    + postfix);
-	    eo.insertFiled(index, newPair);
-	} else {
-	    for (String s : boilerList) {
-		KeyValuePair newPair = new KeyValuePair("Branch Name", s
-			+ postfix);
-		eo.insertFiled(index, newPair);
-	    }
-	}
-    }
-
-    private void insertCoolingCoils(int index, EplusObject eo) {
-	for (String s : systemCoolingCoilList) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
-	    eo.insertFiled(index, newPair);
-	}
-    }
-
-    private void insertHeatingCoils(int index, EplusObject eo) {
-	for (String s : zoneHeatingCoilList) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
-	    eo.insertFiled(index, newPair);
-	}
-
-	for (String s : systemHeatingCoilList) {
-	    KeyValuePair newPair = new KeyValuePair("Branch Name", s);
-	    eo.insertFiled(index, newPair);
-	}
+	HVACSystemImplUtil.plantConnection(plantSystem, chillerList, towerList,
+		boilerList, systemCoolingCoilList, systemHeatingCoilList,
+		zoneHeatingCoilList);
     }
 }

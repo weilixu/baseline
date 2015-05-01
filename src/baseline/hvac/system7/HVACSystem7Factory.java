@@ -7,6 +7,23 @@ import baseline.generator.EplusObject;
 import baseline.hvac.SystemParser;
 import baseline.idfdata.EnergyPlusBuilding;
 
+/**
+ * This class represents HVAC System type 7 manufacturer
+ * The class behaviors includes:
+ * 1. Establish the template System Type 7
+ * 2. Check Clauses for components modifications:
+ * 	G3.1.2.2; G3.1.2.4 (Not implemented); G3.1.2.5; G3.1.2.7;G3.1.2.8;G3.1.2.9 (Not completed);
+ * 	G3.1.2.11 (Not implemented yet)
+ * 	G3.1.3.2; G3.1.3.3; G3.1.3.4; G3.1.3.5;G3.1.3.7;G3.1.3.8;G3.1.3.9;
+ * 	G3.1.3.10;G3.1.3.11;G3.1.3.12;G3.1.3.13;G3.1.3.15
+ * 3. Check exceptions includes:
+ * 	G3.1.1 (not implemented); G3.1.1.1 (Not implemented); G3.1.1.2 (Not implemented)
+ * 	G3.1.1.3 (nOT implemented)
+ * 4. Manufactured correct system tyep 7 based on design case and merge it back to the whole building
+ *    energy model
+ * @author Weili
+ *
+ */
 public class HVACSystem7Factory {
     //extract the template system
     private final SystemParser system = new SystemParser("System Type 7");
