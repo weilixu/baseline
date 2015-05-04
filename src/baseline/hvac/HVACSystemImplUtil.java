@@ -39,6 +39,30 @@ public final class HVACSystemImplUtil {
 	    }
 	}
     }
+    
+    /**
+     * calculates the fan power the calculation method is established base don
+     * G3.1.2.10 This is specifically calculation for system type 3 to 4 fan
+     * power
+     * 
+     * @param eo
+     * @param airflowRate
+     */
+    public static void updateFanPowerforSystem3To4(EplusObject eo, double airflowRate){
+	Double fanPower = FanPowerCalculation.getFanPowerForSystem3To4(airflowRate);
+	//0.5 is the assumed fan total efficiency
+	Double pressureDrop = fanPower/airflowRate*0.5;
+	Double motorEff = FanPowerCalculation.getFanMotorEfficiencyForSystem3To4(airflowRate);
+	for (int i = 0; i < eo.getSize(); i++) {
+	    if (eo.getKeyValuePair(i).getKey()
+		    .equalsIgnoreCase("Pressure Rise")) {
+		eo.getKeyValuePair(i).setValue("" + pressureDrop);
+	    } else if (eo.getKeyValuePair(i).getKey()
+		    .equalsIgnoreCase("Motor Efficiency")) {
+		eo.getKeyValuePair(i).setValue("" + motorEff);
+	    }
+	}
+    }
 
     /**
      * calculates the fan power the calculation method is established base don

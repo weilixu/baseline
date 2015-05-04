@@ -30,6 +30,20 @@ public final class FanPowerCalculation {
     }
     
     /**
+     * calculate the fan motor efficiency for system type 3 to system type 4.
+     * The fan power limitation pressure drop credit includes:
+     * 1. Fully ducted return and/or exhaust air system
+     * 2. MERV 13 through 15
+     * @param airFlow
+     * @return
+     */
+    public static double getFanMotorEfficiencyForSystem3To4(Double airFlow){
+	double bhp = getBhPforConstantVolumeSystem(airFlow);
+	double motoreff = selectMotorEff(bhp);
+	return motoreff;
+    }
+    
+    /**
      * calculate the fan power for system type 5 to system type 8.
      * The fan power limitation pressure drop credit includes:
      * 1. Fully ducted return and/or exhaust air system

@@ -19,6 +19,7 @@ public class EnergyPlusBuilding {
     private Double totalFloorArea;
     private Double conditionedFloorArea;
     private Set<String> floorSet;
+    private boolean electricHeating;
     
     /**
      * set point not met
@@ -56,6 +57,7 @@ public class EnergyPlusBuilding {
 	totalHeatingLoad = 0.0;
 	cZone = zone;
 	this.baselineModel = baselineModel;
+	electricHeating = false;
     }
 
     /**
@@ -86,6 +88,10 @@ public class EnergyPlusBuilding {
 
     public void setCoolTimeSetPointNotMet(Double hr) {
 	coolingSetPointNotMet = hr;
+    }
+    
+    public void setElectricHeating(){
+	electricHeating = true;
     }
 
     /**
@@ -121,6 +127,23 @@ public class EnergyPlusBuilding {
     }
     
     /**
+     * get the zone maximum flow rate
+     * @param zoneName
+     * @return
+     */
+    public Double getZoneMaximumFlowRate(String zoneName){
+	Double coolingFlowRate = 0.0;
+	Double heatingFlowRate = 0.0;
+	for (ThermalZone zone : thermalZoneList){
+	    if(zone.getFullName().equalsIgnoreCase(zoneName)){
+		coolingFlowRate = zone.getCoolingAirFlow();
+		heatingFlowRate = zone.getHeatingAirFlow();
+	    }
+	}
+	return Math.max(coolingFlowRate, heatingFlowRate);
+    }
+    
+    /**
      * get the floor maximum flow rate from the database
      * @param floor
      * @return
@@ -151,6 +174,10 @@ public class EnergyPlusBuilding {
 
     public ClimateZone getClimateZone() {
 	return cZone;
+    }
+    
+    public boolean getHeatingMethod(){
+	return electricHeating;
     }
 
     /**

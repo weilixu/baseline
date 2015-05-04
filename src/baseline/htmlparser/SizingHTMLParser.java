@@ -2,6 +2,7 @@ package baseline.htmlparser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,6 +26,7 @@ public final class SizingHTMLParser {
     //All Summary tables
     private static HeatingLoadParser heatingLoad;
     private static CoolingLoadParser coolingLoad;
+    private static EndUseParser enduse;
     
     
     /**
@@ -38,6 +40,7 @@ public final class SizingHTMLParser {
 	    
 	    heatingLoad = new HeatingLoadParser(doc);
 	    coolingLoad = new CoolingLoadParser(doc);
+	    enduse = new EndUseParser(doc);
 	} catch (IOException e) {
 	    // do nothing
 	}
@@ -53,6 +56,8 @@ public final class SizingHTMLParser {
 	extractBuildingFloorArea(building);
 	//extract the time setpoint not met
 	extractTimeSetPointNotMet(building);
+	//extract the heating method
+	extractHeatingMethod(building);
     }
 
     /**
@@ -110,6 +115,15 @@ public final class SizingHTMLParser {
 		Double coolHr = Double.parseDouble(hourList.get(i+notMetHour).text());
 		building.setCoolTimeSetPointNotMet(coolHr);
 	    }
+	}
+    }
+    
+    private static void extractHeatingMethod(EnergyPlusBuilding building){
+	HashMap<String, String> heatingEndUse = enduse.getHeatingEndUseMap();
+	Double electricity = Double.parseDouble(heatingEndUse.get("Electricity"));
+	Double naturalgas = Double.parseDouble(heatingEndUse.get("Natural Gas"));
+	if(electricity>naturalgas){
+	    building.setElectricHeating();
 	}
     }
     
