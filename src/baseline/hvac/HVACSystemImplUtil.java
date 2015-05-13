@@ -51,7 +51,7 @@ public final class HVACSystemImplUtil {
     public static void updateFanPowerforSystem3To4(EplusObject eo, double airflowRate){
 	Double fanPower = FanPowerCalculation.getFanPowerForSystem3To4(airflowRate);
 	//0.5 is the assumed fan total efficiency
-	Double pressureDrop = fanPower/airflowRate*0.5;
+	Double pressureDrop = fanPower/airflowRate*0.6;
 	Double motorEff = FanPowerCalculation.getFanMotorEfficiencyForSystem3To4(airflowRate);
 	for (int i = 0; i < eo.getSize(); i++) {
 	    if (eo.getKeyValuePair(i).getKey()
@@ -76,7 +76,7 @@ public final class HVACSystemImplUtil {
 	    double airflowRate) {
 	Double fanPower = FanPowerCalculation
 		.getFanPowerForSystem5To8(airflowRate);
-	Double pressureDrop = fanPower / airflowRate * 0.7; // 0.7 is assumed
+	Double pressureDrop = fanPower / airflowRate * 0.6; // 0.7 is assumed
 							    // fan total
 							    // efficiency
 	Double motorEff = FanPowerCalculation
