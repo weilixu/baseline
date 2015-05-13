@@ -9,5 +9,5 @@ import baseline.hvac.HVACSystem;
  *
  */
 public interface SystemType3 extends HVACSystem{
-
+    //Marker Interface
 }

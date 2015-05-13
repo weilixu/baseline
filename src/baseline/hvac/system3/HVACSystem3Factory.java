@@ -6,6 +6,21 @@ import java.util.HashMap;
 import baseline.generator.EplusObject;
 import baseline.hvac.SystemParser;
 import baseline.idfdata.EnergyPlusBuilding;
+/**
+ * This class represent HVAC system type 3 manufacturer
+ * The class behaviors includes
+ * 1. Establish the template System Type 3
+ * 2. Check Clauses for components modifications:
+ * 	G3.1.2.2; G3.1.2.4 (Not implemented); G3.1.2.5; G3.1.2.7;G3.1.2.8;G3.1.2.9(Not completed);
+ * 	G3.1.2.11(Not implemented yet)
+ * 3. Check exceptions includes
+ * 	G3.1.1 (not implemented); G3.1.1.1 (Not implemented); G3.1.1.2 (Not implemented)
+ * 	G3.1.1.3 (nOT implemented)
+ * 4. Manufacture correct system type 3 based on design case and merge it back to the whole building
+ *    energy model
+ * @author Weili
+ *
+ */
 
 public class HVACSystem3Factory {
     //extract the template system
@@ -22,6 +37,17 @@ public class HVACSystem3Factory {
 	processTemplate();
 	systemType3 = new HVACSystem3(systemObjects, building);
 	
+    }
+    
+    public SystemType3 getSystem(){
+	processSystem();
+	return systemType3;
+    }
+    
+    private void processSystem(){
+	if(building.getBaselineModel().getObjectList("DistrictHeating")!=null){
+	    
+	}
     }
     
     /**

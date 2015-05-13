@@ -19,7 +19,7 @@ import baseline.idfdata.EnergyPlusBuilding;
  * 3. Check exceptions includes:
  * 	G3.1.1 (not implemented); G3.1.1.1 (Not implemented); G3.1.1.2 (Not implemented)
  * 	G3.1.1.3 (nOT implemented)
- * 4. Manufactured correct system tyep 7 based on design case and merge it back to the whole building
+ * 4. Manufactured correct system type 7 based on design case and merge it back to the whole building
  *    energy model
  * @author Weili
  *
