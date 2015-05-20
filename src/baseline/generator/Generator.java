@@ -76,7 +76,7 @@ public class Generator {
 	SizingHTMLParser.processOutputs(htmlOutput);
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);
-	building.getThermalZoneInfo();
+	building.processModelInfo();
 	
 	buildingHVAC();
     }

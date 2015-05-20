@@ -76,7 +76,7 @@ public final class HVACSystemImplUtil {
 	    double airflowRate) {
 	Double fanPower = FanPowerCalculation
 		.getFanPowerForSystem5To8(airflowRate);
-	Double pressureDrop = fanPower / airflowRate * 0.6; // 0.7 is assumed
+	Double pressureDrop = fanPower / airflowRate * 0.6; // 0.6 is assumed
 							    // fan total
 							    // efficiency
 	Double motorEff = FanPowerCalculation

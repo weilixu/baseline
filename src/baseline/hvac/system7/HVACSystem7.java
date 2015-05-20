@@ -7,7 +7,6 @@ import java.util.Set;
 
 import baseline.generator.EplusObject;
 import baseline.generator.KeyValuePair;
-import baseline.hvac.FanPowerCalculation;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.idfdata.ThermalZone;

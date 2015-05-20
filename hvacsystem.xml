@@ -61,7 +61,7 @@
 		<object description = "Fan:OnOff" reference = "Supply Side System">
 			<field description = "Name" type = "String">Zone% Supply Fan</field>
 			<field description = "Availability Schedule Name" type = "String">On</field>
-			<field description = "Fan Total Efficiency" type = "Double">0.5</field>
+			<field description = "Fan Total Efficiency" type = "Double">0.6</field>
 			<field description = "Pressure Rise" type = "Double">1000</field>
 			<field description = "Maximum Flow Rate" type = "Double/String">autosize</field>
 			<field description = "Motor Efficiency" type = "Double">0.84</field>
@@ -634,7 +634,7 @@
 		<object description = "Fan:VariableVolume" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Supply Fan</field>
 			<field description = "Availability Schedule Name" type = "String">On</field>
-			<field description = "Fan Total Efficiency" type = "Double">0.7</field>
+			<field description = "Fan Total Efficiency" type = "Double">0.6</field>
 			<field description = "Pressure Rise" type = "Double">2000</field>
 			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Fan Power Minimum Flow Rate Input Method" type = "String">Fraction</field>
