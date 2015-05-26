@@ -186,6 +186,18 @@ public class EnergyPlusBuilding {
     public boolean getHeatingMethod() {
 	return electricHeating;
     }
+    
+    public boolean hasReturnFan(){
+	Set<String> returnFan = returnFanMap.keySet();
+	Iterator<String> returnFanIterator = returnFan.iterator();
+	while(returnFanIterator.hasNext()){
+	    String fan = returnFanIterator.next();
+	    if(returnFanMap.get(fan)){
+		return true;
+	    }
+	}
+	return false;
+    }
 
     /**
      * get the total cooling load

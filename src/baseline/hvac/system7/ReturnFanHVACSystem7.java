@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import baseline.generator.EplusObject;
+import baseline.idfdata.EnergyPlusBuilding;
 
 public class ReturnFanHVACSystem7 implements SystemType7{
     //recording all the required data for HVAC system type 7
@@ -11,15 +12,25 @@ public class ReturnFanHVACSystem7 implements SystemType7{
     
     private SystemType7 system;
     
-    public ReturnFanHVACSystem7(SystemType7 sys){
+    private final EnergyPlusBuilding building;
+    
+    private HashMap<String, Double> returnFanFlowMap;
+    
+    public ReturnFanHVACSystem7(SystemType7 sys, EnergyPlusBuilding bldg){
 	system = sys;
 	objectLists = system.getSystemData();
+	building = bldg;
+	constructFlowMap();
 	addReturnFanToSystem();
     }
 
     @Override
     public HashMap<String, ArrayList<EplusObject>> getSystemData() {
 	return objectLists;
+    }
+    
+    private void constructFlowMap(){
+	
     }
     
     private void addReturnFanToSystem(){

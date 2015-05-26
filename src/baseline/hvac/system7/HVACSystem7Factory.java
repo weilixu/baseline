@@ -54,14 +54,9 @@ public class HVACSystem7Factory {
 	//judge if it is purchased heat or not
 	if(building.getBaselineModel().getObjectList("DistrictHeating")!=null){
 	    
-	}else if(findReturnFan()){
+	}else if(building.hasReturnFan()){
 	    
 	}
-    }
-    
-    private boolean findReturnFan(){
-
-	return false;
     }
     
     /**
