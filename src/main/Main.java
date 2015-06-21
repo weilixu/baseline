@@ -17,5 +17,6 @@ public class Main {
 	
 	Generator generator = new Generator(energyplusFile,weatherFile,zone,false);
 	System.out.println("done!");
+	System.out.println("this is a test!");
     }
 }
