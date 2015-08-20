@@ -108,7 +108,7 @@ public class EnergyPlusBuilding {
     }
 
     /**
-     * This method must be called prior to get floorMap, get totalcoolingload
+     * This method must be called prior to get floorMap, get total cooling load
      * and get total heating load and then check return fans
      * 
      * @return
