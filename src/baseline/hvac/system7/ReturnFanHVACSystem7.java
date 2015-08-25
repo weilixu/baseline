@@ -9,6 +9,20 @@ import baseline.generator.EplusObject;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EnergyPlusBuilding;
 
+/**
+ * Add return fan to the systems.
+ * Once one return fan is found in the design case,
+ * this class will be initialized and insert return fan
+ * to the system at every floor.
+ * The return fan power is adjusted based on the ratio from design case
+ * return fan power in baseline = return fan power in design case / fan power in design case
+ * supply fan will be adjusted too, pressure drop and motor efficiencies will be recalculated.
+ * The connections requires to be modified as well. This is also implemented.
+ * 
+ *
+ * @author Weili Xu
+ *
+ */
 public class ReturnFanHVACSystem7 implements SystemType7 {
     // recording all the required data for HVAC system type 7
     private HashMap<String, ArrayList<EplusObject>> objectLists;
@@ -17,7 +31,7 @@ public class ReturnFanHVACSystem7 implements SystemType7 {
 
     private final EnergyPlusBuilding building;
 
-    private HashMap<String, Double> returnFanFlowMap;
+    //private HashMap<String, Double> returnFanFlowMap;
 
     // modify indexes
     private final int outdoorAirControllerIndex = 2;
@@ -89,7 +103,6 @@ public class ReturnFanHVACSystem7 implements SystemType7 {
 		supplyFan = eo;
 	    }
 	}
-
 	HVACSystemImplUtil.updatedFanPowerforSystem5To8TwoFans(supplyFan,
 		returnFan, maxAirFlow, returnFanFlow);
     }

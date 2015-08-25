@@ -55,7 +55,7 @@ public class HVACSystem7Factory {
 	if(building.getBaselineModel().getObjectList("DistrictHeating")!=null){
 	    
 	}else if(building.hasReturnFan()){
-	    
+	    systemType7 = new ReturnFanHVACSystem7(systemType7,building);
 	}
     }
     
