@@ -30,6 +30,7 @@ public class AssetScoreThermalZone implements ThermalZone{
     private Double heatingLoad;    
     private Double coolingAirFlow;
     private Double heatingAirFlow;
+    private Double minimumVentilation;
     
     
     public AssetScoreThermalZone(String zoneName){
@@ -106,6 +107,11 @@ public class AssetScoreThermalZone implements ThermalZone{
     public void setHeaingLoad(Double load) {
 	heatingLoad = load;
     }
+    
+    @Override
+    public void setMechanicalVentilation(Double vent) {
+	minimumVentilation = vent;
+    }
 
     @Override
     public Double getCoolingLoad() {
@@ -128,7 +134,6 @@ public class AssetScoreThermalZone implements ThermalZone{
     @Override
     public void setOAVentilation(EplusObject OAObject) {
 	mechanicalVentilationRequirement = OAObject;
-	
     }
 
     @Override
@@ -149,5 +154,10 @@ public class AssetScoreThermalZone implements ThermalZone{
     @Override
     public Double getHeatingAirFlow() {
 	return heatingAirFlow;
+    }
+
+    @Override
+    public Double getMinimumVentilation() {
+	return minimumVentilation;
     }
 }

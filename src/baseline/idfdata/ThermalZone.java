@@ -62,6 +62,12 @@ public interface ThermalZone {
     public void setHeaingLoad(Double load);
     
     /**
+     * set the minimum ventilation for thermal zone
+     * @param load
+     */
+    public void setMechanicalVentilation(Double vent);
+    
+    /**
      * Set the cooling air flow rate for this thermal zone
      * @param airflow
      */
@@ -120,6 +126,12 @@ public interface ThermalZone {
      * @return
      */
     public Double getHeatingLoad();
+    
+    /**
+     * get the minimum ventilation load
+     * @return ventilation load in m3/s
+     */
+    public Double getMinimumVentilation();
     
     /**
      * get the cooling air flow rate of this thermal zone

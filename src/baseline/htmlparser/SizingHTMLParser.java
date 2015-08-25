@@ -26,6 +26,7 @@ public final class SizingHTMLParser {
     //All Summary tables
     private static HeatingLoadParser heatingLoad;
     private static CoolingLoadParser coolingLoad;
+    private static MechanicalVentilation miniVent;
     private static EndUseParser enduse;
     
     
@@ -79,13 +80,40 @@ public final class SizingHTMLParser {
 		double heatLoad = getZoneHeatingLoad(zoneName);
 		double coolAirFlow = getZoneCoolingAirFlow(zoneName);
 		double heatAirFlow = getZoneHeatingAirFlow(zoneName);
+		double minimumVent = getZoneMinimumVentilation(zoneName);
 		temp.setCoolingLoad(coolLoad);
 		temp.setHeaingLoad(heatLoad);
 		temp.setCoolingAirFlow(coolAirFlow);
 		temp.setHeatingAirFlow(heatAirFlow);
+		temp.setMechanicalVentilation(minimumVent);
 		building.addThermalZone(temp);
 	    }
 	}
+    }
+    
+    /**
+     * Get the ratio of supply fan power in the total fan power. This method is only useful when
+     * the system has supply fan and return fan / supply fan and exhaust fan only.
+     * @param supplyFan
+     * @param anotherFan
+     * @return
+     */
+    public static double getSupplyFanPowerRatio(String supplyFan, String anotherFan){
+	Elements fanSummary = doc.getElementsByAttributeValue("tableID", "Equipment Summary:Fans");
+	Elements fanList = fanSummary.get(0).getElementsByTag("tr");
+	double supplyFanPower = 0.0;
+	double anotherFanPower = 0.0;
+	int powerIndex = 5;
+	for(int i=1; i<fanList.size(); i++){
+	    Elements info = fanList.get(i).getElementsByTag("td");
+	    if(info.get(i).text().equalsIgnoreCase(supplyFan)){
+		supplyFanPower = Double.parseDouble(info.get(i+powerIndex).text());
+	    }
+	    if(info.get(i).text().equalsIgnoreCase(anotherFan)){
+		anotherFanPower = Double.parseDouble(info.get(i+powerIndex).text());
+	    }
+	}
+	return supplyFanPower / (supplyFanPower + anotherFanPower);
     }
     
     private static void extractBuildingFloorArea(EnergyPlusBuilding building){
@@ -151,6 +179,11 @@ public final class SizingHTMLParser {
     private static Double getZoneCoolingLoad(String zone){
 	Double load = Double.parseDouble(coolingLoad.getUserDefinedCoolingLoad(zone));
 	return load;
+    }
+    
+    private static Double getZoneMinimumVentilation(String zone){
+	Double vent = miniVent.getMinimumVentilationRate(zone);
+	return vent;
     }
 
     private static void preprocessTable() {

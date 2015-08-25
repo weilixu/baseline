@@ -159,11 +159,22 @@ public class EnergyPlusBuilding {
 	ArrayList<ThermalZone> zoneList = floorMap.get(floor);
 	Double coolingFlowRate = 0.0;
 	Double heatingFlowRate = 0.0;
+	
 	for (ThermalZone zone : zoneList) {
 	    coolingFlowRate += zone.getCoolingAirFlow();
 	    heatingFlowRate += zone.getHeatingAirFlow();
 	}
 	return Math.max(coolingFlowRate, heatingFlowRate);
+    }
+    
+    public Double getFloorMinimumVentilationRate(String floor){
+	ArrayList<ThermalZone> zoneList = floorMap.get(floor);
+	Double flowVent = 0.0;
+	
+	for (ThermalZone zone : zoneList) {
+	    flowVent += zone.getMinimumVentilation();
+	}
+	return flowVent;
     }
 
     /**

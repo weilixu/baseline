@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import baseline.generator.EplusObject;
 import baseline.generator.KeyValuePair;
+import baseline.htmlparser.SizingHTMLParser;
 
 /**
  * This class helps to establish, modify, or implement control logic which are
@@ -88,6 +89,44 @@ public final class HVACSystemImplUtil {
 	    } else if (eo.getKeyValuePair(i).getKey()
 		    .equalsIgnoreCase("Motor Efficiency")) {
 		eo.getKeyValuePair(i).setValue("" + motorEff);
+	    }
+	}
+    }
+    
+    /**
+     * This method is specifically used when there are two fans (supply + return) / (supply + exhaust)
+     * coexist in one HVAC air loop.
+     * Calculates the fan power the calculation method is established base don
+     * G3.1.2.10 This is specifically calculation for system type 5 to 8 fan
+     * power.
+     * 
+     * @param supply: supply fan object
+     * @param another: the other fan object
+     * @param supplyAir: supply air flow rate
+     * @param anotherAir: the another fan air flow rate
+     */
+    public static void updatedFanPowerforSystem5To8TwoFans(EplusObject supply, EplusObject another, double supplyAir, double anotherAir){
+	Double totalFanPower = FanPowerCalculation.getFanPowerForSystem5To8(supplyAir);
+	String supplyFanname = supply.getKeyValuePair(0).getValue();
+	String anotherFanname = another.getKeyValuePair(0).getValue();
+	double ratio = SizingHTMLParser.getSupplyFanPowerRatio(supplyFanname, anotherFanname);
+	
+	double supplyFanPower = totalFanPower * ratio;
+	double anotherFanPower = totalFanPower - supplyFanPower;
+	
+	double supplyPressureDrop = supplyFanPower / supplyAir * 0.6;
+	double anotherPressureDrop = anotherFanPower / anotherAir * 0.6;
+	
+	double supplymotorEff = FanPowerCalculation.getFanMotorEffciencyForSystem5To8(supplyAir);
+	double anothermotorEff = FanPowerCalculation.getFanMotorEffciencyForSystem5To8(anotherAir);
+	
+	for(int i=0; i<supply.getSize(); i++){
+	    if(supply.getKeyValuePair(i).getKey().equalsIgnoreCase("Pressure Rise")){
+		supply.getKeyValuePair(i).setValue(""+supplyPressureDrop);
+		another.getKeyValuePair(i).setValue("" + anotherPressureDrop);
+	    }else if(supply.getKeyValuePair(i).getKey().equalsIgnoreCase("Motor Efficiency")){
+		supply.getKeyValuePair(i).setValue(""+supplymotorEff);
+		another.getKeyValuePair(i).setValue(""+anothermotorEff);
 	    }
 	}
     }
