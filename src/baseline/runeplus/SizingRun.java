@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
+import baseline.util.BaselineUtils;
+
 /**
  * This class runs the EnergyPlus file for sizing purpose. The EnergyPlus
  * model's envelope thermal properties and lighting should be properly defined.
@@ -110,7 +112,7 @@ public class SizingRun {
 	    while (line != null) {
 		if (line.contains(keyWord)) {
 		    sb.append(keyWord);
-		    sb.append("E:\\01_Software\\EnergyPlusV8-2-0\\"); // fixed
+		    sb.append(BaselineUtils.getEnergyPlusDirectory()); // fixed
 								      // version
 		} else if (line.contains(weaWord)) {
 		    sb.append(weaWord);
