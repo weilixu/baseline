@@ -42,6 +42,7 @@ public final class SizingHTMLParser {
 	    heatingLoad = new HeatingLoadParser(doc);
 	    coolingLoad = new CoolingLoadParser(doc);
 	    enduse = new EndUseParser(doc);
+	    miniVent = new MechanicalVentilation(doc);
 	} catch (IOException e) {
 	    // do nothing
 	}

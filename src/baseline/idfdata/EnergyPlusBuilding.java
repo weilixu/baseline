@@ -313,7 +313,7 @@ public class EnergyPlusBuilding {
 		"Branch 1 Name");
 	// 2. check fan object at first component listed on branch
 	String componentName = baselineModel.getValue("Branch", branchName,
-		"Component 1 Object Type");
+		"Component Object Type 1");
 	if (componentName.contains("Fan")) {
 	    returnFan = true;
 	}

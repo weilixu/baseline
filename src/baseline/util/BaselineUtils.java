@@ -5,7 +5,7 @@ import java.util.Properties;
 
 public final class BaselineUtils {
     private static final String CONFIG_PROPERTIES = "baseline.properties";
-    private static final String ENERGYPLUS_DIR = "energyplus.directory";
+    private static final String ENERGYPLUS_DIR = "baseline.directory";
     
     private static String directory = null;
     

@@ -70,6 +70,8 @@ public class Generator {
 	System.out.println("Finish sizing round");
 	building = new EnergyPlusBuilding(cZone, baselineModel);
 	
+	
+	
 	//for test only
 	//htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
 	
