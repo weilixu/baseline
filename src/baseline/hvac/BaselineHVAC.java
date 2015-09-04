@@ -1,7 +1,6 @@
 package baseline.hvac;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import baseline.generator.EplusObject;
 import baseline.generator.IdfReader;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.util.BuildingType;
-import baseline.util.ClimateZone;
 
 public class BaselineHVAC {
     private final IdfReader baselineModel;

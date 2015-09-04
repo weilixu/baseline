@@ -1,7 +1,6 @@
 package baseline.idfdata;
 
 import baseline.generator.EplusObject;
-import baseline.generator.KeyValuePair;
 
 /**
  * This class represents the Asset score thermal zone (conditioned zones) naming convention.
