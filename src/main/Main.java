@@ -15,7 +15,7 @@ public class Main {
 	File weatherFile = new File("C:\\Uers\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\USA_PA_Pittsburgh-Allegheny.County.AP.725205_TMY3");
 	ClimateZone zone = ClimateZone.CLIMATEZONE5A;
 	
-	Generator generator = new Generator(energyplusFile,weatherFile,zone,false);
+	Generator generator = new Generator(energyplusFile,weatherFile,zone,"Office",false);
 	System.out.println("done!");
 	System.out.println("this is a test!");
     }

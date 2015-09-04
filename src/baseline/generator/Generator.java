@@ -29,12 +29,14 @@ public class Generator {
     private File htmlOutput;
     
     private EnergyPlusBuilding building;
+    private String bldgType;
 
-    public Generator(File idfFile, File wea, ClimateZone zone,
+    public Generator(File idfFile, File wea, ClimateZone zone, String buildingType,
 	    boolean existing) {
 	// identify the climate zone
 	cZone = zone;
 	isExisting = existing;
+	bldgType = buildingType;
 
 	// establish the design model
 	energyplusFile = idfFile;
@@ -69,8 +71,8 @@ public class Generator {
 	    e.printStackTrace();
 	}
 	//creating the abstract building info for deeper level information process
-	System.out.println("Finish sizing round");
-	building = new EnergyPlusBuilding("Office",cZone, baselineModel);
+	System.out.println("Finish first round sizing");
+	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
 	//for test only
 	//htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
 	
@@ -80,6 +82,7 @@ public class Generator {
 	building.processModelInfo();
 	
 	//modify lighting and WWR Skylights
+	processWindowToWallRatio();
 	processLighting();
 	//second round of sizing simulation - to provide update thermal load
 	try {
@@ -87,6 +90,8 @@ public class Generator {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
+	System.out.println("Finish second round sizing");
+	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
 	//reprocess the building abstract information
 	SizingHTMLParser.processOutputs(htmlOutput);
 	SizingHTMLParser.extractBldgBasicInfo(building);
@@ -121,6 +126,10 @@ public class Generator {
 	if (!isExisting) {
 	    envelopeProcessor.execute();
 	}
+    }
+    
+    private void processWindowToWallRatio(){
+	
     }
     
     /**
