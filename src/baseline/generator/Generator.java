@@ -57,11 +57,6 @@ public class Generator {
 	
 	eplusSizing = new SizingRun(weatherFile);
 	modifyOutput();
-
-	envelopeProcessor = new BaselineEnvelope(baselineModel, cZone);
-	//change the envelope materials and lighting power densities
-	processOpaqueEnvelope();
-	processLighting();
 	
 	//run first sizing simulations-
 	//this simulation is mainly to create abstract building info
@@ -82,6 +77,9 @@ public class Generator {
 	SizingHTMLParser.extractThermalZones(building);
 	building.processModelInfo();
 	
+	envelopeProcessor = new BaselineEnvelope(building);
+	//change the envelope materials and lighting power densities
+	processOpaqueEnvelope();
 	//modify lighting and WWR Skylights
 	processWindowToWallRatio();
 	processLighting();
@@ -125,7 +123,7 @@ public class Generator {
      */
     private void processOpaqueEnvelope() {
 	if (!isExisting) {
-	    envelopeProcessor.execute();
+	    envelopeProcessor.replaceConstruction();;
 	}
     }
     
