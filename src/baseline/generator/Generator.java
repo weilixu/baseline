@@ -7,6 +7,7 @@ import baseline.construction.opaque.BaselineEnvelope;
 import baseline.htmlparser.SizingHTMLParser;
 import baseline.hvac.BaselineHVAC;
 import baseline.idfdata.EnergyPlusBuilding;
+import baseline.lighting.LightingGenerator;
 import baseline.runeplus.SizingRun;
 import baseline.util.BuildingType;
 import baseline.util.ClimateZone;
@@ -137,6 +138,7 @@ public class Generator {
      * This will implement later...
      */
     private void processLighting(){
+	LightingGenerator lgtGen = new LightingGenerator(building);
 	//1. create lighting objects
 	//2. process lights
     }
