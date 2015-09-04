@@ -114,7 +114,6 @@ public class SizingRun {
 		    sb.append(keyWord);
 		    sb.append(BaselineUtils.getEnergyPlusDirectory()); // fixed
 								      // version
-		    System.out.println(BaselineUtils.getEnergyPlusDirectory());
 		} else if (line.contains(weaWord)) {
 		    sb.append(weaWord);
 		    sb.append(folder.getAbsolutePath() + "\\");

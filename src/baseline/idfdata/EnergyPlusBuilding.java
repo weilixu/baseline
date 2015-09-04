@@ -13,11 +13,12 @@ import baseline.generator.IdfReader.ValueNode;
 import baseline.generator.OutdoorDesignSpecification;
 import baseline.util.ClimateZone;
 
-public class EnergyPlusBuilding {
+public class EnergyPlusBuilding implements BuildingLight {
 
     /**
      * basic information about the building
      */
+    private String buildingType;
     private Double totalFloorArea;
     private Double conditionedFloorArea;
     private Set<String> floorSet;
@@ -52,8 +53,12 @@ public class EnergyPlusBuilding {
      * EnergyPlus data
      */
     private IdfReader baselineModel;
+    private final static String LIGHT = "Lights";
+    private final static String ZONELIST = "ZoneList";
 
-    public EnergyPlusBuilding(ClimateZone zone, IdfReader baselineModel) {
+    public EnergyPlusBuilding(String bldgType, ClimateZone zone,
+	    IdfReader baselineModel) {
+	buildingType = bldgType;
 	thermalZoneList = new ArrayList<ThermalZone>();
 	floorMap = new HashMap<String, ArrayList<ThermalZone>>();
 	returnFanMap = new HashMap<String, Boolean>();
@@ -159,18 +164,18 @@ public class EnergyPlusBuilding {
 	ArrayList<ThermalZone> zoneList = floorMap.get(floor);
 	Double coolingFlowRate = 0.0;
 	Double heatingFlowRate = 0.0;
-	
+
 	for (ThermalZone zone : zoneList) {
 	    coolingFlowRate += zone.getCoolingAirFlow();
 	    heatingFlowRate += zone.getHeatingAirFlow();
 	}
 	return Math.max(coolingFlowRate, heatingFlowRate);
     }
-    
-    public Double getFloorMinimumVentilationRate(String floor){
+
+    public Double getFloorMinimumVentilationRate(String floor) {
 	ArrayList<ThermalZone> zoneList = floorMap.get(floor);
 	Double flowVent = 0.0;
-	
+
 	for (ThermalZone zone : zoneList) {
 	    flowVent += zone.getMinimumVentilation();
 	}
@@ -197,13 +202,13 @@ public class EnergyPlusBuilding {
     public boolean getHeatingMethod() {
 	return electricHeating;
     }
-    
-    public boolean hasReturnFan(){
+
+    public boolean hasReturnFan() {
 	Set<String> returnFan = returnFanMap.keySet();
 	Iterator<String> returnFanIterator = returnFan.iterator();
-	while(returnFanIterator.hasNext()){
+	while (returnFanIterator.hasNext()) {
 	    String fan = returnFanIterator.next();
-	    if(returnFanMap.get(fan)){
+	    if (returnFanMap.get(fan)) {
 		return true;
 	    }
 	}
@@ -277,8 +282,7 @@ public class EnergyPlusBuilding {
 	    processFloorReturnFanMap(demandSideOutletName, returnFan);
 	}
     }
-    
-    
+
     private void processFloorReturnFanMap(String demandOutlet, Boolean returnFan) {
 	HashMap<String, ArrayList<ValueNode>> mixerList = baselineModel
 		.getObjectList("AirLoopHVAC:ZoneMixer").get(
@@ -310,7 +314,7 @@ public class EnergyPlusBuilding {
 	Boolean returnFan = false;
 	// 1. get the air loop branch name from branchlist
 	String branchName = baselineModel.getValue("BranchList", BranchList,
-		"Branch 1 Name");
+		"Branch Name 1");
 	// 2. check fan object at first component listed on branch
 	String componentName = baselineModel.getValue("Branch", branchName,
 		"Component Object Type 1");
@@ -372,5 +376,134 @@ public class EnergyPlusBuilding {
 	if (oaSchedule != null) {
 	    oa.changeAirFlowSchedule(oaSchedule);
 	}
+    }
+
+    /**
+     * API Methods for lighting module
+     */
+    @Override
+    public String getBuildingType() {
+	return buildingType;
+    }
+
+    @Override
+    public String getZoneType(String zoneName) {
+	for (ThermalZone zone : thermalZoneList) {
+	    if (zone.getFullName().equals(zoneName)) {
+		if (zone.getZoneType() != null) {
+		    return zone.getZoneType();
+		}
+	    }
+	}
+	return null;
+    }
+
+    @Override
+    public void setZoneLPD(String zoneName, Double lpd) {
+	// 1. Loop over lights object to find zones
+	HashMap<String, HashMap<String, ArrayList<ValueNode>>> lights = baselineModel
+		.getObjectList(LIGHT);
+	HashMap<String, HashMap<String, ArrayList<ValueNode>>> zoneList = baselineModel
+		.getObjectList(ZONELIST);
+	if (lights != null) {
+	    Set<String> elementCount = lights.get(LIGHT).keySet();
+	    Iterator<String> elementIterator = elementCount.iterator();
+	    boolean zoneExist = false; // flag indicate whether it uses zone
+				       // name or zone list name
+	    while (elementIterator.hasNext() && !zoneExist) {
+		// if there is still element left and we haven't find the zone,
+		// continue loop
+		String count = elementIterator.next();
+		ArrayList<ValueNode> lightsList = lights.get(LIGHT).get(count);
+		boolean find = false;
+		for (ValueNode v : lightsList) {
+		    if (v.getDescription().equalsIgnoreCase(
+			    "ZONE OR ZONELIST NAME")
+			    && v.getAttribute().equals(zoneName)) {
+			// if we find zone name matches, we need to revise its
+			// lighting power density
+			// so we turn the flag to true
+			find = true;
+			zoneExist = true; // we find the zone, turn the flag to
+					  // true and we are about done
+		    } else if (find
+			    && v.getDescription().equalsIgnoreCase(
+				    "DESIGN LEVEL CALCULATION METHOD")) {
+			v.setAttribute("Watts/Area");
+		    } else if (find
+			    && v.getDescription().contains(
+				    "WATTS PER ZONE FLOOR AREA")) {
+			v.setAttribute(lpd.toString());
+		    }
+		}
+	    }
+	    // 2. Once we confirm we cannot find the lights object for this
+	    // particular zone
+	    // we need to look for the correspondent light object in zonelist
+	    // object
+	    if (!zoneExist && zoneList != null) {
+		// lets first loop through zone list, zone by zone
+		Set<String> zoneListElement = lights.get(ZONELIST).keySet();
+		Iterator<String> zoneListElementIterator = zoneListElement
+			.iterator();
+		String targetZoneListName = null;
+		while (zoneListElementIterator.hasNext()) {
+		    String count = zoneListElementIterator.next();
+		    ArrayList<ValueNode> zoneListList = lights.get(ZONELIST)
+			    .get(count);
+		    String zoneListName = zoneListList.get(0).getAttribute();
+		    for (ValueNode v : zoneListList) {
+			// we find the zone in a particular zone list
+			if (v.getAttribute().equals(zoneName)) {
+			    targetZoneListName = zoneListName;
+			}
+		    }
+		}
+		if (targetZoneListName != null) {// this means we find the
+						 // zonelist
+		    // look at the lights objects again to find correspondent
+		    // zoneList name
+		    elementIterator = elementCount.iterator();
+		    while (elementIterator.hasNext()) {
+			// if there is still element left and we haven't find
+			// the zone, continue loop
+			String count = elementIterator.next();
+			ArrayList<ValueNode> lightsList = lights.get(LIGHT)
+				.get(count);
+			boolean find = false;
+			for (ValueNode v : lightsList) {
+			    if (v.getDescription().equalsIgnoreCase(
+				    "ZONE OR ZONELIST NAME")
+				    && v.getAttribute().equals(
+					    targetZoneListName)) {
+				// if we find zone name matches, we need to
+				// revise its lighting power density
+				// so we turn the flag to true
+				find = true;
+				zoneExist = true;
+			    } else if (find
+				    && v.getDescription().equalsIgnoreCase(
+					    "DESIGN LEVEL CALCULATION METHOD")) {
+				v.setAttribute("Watts/Area");
+			    } else if (find
+				    && v.getDescription().contains(
+					    "WATTS PER ZONE FLOOR AREA")) {
+				v.setAttribute(lpd.toString());
+			    }// if
+			}// for
+		    }// while
+		}// if
+	    }// if
+	}// if
+    }
+
+    @Override
+    public int getNumberOfZone() {
+	return thermalZoneList.size();
+    }
+
+    @Override
+    public String getZoneNamebyIndex(int index) {
+	return thermalZoneList.get(index).getFullName();
     }
 }

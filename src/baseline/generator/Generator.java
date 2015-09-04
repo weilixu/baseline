@@ -60,18 +60,17 @@ public class Generator {
 	processOpaqueEnvelope();
 	processLighting();
 	
-	//run sizing simulations
+	//run first sizing simulations-
+	//this simulation is mainly to create abstract building info
+	//on top of the basic data structure
 	try {
 	    sizingRun();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	
+	//creating the abstract building info for deeper level information process
 	System.out.println("Finish sizing round");
-	building = new EnergyPlusBuilding(cZone, baselineModel);
-	
-	
-	
+	building = new EnergyPlusBuilding("Office",cZone, baselineModel);
 	//for test only
 	//htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
 	
@@ -80,6 +79,21 @@ public class Generator {
 	SizingHTMLParser.extractThermalZones(building);
 	building.processModelInfo();
 	
+	//modify lighting and WWR Skylights
+	processLighting();
+	//second round of sizing simulation - to provide update thermal load
+	try {
+	    sizingRun();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	//reprocess the building abstract information
+	SizingHTMLParser.processOutputs(htmlOutput);
+	SizingHTMLParser.extractBldgBasicInfo(building);
+	SizingHTMLParser.extractThermalZones(building);
+	building.processModelInfo();
+
+	//build HVAC system
 	buildingHVAC();
     }
 
@@ -114,7 +128,8 @@ public class Generator {
      * This will implement later...
      */
     private void processLighting(){
-	
+	//1. create lighting objects
+	//2. process lights
     }
     
     private void buildingHVAC(){
