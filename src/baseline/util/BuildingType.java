@@ -5,15 +5,15 @@ public enum BuildingType {
     NONRESIDENTIAL("Nonresidential"),
     HEATEDONLYSTORAGE("Heated Only Storage");
     
-    private String bldgType;
+    private String bldgCate;
     
     private BuildingType(String type){
-	this.bldgType = type;
+	this.bldgCate = type;
     }
     
     @Override
     public String toString(){
-	return bldgType;
+	return bldgCate;
     }
-
+    
 }
