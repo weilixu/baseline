@@ -545,7 +545,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	baselineModel.removeEnergyPlusObject(CONSTRUCTION);
 	baselineModel.removeEnergyPlusObject(SIMPLE_WINDOW);
 
-	// add new building envelope related objects
+	//add new building envelope related objects
 	ArrayList<EplusObject> objects = envelope.getObjects(); // retrieve the
 								// data from
 								// database

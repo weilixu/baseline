@@ -17,6 +17,8 @@ public class AssetScoreThermalZone implements ThermalZone{
     private final static int floorIndex = 2;
     private final static int zoneIdentificationIndex = 3;
     
+    private final static String seperator = "_";
+    
     private String block;
     private String zoneType;
     private String floor;
@@ -34,7 +36,7 @@ public class AssetScoreThermalZone implements ThermalZone{
     
     public AssetScoreThermalZone(String zoneName){
 	originalZoneName = zoneName;
-	String[] zoneCharacters = zoneName.split("_");
+	String[] zoneCharacters = zoneName.split(seperator);
 	block = zoneCharacters[blockIndex];
 	zoneType = zoneCharacters[zoneTypeIndex];
 	floor = zoneCharacters[floorIndex];
