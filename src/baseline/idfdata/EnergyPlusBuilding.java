@@ -98,6 +98,8 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	cZone = zone;
 	this.baselineModel = baselineModel;
 	electricHeating = false;
+	
+	this.baselineModel.removeEnergyPlusObject("Daylighting:Controls");
     }
 
     /**
