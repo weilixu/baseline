@@ -186,7 +186,7 @@ public final class HVACSystemImplUtil {
      * @param sysHeatingCoilList
      * @param zoneHeatingCoilList
      */
-    public static void plantConnection(ArrayList<EplusObject> plantSystem,
+    public static void plantConnectionForSys7And8(ArrayList<EplusObject> plantSystem,
 	    ArrayList<String> chillerList, ArrayList<String> towerList,
 	    ArrayList<String> boilerList, ArrayList<String> sysCooilngCoilList,
 	    ArrayList<String> sysHeatingCoilList,
@@ -248,6 +248,46 @@ public final class HVACSystemImplUtil {
 	}
     }
 
+    /**
+     * For system type 5-6 where plant is available on-site and require to
+     * connect to air distribution system
+     * 
+     * This method connects all the chillers, towers, boilers, heating and cooling
+     * coils in the plant side system
+     * 
+     * @param plantSystem
+     * @param boilerList
+     * @param sysHeatingCoilList
+     * @param zoneHeatingCoilList
+     */
+    public static void plantConnectionForSys5And6(ArrayList<EplusObject> plantSystem,
+	    ArrayList<String> boilerList,
+	    ArrayList<String> sysHeatingCoilList,
+	    ArrayList<String> zoneHeatingCoilList) {
+
+	// use for additional eplus objects
+	for (EplusObject eo : plantSystem) {
+	    String name = eo.getKeyValuePair(0).getValue();
+	    if (name.equals("Hot Water Loop HW Demand Side Branches")) {
+		insertHeatingCoils(2, eo, sysHeatingCoilList,
+			zoneHeatingCoilList);
+	    } else if (name.equals("Hot Water Loop HW Demand Splitter")
+		    || name.equals("Hot Water Loop HW Demand Mixer")) {
+		insertHeatingCoils(eo.getSize(), eo, sysHeatingCoilList,
+			zoneHeatingCoilList);// insert to the last index
+	    }else if (name.equals("Hot Water Loop HW Supply Side Branches")
+		    || name.equals("Hot Water Loop HW Supply Splitter")
+		    || name.equals("Hot Water Loop HW Supply Mixer")) {
+		insertBoilerRelatedInputs(2, eo, " HW Branch", boilerList);
+	    } else if (name.equals("Hot Water Loop HW Supply Setpoint Nodes")) {
+		insertBoilerRelatedInputs(1, eo, " HW Outlet", boilerList);
+	    }  else if (name.equals("Hot Water Loop All Equipment")) {
+		insertBoilerEquipmentList(eo, boilerList);
+	    }
+	}
+    }
+    
+    
     /*
      * Group of helper functions which inserts the systems connections to the
      * specified fields

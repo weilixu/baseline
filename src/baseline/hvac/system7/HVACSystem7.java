@@ -461,7 +461,7 @@ public class HVACSystem7 implements SystemType7 {
      */
     private void processConnections() {
 	ArrayList<EplusObject> plantSystem = objectLists.get("Plant");
-	HVACSystemImplUtil.plantConnection(plantSystem, chillerList, towerList,
+	HVACSystemImplUtil.plantConnectionForSys7And8(plantSystem, chillerList, towerList,
 		boilerList, systemCoolingCoilList, systemHeatingCoilList,
 		zoneHeatingCoilList);
     }
