@@ -104,7 +104,11 @@ public class BaselineHVAC {
 		system = factory.createSystem();
 	    } else if (floorNumber <= smallFloorNumber
 		    && floorSize <= smallFloorArea) {
-
+		factory = new HVACSystemFactory("System Type 3", building);
+		system = factory.createSystem();
+	    }else{
+		factory = new HVACSystemFactory("System Type 5", building);
+		system = factory.createSystem();
 	    }
 	}
     }
