@@ -609,7 +609,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		ArrayList<ValueNode> object = objectList.get(s)
 			.get(count);
 		for(ValueNode v: object){
-		    if (v.getDescription().contains("NAME") && v.getAttribute().contains("DHWSys")){
+		    if (v.getDescription().contains("Name") && v.getAttribute().contains("DHWSys")){
 			if(!serviceHotWater.containsKey(s)){
 			    serviceHotWater.put(s, new HashMap<String, ArrayList<ValueNode>>());
 			}
