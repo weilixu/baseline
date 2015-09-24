@@ -1,5 +1,5 @@
 <hvac>
-	<dataset setname = "System Type 3" category = "Supply Side System">
+	<dataset setname = "System Type 3" category = "8.2">
 		<object description = "Sizing:Zone" reference = "Demand Side System">
 			<field description = "Zone or ZoneList Name" type = "String">Zone%</field>
 			<field description = "Zone Cooling Design Supply Air Temperature Input Method" type = "String">TemperatureDifference</field>
@@ -27,7 +27,7 @@
 		</object>
 		<object description = "AirTerminal:SingleDuct:Uncontrolled" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% Air Terminal</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Zone Supply Air Node Name" type = "String">Zone% Zone Equip Inlet</field>
 			<field description = "Maximum Air Flow Rate" type = "String">autosize</field>
 		</object>
@@ -40,10 +40,10 @@
 		</object>
 		<object description = "AirLoopHVAC:Unitary:Furnace:HeatCool" reference = "Supply Side System">
 			<field description = "Name" type = "String">zone% Furnace with DX Cooling</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Furnace Air Inlet Node Name" type = "String">Zone% Mixed Air Outlet</field>
 			<field description = "Furnace Air Outlet Node Name" type = "String">Zone% Air Loop Outlet</field>
-			<field description = "Supply Air Fan Operating Mode Schedule Name" type = "String">Always 1</field>
+			<field description = "Supply Air Fan Operating Mode Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Maximum Supply Air Temperature" type = "Double">80.0</field>
 			<field description = "Supply Air Flow Rate During Cooling Operation" type = "Double/String">autosize</field>
 			<field description = "Supply Air Flow Rate During Heating Operation" type = "Double/String">autosize</field>
@@ -60,7 +60,7 @@
 		</object>
 		<object description = "Fan:OnOff" reference = "Supply Side System">
 			<field description = "Name" type = "String">Zone% Supply Fan</field>
-			<field description = "Availability Schedule Name" type = "String">On</field>
+			<field description = "Availability Schedule Name" type = "String">On_BAS</field>
 			<field description = "Fan Total Efficiency" type = "Double">0.6</field>
 			<field description = "Pressure Rise" type = "Double">1000</field>
 			<field description = "Maximum Flow Rate" type = "Double/String">autosize</field>
@@ -71,7 +71,7 @@
 		</object>
 		<object description = "HeatExchanger:AirToAir:SensibleAndLatent" reference = "Supply Side System">
 			<field description = "Name" type="String">Zone% Heat Recovery</field>
-			<field description = "Availability Schedule Name" type="String">Off</field>
+			<field description = "Availability Schedule Name" type="String">Off_BAS</field>
 			<field description = "Nominal Supply Air Flow Rate" type="Double or String">autosize</field>
 			<field description = "Sensible Effectiveness at 100% Heating Air Flow" type="Double">0.5</field>
 			<field description = "Latent Effectiveness at 100% Heating Air Flow" type="Double">0.0</field>
@@ -111,7 +111,7 @@
 			<field description = "Economizer Minimum Limit Dry-Bult Temperature" type = "Double"/>
 			<field description = "Lockout Type" type = "String">NoLockOut</field>
 			<field description = "Minimum Limit Type" type = "String">FixedMinimum</field>
-			<field description = "Minimum Outdoor Air Schedule Name" type = "String">OAMinFracSch</field>
+			<field description = "Minimum Outdoor Air Schedule Name" type = "String">OAMinFracSch_BAS</field>
 		</object>
 		<object description = "AirLoopHVAC:ControllerList" reference = "Supply Side System">
 			<field description = "Name" type = "String">Zone% OA System Controllers</field>
@@ -200,8 +200,8 @@
 		</object>
 		<object description = "AvailabilityManager:NightCycle" reference = "Supply Side System">
 			<field description = "Name" type = "String">Zone% Availability</field>
-			<field description = "Applicability Schedule Name" type = "String">Always 1</field>
-			<field description = "Fan Schedule Name" type = "String">On</field>
+			<field description = "Applicability Schedule Name" type = "String">Always 1_BAS</field>
+			<field description = "Fan Schedule Name" type = "String">On_BAS</field>
 			<field description = "Control Type" type = "String">CycleOnAny</field>
 			<field description = "Thermostat Tolerance" type = "Double">1.0</field>
 			<field description = "Cycling Run Time" type = "Double">1800</field>
@@ -214,7 +214,7 @@
 		<object description = "SetpointManager:Scheduled" reference = "Supply Side System">
 			<field description = "Name" type = "String">Zone% Heat Recovery Air Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Schedule Name" type = "String">Always 5</field>
+			<field description = "Schedule Name" type = "String">Always 5_BAS</field>
 			<field description = "Setpoint Node or NodeList Name" type = "String">Zone% Heat Recovery Supply Outlet</field>
 		</object>
 		<object description = "SetpointManager:SingleZone:Reheat" reference = "Supply Side System">
@@ -237,7 +237,7 @@
 		</object>
 		<object description = "Coil:Cooling:DX:SingleSpeed" reference = "Supply Side System">
 			<field description = "Name" type = "String">Zone% Cooling Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Gross Rated Total Cooling Capacity" type = "Double/String">autosize</field>
 			<field description = "Gross Rated Sensible Heat Ratio" type = "Double/String">autosize</field>
 			<field description = "Gross Rated Cooling COP" type = "Double">2.72</field>
@@ -264,7 +264,7 @@
 		</object>
 		<object description = "Coil:Heating:Gas" reference = "Supply Side System">
 			<field description = "Name" type = "String">Zone% Heating Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Gas Burner Efficiency" type = "Double">0.8</field>
 			<field description = "Nominal Capacity" type = "Double/String">autosize</field>
 			<field description = "Air Inlet Node Name" type = "String">Zone% Cooling Coil Outlet</field>
@@ -334,59 +334,71 @@
 			<field description = "Maximum Value of y" type = "Double">46.11111</field>			
 		</object>
 		<object description = "ScheduleTypeLimits" reference = "Schedule">
-			<field description = "Name" type = "String">Any Number</field>
-		</object>		
+			<field description = "Name" type = "String">Any Number_BAS</field>
+		</object>
+		<object description = "ScheduleTypeLimits" reference = "Schedule">
+			<field description = "Name" type = "String">OnOff_BAS</field>
+			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Upper Limit Value" type = "Double">1</field>
+			<field description = "Numeric Type" type = "String">DISCRETE</field>
+		</object>
+		<object description = "ScheduleTypeLimits" reference = "Schedule">
+			<field description = "Name" type = "String">Fraction_BAS</field>
+			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Upper Limit Value" type = "Double">1</field>
+			<field description = "Numeric Type" type = "String">CONTINUOUS</field>
+		</object>			
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Off</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">Off_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">OnOff_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">0.0</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">On</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">On_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">OnOff_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">1.0</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 1</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">Always 1_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">OnOff_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">1</field>
 		</object>	
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 5</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 5_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">5</field>
 		</object>	
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 12.8</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 12.8_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">12.8</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 29</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 29_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">29</field>
 		</object>		
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">OAMinFracSch</field>
-			<field description = "Schedule Type Limits Name" type = "String">Fractional</field>
+			<field description = "Name" type ="String">OAMinFracSch_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Fraction_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
@@ -398,7 +410,7 @@
 			<field description = "Timesteps in Averaging Window" type = "Double">1</field>
 		</object>		
 	</dataset>
-	<dataset setname="System Type 5" category="Supply Side System">
+	<dataset setname="System Type 5" category="8.3">
 		<object description = "Sizing:Zone" reference = "Demand Side System">
 			<field description = "Zone or ZoneList Name" type = "String">Zone%</field>
 			<field description = "Zone Cooling Design Supply Air Temperature Input Method" type = "String">TemperatureDifference</field>
@@ -499,7 +511,7 @@
 		</object>
 		<object description = "AirTerminal:SingleDuct:VAV:Reheat" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% VAV Reheat</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Damper Air Outlet Node Name" type = "String">Zone% Damper Outlet</field>
 			<field description = "Air Inlet Node Name" type = "String">Zone% Zone Equip Inlet</field>
 			<field description = "Maximum Air Flow Rate" type = "Double or String">autosize</field>
@@ -520,7 +532,7 @@
 		</object>
 		<object description = "Coil:Heating:Water" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% Reheat Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "UFactor Times Area Value" type = "Double or String">autosize</field>
 			<field description = "Maximum Water Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Water Inlet Node Name" type = "String">Zone% Reheat Coil HW Inlet</field>
@@ -547,7 +559,7 @@
 		</object>		
 		<object description = "Fan:VariableVolume" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Supply Fan</field>
-			<field description = "Availability Schedule Name" type = "String">On</field>
+			<field description = "Availability Schedule Name" type = "String">On_BAS</field>
 			<field description = "Fan Total Efficiency" type = "Double">0.6</field>
 			<field description = "Pressure Rise" type = "Double">2000</field>
 			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
@@ -566,7 +578,7 @@
 		</object>
 		<object description = "Coil:Cooling:DX:SingleSpeed" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Cooling Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Gross Rated Total Cooling Capacity" type = "Double or String">autosize</field>
 			<field description = "Gross Rated Sensible Heat Ratio" type = "Double or String">autosize</field>
 			<field description = "Gross Rated Cooling COP" type = "Double">3.00</field>
@@ -574,11 +586,11 @@
 			<field description = "Rated Evaporator Fan Power Per Volume Flow Rate" type = "Double">773.3000</field>
 			<field description = "Air Inlet Node Name" type = "String">Floor% Mixed Air Outlet</field>
 			<field description = "Air Outlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
-			<field description = "Total Cooling Capacity Function of Temperature Curve Name" type = "String">CU DX Coil CAP-FT</field>
-			<field description = "Total Cooling Capacity Function of Flow Fraction Curve Name" type = "String">CU DX Coil CAP-FF</field>
-			<field description = "Energy Input Ratio Function of Temperature Curve Name" type = "String">CU DX Coil EIR-FT</field>
-			<field description = "Energy Input Ratio Function of Flow Fraction Curve Name" type = "String">CU DX Coil EIR-FF</field>
-			<field description = "Part Load Fraction Correlation Curve Name" type = "String">CU DX Coil PLF</field>
+			<field description = "Total Cooling Capacity Function of Temperature Curve Name" type = "String">Floor% CU DX Coil CAP-FT</field>
+			<field description = "Total Cooling Capacity Function of Flow Fraction Curve Name" type = "String">Floor% CU DX Coil CAP-FF</field>
+			<field description = "Energy Input Ratio Function of Temperature Curve Name" type = "String">Floor% CU DX Coil EIR-FT</field>
+			<field description = "Energy Input Ratio Function of Flow Fraction Curve Name" type = "String">Floor% CU DX Coil EIR-FF</field>
+			<field description = "Part Load Fraction Correlation Curve Name" type = "String">Floor% CU DX Coil PLF</field>
 			<field description = "Nominal Time for Condensate Removal to Begin" type = "Double">0.0</field>
 			<field description = "Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity" type = "Double">0.0</field>
 			<field description = "Maximum Cycling Rate" type = "Double">0.0</field>
@@ -593,7 +605,7 @@
 		</object>
 		<object description = "CoilSystem:Cooling:DX" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% AHU Cooling Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "DX Cooling Coil System Inlet Node Name" type = "String">Floor% Mixed Air Outlet</field>
 			<field description = "DX Cooling Coil System Outlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
 			<field description = "DX Cooling Coil System Sensor Node Name" type = "String">Floor% Supply Fan Outlet</field>
@@ -604,7 +616,7 @@
 			<field description = "Run on Latent Load" type = "String">No</field>
 		</object>
 		<object description = "Curve:Quadratic" reference = "Supply Side System">
-			<field description = "Name" type = "String">CU DX Coil Cap-FF</field>
+			<field description = "Name" type = "String">Floor% CU DX Coil Cap-FF</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.8</field>
 			<field description = "Coefficient2 x" type = "Double">0.2</field>
 			<field description = "Coefficient3 x**2" type = "Double">0.0</field>
@@ -612,7 +624,7 @@
 			<field description = "Maximum Value of x" type = "Double">1.5</field>
 		</object>	
 		<object description = "Curve:Quadratic" reference = "Supply Side System">
-			<field description = "Name" type = "String">CU DX Coil EIR-FF</field>
+			<field description = "Name" type = "String">Floor% CU DX Coil EIR-FF</field>
 			<field description = "Coefficient1 Constant" type = "Double">1.1552</field>
 			<field description = "Coefficient2 x" type = "Double">-0.1808</field>
 			<field description = "Coefficient3 x**2" type = "Double">0.0256</field>
@@ -620,7 +632,7 @@
 			<field description = "Maximum Value of x" type = "Double">1.5</field>
 		</object>	
 		<object description = "Curve:Quadratic" reference = "Supply Side System">
-			<field description = "Name" type = "String">CU DX Coil PLF</field>
+			<field description = "Name" type = "String">Floor% CU DX Coil PLF</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.85</field>
 			<field description = "Coefficient2 x" type = "Double">0.15</field>
 			<field description = "Coefficient3 x**2" type = "Double">0.0</field>
@@ -628,7 +640,7 @@
 			<field description = "Maximum Value of x" type = "Double">1.0</field>
 		</object>	
 		<object description = "Curve:Biquadratic" reference = "Supply Side System">
-			<field description = "Name" type = "String">CU DX Coil Cap-FT</field>
+			<field description = "Name" type = "String">Floor% CU DX Coil Cap-FT</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.942587793</field>
 			<field description = "Coefficient2 x" type = "Double">0.009543347</field>
 			<field description = "Coefficient3 x**2" type = "Double">0.00068377</field>
@@ -641,7 +653,7 @@
 			<field description = "Maximum Value of y" type = "Double">46.11111</field>			
 		</object>	
 		<object description = "Curve:Biquadratic" reference = "Supply Side System">
-			<field description = "Name" type = "String">CU DX Coil EIR-FT</field>
+			<field description = "Name" type = "String">Floor% CU DX Coil EIR-FT</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.342414409</field>
 			<field description = "Coefficient2 x" type = "Double">0.034885008</field>
 			<field description = "Coefficient3 x**2" type = "Double">-0.0006237</field>
@@ -655,7 +667,7 @@
 		</object>
 		<object description = "Coil:Heating:Water" reference="Supply Side System">
 			<field description = "Name" type = "String">Floor% Heating Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "U-Factor Times Area Value" type = "Double or String">autosize</field>
 			<field description = "Maximum Water Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Water Inlet Node Name" type = "String">Floor% Heating Coil HW Inlet</field>
@@ -672,7 +684,7 @@
 		</object>
 		<object description = "HeatExchanger:AirToAir:SensibleAndLatent" reference = "Supply Side System">
 			<field description = "Name" type="String">Floor% Heat Recovery</field>
-			<field description = "Availability Schedule Name" type="String">Off</field>
+			<field description = "Availability Schedule Name" type="String">Off_BAS</field>
 			<field description = "Nominal Supply Air Flow Rate" type="Double or String">autosize</field>
 			<field description = "Sensible Effectiveness at 100% Heating Air Flow" type="Double">0.5</field>
 			<field description = "Latent Effectiveness at 100% Heating Air Flow" type="Double">0.0</field>
@@ -723,7 +735,7 @@
 			<field description = "Economizer Minimum Limit Dry-Bulb Temperature" type = "String"/>
 			<field description = "Lockout Type" type = "String">NoLockout</field>
 			<field description = "Minimum Limit Type" type = "String">FixedMinimum</field>
-			<field description = "Minimum Outdoor Air Schedule Name" type = "String">OAMinFracSch</field>
+			<field description = "Minimum Outdoor Air Schedule Name" type = "String">OAMinFracSch_BAS</field>
 			<field description = "Minimum Fraction of Outdoor Air Schedule Name" type = "String"/>
 			<field description = "Maximum Fraction of Outdoor Air Schedule Name" type = "String"/>
 			<field description = "Mechanical Ventilation Controller Name" type = "String"/>
@@ -806,7 +818,7 @@
 			<field description = "Component 1 Outlet Node Name" type = "String">Floor% Mixed Air Outlet</field>
 			<field description = "Component 1 Branch Control Type" type = "String">Passive</field>
 			<field description = "Component 2 Object Type" type = "String">CoilSystem:Cooling:DX</field>
-			<field description = "Component 2 Name" type = "String">Floor% Cooling Coil</field>
+			<field description = "Component 2 Name" type = "String">Floor% AHU Cooling Coil</field>
 			<field description = "Component 2 Inlet Node Name" type = "String">Floor% Mixed Air Outlet</field>
 			<field description = "Component 2 Outlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
 			<field description = "Component 2 Branch Control Type" type = "String">Passive</field>
@@ -842,11 +854,12 @@
 		</object>
 		<object description = "OutdoorAir:NodeList" reference = "Supply Side System">
 			<field description = "Node or NodeList Name 1" type = "String">Floor% Outside Air Inlet</field>
+			<field description = "Node or NodeList Name 2" type = "String">Floor% Cooling Coil Condenser Inlet</field>
 		</object>
 	    <object description = "AvailabilityManager:NightCycle" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Availability</field>
-			<field description = "Applicability Schedule Name" type="String">Always 1</field>
-			<field description = "Fan Schedule Name" type = "String">On</field>
+			<field description = "Applicability Schedule Name" type="String">Always 1_BAS</field>
+			<field description = "Fan Schedule Name" type = "String">On_BAS</field>
 			<field description = "Control Type" type = "String">CycleOnAny</field>
 			<field description = "Thermostat Tolerance" type = "Double">1.0</field>
 			<field description = "Cycling Run Time" type = "Double">1800</field>
@@ -859,13 +872,13 @@
 		<object description = "SetpointManager:Scheduled" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Heating Supply Air Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Schedule Name" type = "String">Always 12.8</field>
+			<field description = "Schedule Name" type = "String">Always 12.8_BAS</field>
 			<field description = "Setpoint Node or NodeList Name" type = "String">Floor% Supply Path Inlet</field>
 		</object>
 		<object description = "SetpointManager:Scheduled" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Heat Recovery Air Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Schedule Name" type = "String">Always 5</field>
+			<field description = "Schedule Name" type = "String">Always 5_BAS</field>
 			<field description = "Setpoint Node or NodeList Name" type = "String">Floor% Heat Recovery Supply Outlet</field>
 		</object>
 		<object description = "SetpointManager:MixedAir" reference = "Supply Side System">
@@ -905,7 +918,7 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type="Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
-			<field description = "Pump Flow Rate Schedule Name" type = "String">On</field>
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>
 		</object>	
 		<object description = "HeaderedPumps:VariableSpeed" reference = "Plant">
 			<field description = "Name" type = "String">Hot Water Loop HW Supply Pump</field>
@@ -924,7 +937,7 @@
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
-			<field description = "Pump Flow Rate Schedule Name" type = "String">On</field>			
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>			
 		</object>	
 		<object description = "Boiler:HotWater" reference = "Plant">
 			<field description = "Name" type = "String">Boiler%</field>
@@ -981,7 +994,7 @@
 			<field description = "Name" type = "String">Hot Water Loop Operation</field>
 			<field description = "Control Scheme 1 Object Type" type = "String">PlantEquipmentOperation:HeatingLoad</field>
 			<field description = "Control Scheme 1 Name" type = "String">Hot Water Loop Operation All Hours</field>
-			<field description = "Control Scheme 1 Schedule Name" type = "String">Always 1</field>
+			<field description = "Control Scheme 1 Schedule Name" type = "String">Always 1_BAS</field>
 		</object>	
 		<object description = "SetpointManager:OutdoorAirReset" reference = "Plant">
 			<field description = "Name" type = "String">Hot Water Loop HW Temp Manager</field>
@@ -1146,59 +1159,71 @@
 			<field description = "Outlet Node Name" type = "String">Hot Water Loop HW Demand Outlet</field>
 		</object>	
 		<object description = "ScheduleTypeLimits" reference = "Schedule">
-			<field description = "Name" type = "String">Any Number</field>
-		</object>		
+			<field description = "Name" type = "String">Any_Number_BAS</field>
+		</object>
+		<object description = "ScheduleTypeLimits" reference = "Schedule">
+			<field description = "Name" type = "String">On_Off_BAS</field>
+			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Upper Limit Value" type = "Double">1</field>
+			<field description = "Numeric Type" type = "String">DISCRETE</field>
+		</object>
+		<object description = "ScheduleTypeLimits" reference = "Schedule">
+			<field description = "Name" type = "String">Fraction_BAS</field>
+			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Upper Limit Value" type = "Double">1</field>
+			<field description = "Numeric Type" type = "String">CONTINUOUS</field>
+		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Off</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">Off_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">On_Off_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">0.0</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">On</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">On_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">On_Off_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">1.0</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 1</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">Always 1_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">On_Off_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">1</field>
 		</object>	
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 5</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 5_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any_Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">5</field>
 		</object>	
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 12.8</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 12.8_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any_Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">12.8</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 29</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 29_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any_Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">29</field>
 		</object>		
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">OAMinFracSch</field>
-			<field description = "Schedule Type Limits Name" type = "String">Fractional</field>
+			<field description = "Name" type ="String">OAMinFracSch_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Fraction_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
@@ -1210,7 +1235,7 @@
 			<field description = "Timesteps in Averaging Window" type = "Double">1</field>
 		</object>	
 	</dataset>	
-	<dataset setname="System Type 7" category="Supply Side System">
+	<dataset setname="System Type 7" category="8.2">
 		<object description = "Sizing:System" reference = "Supply Side System">
 			<field description = "AirLoop Name" type="String">Floor% VAV</field>
 			<field description = "Type of Load to Size On" type="String">Sensible</field>
@@ -1246,13 +1271,10 @@
 			<field description = "Fraction of Autosized Cooling Design Capacity" type = "Double"/>
 			<field description = "Heating Design Capacity Method" type = "String">HeatingDesignCapacity</field>
 			<field description = "Heating Design Capacity" type = "Double or String">autosize</field>
-			<field description = "Heating Design Capacity Per Floor Area" type = "Double or String"/>
-			<field description = "Fraction of Autosized Heating Design Capacity" type = "Double"/>
-			<field description = "Central Cooling Capacity Control Method" type = "String">VAV</field>
 		</object>
 		<object description = "HeatExchanger:AirToAir:SensibleAndLatent" reference = "Supply Side System">
 			<field description = "Name" type="String">Floor% Heat Recovery</field>
-			<field description = "Availability Schedule Name" type="String">Off</field>
+			<field description = "Availability Schedule Name" type="String">Off_BAS</field>
 			<field description = "Nominal Supply Air Flow Rate" type="Double or String">autosize</field>
 			<field description = "Sensible Effectiveness at 100% Heating Air Flow" type="Double">0.5</field>
 			<field description = "Latent Effectiveness at 100% Heating Air Flow" type="Double">0.0</field>
@@ -1314,7 +1336,7 @@
 			<field description = "Economizer Minimum Limit Dry-Bulb Temperature" type = "String"/>
 			<field description = "Lockout Type" type = "String">NoLockout</field>
 			<field description = "Minimum Limit Type" type = "String">FixedMinimum</field>
-			<field description = "Minimum Outdoor Air Schedule Name" type = "String">OAMinFracSch</field>
+			<field description = "Minimum Outdoor Air Schedule Name" type = "String">OAMinFracSch_BAS</field>
 			<field description = "Minimum Fraction of Outdoor Air Schedule Name" type = "String"/>
 			<field description = "Maximum Fraction of Outdoor Air Schedule Name" type = "String"/>
 			<field description = "Mechanical Ventilation Controller Name" type = "String"/>
@@ -1448,7 +1470,7 @@
 		</object>
 		<object description = "Fan:VariableVolume" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Supply Fan</field>
-			<field description = "Availability Schedule Name" type = "String">On</field>
+			<field description = "Availability Schedule Name" type = "String">On_BAS</field>
 			<field description = "Fan Total Efficiency" type = "Double">0.6</field>
 			<field description = "Pressure Rise" type = "Double">2000</field>
 			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
@@ -1467,7 +1489,7 @@
 		</object>
 		<object description = "Coil:Cooling:Water" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Cooling Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">On_BAS</field>
 			<field description = "Design Water Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Design Air Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Design Inlet Water Temperature" type = "Double or String">autosize</field>
@@ -1484,7 +1506,7 @@
 		</object>
 		<object description = "Coil:Heating:Water" reference="Supply Side System">
 			<field description = "Name" type = "String">Floor% Heating Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">On_BAS</field>
 			<field description = "U-Factor Times Area Value" type = "Double or String">autosize</field>
 			<field description = "Maximum Water Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Water Inlet Node Name" type = "String">Floor% Heating Coil HW Inlet</field>
@@ -1501,8 +1523,8 @@
 		</object>
 		<object description = "AvailabilityManager:NightCycle" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Availability</field>
-			<field description = "Applicability Schedule Name" type="String">Always 1</field>
-			<field description = "Fan Schedule Name" type = "String">On</field>
+			<field description = "Applicability Schedule Name" type="String">On_BAS</field>
+			<field description = "Fan Schedule Name" type = "String">On_BAS</field>
 			<field description = "Control Type" type = "String">CycleOnAny</field>
 			<field description = "Thermostat Tolerance" type = "Double">1.0</field>
 			<field description = "Cycling Run Time" type = "Double">1800</field>
@@ -1515,13 +1537,13 @@
 		<object description = "SetpointManager:Scheduled" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Heating Supply Air Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Schedule Name" type = "String">Always 12.8</field>
+			<field description = "Schedule Name" type = "String">Always 12.8_BAS</field>
 			<field description = "Setpoint Node or NodeList Name" type = "String">Floor% Supply Path Inlet</field>
 		</object>
 		<object description = "SetpointManager:Scheduled" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Heat Recovery Air Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Schedule Name" type = "String">Always 5</field>
+			<field description = "Schedule Name" type = "String">Always 5_BAS</field>
 			<field description = "Setpoint Node or NodeList Name" type = "String">Floor% Heat Recovery Supply Outlet</field>
 		</object>
 		<object description = "SetpointManager:MixedAir" reference = "Supply Side System">
@@ -1579,7 +1601,7 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type="Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
-			<field description = "Pump Flow Rate Schedule Name" type = "String">On</field>
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>
 		</object>
 		<object description = "HeaderedPumps:ConstantSpeed" reference="Plant">
 			<field description = "Name" type = "String">Hot Water Loop HW Supply Pump</field>
@@ -1593,7 +1615,7 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type="Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
-			<field description = "Pump Flow Rate Schedule Name" type = "String">On</field>
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>
 		</object>
 		<object description = "HeaderedPumps:ConstantSpeed" reference="Plant">
 			<field description = "Name" type = "String">Chilled Water Loop ChW Secondary Pump</field>
@@ -1607,7 +1629,7 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type="Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
-			<field description = "Pump Flow Rate Schedule Name" type = "String">On</field>
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>
 		</object>
 		<object description = "HeaderedPumps:VariableSpeed" reference = "Plant">
 			<field description = "Name" type = "String">Hot Water Loop HW Supply Pump</field>
@@ -1626,7 +1648,7 @@
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
-			<field description = "Pump Flow Rate Schedule Name" type = "String">On</field>			
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>			
 		</object>
 		<object description = "HeaderedPumps:VariableSpeed" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop ChW Secondary Pump</field>
@@ -1645,7 +1667,7 @@
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
-			<field description = "Pump Flow Rate Schedule Name" type = "String">On</field>		
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>		
 		</object>
 		<object description = "HeaderedPumps:VariableSpeed" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop CndW Supply Pump</field>
@@ -1664,7 +1686,7 @@
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
-			<field description = "Pump Flow Rate Schedule Name" type = "String">On</field>			
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>			
 		</object>
 		<object description = "Boiler:HotWater" reference = "Plant">
 			<field description = "Name" type = "String">Boiler%</field>
@@ -1854,24 +1876,24 @@
 			<field description = "Name" type = "String">Hot Water Loop Operation</field>
 			<field description = "Control Scheme 1 Object Type" type = "String">PlantEquipmentOperation:HeatingLoad</field>
 			<field description = "Control Scheme 1 Name" type = "String">Hot Water Loop Operation All Hours</field>
-			<field description = "Control Scheme 1 Schedule Name" type = "String">Always 1</field>
+			<field description = "Control Scheme 1 Schedule Name" type = "String">On_BAS</field>
 		</object>
 		<object description = "PlantEquipmentOperationSchemes" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop Chiller Operation</field>
 			<field description = "Control Scheme 1 Object Type" type = "String">PlantEquipmentOperation:CoolingLoad</field>
 			<field description = "Control Scheme 1 Name" type = "String">Chilled Water Loop Chiller Operation All Hours</field>
-			<field description = "Control Scheme 1 Schedule Name" type = "String">Always 1</field>
+			<field description = "Control Scheme 1 Schedule Name" type = "String">On_BAS</field>
 		</object>
 		<object description = "CondenserEquipmentOperationSchemes" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop Condenser Operation</field>
 			<field description = "Control Scheme 1 Object Type" type = "String">PlantEquipmentOperation:CoolingLoad</field>
 			<field description = "Control Scheme 1 Name" type = "String">Chilled Water Loop Condenser Operation All Hours</field>
-			<field description = "Control Scheme 1 Schedule Name" type = "String">Always 1</field>
+			<field description = "Control Scheme 1 Schedule Name" type = "String">On_BAS</field>
 		</object>
 		<object description = "SetpointManager:Scheduled" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop CndW Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Schedule Name" type = "String">Always 29</field>
+			<field description = "Schedule Name" type = "String">Always 29_BAS</field>
 			<field description = "Setpoint Node or NodeList Name">Chilled Water Loop CndW Supply Setpoint Nodes</field>
 		</object>
 		<object description = "SetpointManager:OutdoorAirReset" reference = "Plant">
@@ -2433,7 +2455,7 @@
 		</object>
 		<object description = "AirTerminal:SingleDuct:VAV:Reheat" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% VAV Reheat</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Damper Air Outlet Node Name" type = "String">Zone% Damper Outlet</field>
 			<field description = "Air Inlet Node Name" type = "String">Zone% Zone Equip Inlet</field>
 			<field description = "Maximum Air Flow Rate" type = "Double or String">autosize</field>
@@ -2454,7 +2476,7 @@
 		</object>
 		<object description = "Coil:Heating:Water" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% Reheat Coil</field>
-			<field description = "Availability Schedule Name" type = "String">Always 1</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "UFactor Times Area Value" type = "Double or String">autosize</field>
 			<field description = "Maximum Water Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Water Inlet Node Name" type = "String">Zone% Reheat Coil HW Inlet</field>
@@ -2480,59 +2502,71 @@
 			<field description = "Component 1 Branch Control Type" type = "String">Active</field>
 		</object>
 		<object description = "ScheduleTypeLimits" reference = "Schedule">
-			<field description = "Name" type = "String">Any Number</field>
+			<field description = "Name" type = "String">Any_Number_BAS</field>
+		</object>
+		<object description = "ScheduleTypeLimits" reference = "Schedule">
+			<field description = "Name" type = "String">On_Off_BAS</field>
+			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Upper Limit Value" type = "Double">1</field>
+			<field description = "Numeric Type" type = "String">DISCRETE</field>
+		</object>
+		<object description = "ScheduleTypeLimits" reference = "Schedule">
+			<field description = "Name" type = "String">Fraction_BAS</field>
+			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Upper Limit Value" type = "Double">1</field>
+			<field description = "Numeric Type" type = "String">CONTINUOUS</field>
 		</object>		
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Off</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">Off_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">On_Off_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">0.0</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">On</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">On_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">On_Off_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">1.0</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 1</field>
-			<field description = "Schedule Type Limits Name" type = "String">OnOff</field>
+			<field description = "Name" type ="String">Always 1_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">On_Off_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">1</field>
 		</object>	
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 5</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 5_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any_Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">5</field>
 		</object>	
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 12.8</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 12.8_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any_Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">12.8</field>
 		</object>
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">Always 29</field>
-			<field description = "Schedule Type Limits Name" type = "String">Any Number</field>
+			<field description = "Name" type ="String">Always 29_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Any_Number_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>
 			<field description = "Field 4" type = "String">29</field>
 		</object>		
 		<object description = "Schedule:Compact" reference = "Schedule">
-			<field description = "Name" type ="String">OAMinFracSch</field>
-			<field description = "Schedule Type Limits Name" type = "String">Fractional</field>
+			<field description = "Name" type ="String">OAMinFracSch_BAS</field>
+			<field description = "Schedule Type Limits Name" type = "String">Fraction_BAS</field>
 			<field description = "Field 1" type = "String">Through:12/31</field>
 			<field description = "Field 2" type = "String">For: AllDays</field>
 			<field description = "Field 3" type = "String">Until: 24:00</field>

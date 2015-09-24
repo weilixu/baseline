@@ -49,6 +49,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     // for creating HVAC system
     private HashMap<String, ArrayList<ThermalZone>> floorMap;
     private HashMap<String, Boolean> returnFanMap;
+    private HashMap<String, HashMap<String, ArrayList<ValueNode>>> serviceHotWater;
 
     /**
      * EnergyPlus data
@@ -93,12 +94,14 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	thermalZoneList = new ArrayList<ThermalZone>();
 	floorMap = new HashMap<String, ArrayList<ThermalZone>>();
 	returnFanMap = new HashMap<String, Boolean>();
+	serviceHotWater = new HashMap<String, HashMap<String, ArrayList<ValueNode>>>();
 	totalCoolingLoad = 0.0;
 	totalHeatingLoad = 0.0;
 	cZone = zone;
 	this.baselineModel = baselineModel;
 	electricHeating = false;
 	
+	//remove unnecessary objects in the model
 	this.baselineModel.removeEnergyPlusObject("Daylighting:Controls");
     }
 
@@ -156,8 +159,15 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	for (ThermalZone zone : thermalZoneList) {
 	    String block = zone.getBlock();
 	    String floor = zone.getFloor();
-	    floorSet.add(floor);
-	    String level = block + ":" + floor;
+	    String level = null;
+	    if(floor == null){
+		floorSet.add(block);
+		level = block;
+	    }else{
+		floorSet.add(floor);
+		level = block + ":" + floor;
+	    }
+	    
 	    if (!floorMap.containsKey(level)) {
 		floorMap.put(level, new ArrayList<ThermalZone>());
 	    }
@@ -343,10 +353,12 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	Boolean returnFan = false;
 	// 1. get the air loop branch name from branchlist
 	String branchName = baselineModel.getValue("BranchList", BranchList,
-		"Branch Name 1");
+		"Branch 1 Name");
 	// 2. check fan object at first component listed on branch
+	//System.out.println(branchName);
 	String componentName = baselineModel.getValue("Branch", branchName,
-		"Component Object Type 1");
+		"Component 1 Object Type");
+	//System.out.println(componentName);
 	if (componentName.contains("Fan")) {
 	    returnFan = true;
 	}
@@ -572,6 +584,74 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	System.out.println("Start replacing the internal mass...");
 	replaceInternalMass();
     }
+    
+    @Override
+    public ClimateZone getClimateZone() {
+	return cZone;
+    }
+    
+    /**
+     * removes the HVAC objects and build service hot water model
+     * This method firstly will trace any inputs that relates to service hot water system
+     * Note the name of components in the service hot water must contain DHWSys strings.
+     * then this method will remove the whole objects.
+     * @param s
+     */
+    public void removeHVACObject(String s){
+	HashMap<String, HashMap<String, ArrayList<ValueNode>>> objectList = baselineModel
+		.getObjectList(s);
+	
+	if(objectList!=null){
+	    Set<String> elementCount = objectList.get(s).keySet();
+	    Iterator<String> elementIterator = elementCount.iterator();
+	    while(elementIterator.hasNext()){
+		String count = elementIterator.next();
+		ArrayList<ValueNode> object = objectList.get(s)
+			.get(count);
+		for(ValueNode v: object){
+		    if (v.getDescription().contains("NAME") && v.getAttribute().contains("DHWSys")){
+			if(!serviceHotWater.containsKey(s)){
+			    serviceHotWater.put(s, new HashMap<String, ArrayList<ValueNode>>());
+			}
+			serviceHotWater.get(s).put(count, object);			
+		    }
+		}
+	    }
+	}
+	baselineModel.removeEnergyPlusObject(s);
+    }
+    
+    /**
+     * allow other method to insert energyplus object to the model
+     * 
+     * @param name
+     * @param objectValues
+     * @param objectDes
+     */
+    public void insertEnergyPlusObject(String name, String[] objectValues, String[] objectDes){
+	baselineModel.addNewEnergyPlusObject(name, objectValues, objectDes);
+    }
+    
+    public void generateEnergyPlusModel(String filePath, String fileName){
+	//merge the all the information before write out
+	//1. add service hot water back to the model
+	Set<String> objectList = serviceHotWater.keySet();
+	Iterator<String> objectIterator = objectList.iterator();
+	while(objectIterator.hasNext()){
+	    String objectName = objectIterator.next();
+	    HashMap<String, ArrayList<ValueNode>> elementList = serviceHotWater.get(objectName);
+	    Set<String> elementSet = elementList.keySet();
+	    Iterator<String> elementIterator = elementSet.iterator();
+	    while(elementIterator.hasNext()){
+		String element = elementIterator.next();
+		ArrayList<ValueNode> object = elementList.get(element);
+		baselineModel.addNewEnergyPlusObject(objectName, object);
+	    }
+	}
+	
+	//2. write out the model
+	baselineModel.WriteIdf(filePath, fileName);
+    }
 
     /**
      * replace the internal mass objects with updated constructions. So far this
@@ -600,10 +680,6 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	}
     }
 
-    @Override
-    public ClimateZone getClimateZone() {
-	return cZone;
-    }
 
     /**
      * replace the fenestration surface. The checking algorithm depends on the
@@ -625,11 +701,11 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		// first loop, find the criteria for the selection
 		for (ValueNode v : fenestrationList) {
 		    if (v.getDescription()
-			    .equalsIgnoreCase("CONSTRUCTION NAME")) {
+			    .equalsIgnoreCase("Surface Type")) {
 			String construction = v.getAttribute();
-			if (construction.contains("fenestration")) {
+			if (construction.equalsIgnoreCase("window")) {
 			    surfaceType = "window";
-			} else if (construction.contains("skylight")) {
+			} else if (construction.contains("Daylight")) {
 			    surfaceType = "skylight";
 			}
 		    }

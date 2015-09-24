@@ -373,6 +373,25 @@ public class IdfReader {
 	    // throw exception or warnings something, determine later
 	}
     }
+    
+    /**
+     * insert a new object into the database with known object name, object
+     * values and object descriptions
+     * @param objectName
+     * @param node
+     */
+    public void addNewEnergyPlusObject(String objectName, ArrayList<ValueNode> node){
+	// create a new map
+	String elementCount = null;
+	if (eplusMap.containsKey(objectName)) {
+	    Integer count = eplusMap.get(objectName).size();
+	    elementCount = count.toString();
+	} else {
+	    eplusMap.put(objectName, new HashMap<String, ArrayList<ValueNode>>());
+	    elementCount = "0";
+	}
+	eplusMap.get(objectName).put(elementCount, node);
+    }
 
     /**
      * insert an new object into the database with known object name, object

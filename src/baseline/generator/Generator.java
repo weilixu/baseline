@@ -31,9 +31,10 @@ public class Generator {
     
     private EnergyPlusBuilding building;
     private String bldgType;
+    private String tool;
 
     public Generator(File idfFile, File wea, ClimateZone zone, String buildingType,
-	    boolean existing) {
+	    boolean existing, String tool) {
 	// identify the climate zone
 	cZone = zone;
 	isExisting = existing;
@@ -42,6 +43,7 @@ public class Generator {
 	// establish the design model
 	energyplusFile = idfFile;
 	weatherFile = wea;
+	this.tool = tool;
 	
 	designModel = new IdfReader();
 	designModel.setFilePath(energyplusFile.getAbsolutePath());
@@ -71,7 +73,7 @@ public class Generator {
 	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
 	//for test only
 	//htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
-	
+	SizingHTMLParser.setTool(this.tool);
 	SizingHTMLParser.processOutputs(htmlOutput);
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);
@@ -105,6 +107,9 @@ public class Generator {
     private void modifyOutput(){
 	//change output units
 	baselineModel.removeEnergyPlusObject("OutputControl:Table:Style");
+	baselineModel.removeEnergyPlusObject("OutputControl:ReportingTolerances");
+	baselineModel.removeEnergyPlusObject("Output:Meter");
+	baselineModel.removeEnergyPlusObject("Output:Variable");
 	String[] objectValue = {"HTML","JtoKWH"};
 	String[] objectDes = {"Column Separator","Unit Conversion"};
 	baselineModel.addNewEnergyPlusObject("OutputControl:Table:Style",objectValue,objectDes);
@@ -147,7 +152,7 @@ public class Generator {
 	baselineHVAC.selectSystem();
 	try{
 		baselineHVAC.replaceHVACObjects();
-		baselineHVAC.getBaseline().WriteIdf(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
+		building.generateEnergyPlusModel(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
 		eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));
 		htmlOutput = eplusSizing.runEnergyPlus();
 	}catch(IOException e){

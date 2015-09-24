@@ -14,7 +14,6 @@ import baseline.idfdata.EnergyPlusBuilding;
 import baseline.util.BuildingType;
 
 public class BaselineHVAC {
-    private final IdfReader baselineModel;
 
     // HVAC related objects
     private HVACSystemFactory factory;
@@ -36,12 +35,11 @@ public class BaselineHVAC {
 
     public BaselineHVAC(BuildingType type, EnergyPlusBuilding bldg) {
 	building = bldg;
-	baselineModel = building.getBaselineModel();
 	bldgType = type;
     }
 
     public IdfReader getBaseline() {
-	return baselineModel;
+	return building.getBaselineModel();
     }
 
     /**
@@ -52,7 +50,7 @@ public class BaselineHVAC {
     public void replaceHVACObjects() throws IOException {
 	processObjectLists();
 	for (String s : objectList) {
-	    baselineModel.removeEnergyPlusObject(s);
+	    building.removeHVACObject(s);
 	}
 	mergeSystem();
     }
@@ -75,7 +73,8 @@ public class BaselineHVAC {
 		    objectDes[i] = eo.getKeyValuePair(i).getKey();
 		}
 		// add the object to the baseline model
-		baselineModel.addNewEnergyPlusObject(eo.getObjectName(),
+		
+		building.insertEnergyPlusObject(eo.getObjectName(),
 			objectValues, objectDes);
 	    }
 	}

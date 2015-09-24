@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import baseline.idfdata.AssetScoreThermalZone;
+import baseline.idfdata.DesignBuilderThermalZone;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.idfdata.ThermalZone;
 
@@ -29,6 +30,11 @@ public final class SizingHTMLParser {
     private static MechanicalVentilation miniVent;
     private static EndUseParser enduse;
     
+    private static String tool;
+    
+    public static void setTool(String t){
+	tool = t;
+    }
     
     /**
      * process the sizing results
@@ -76,7 +82,12 @@ public final class SizingHTMLParser {
 	    Elements info = zoneList.get(i).getElementsByTag("td");
 	    if(info.get(conditionIndex).text().equalsIgnoreCase("YES")){
 		String zoneName = info.get(0).text();
-		ThermalZone temp = new AssetScoreThermalZone(zoneName);
+		ThermalZone temp = null;
+		if(tool.equalsIgnoreCase("Asset Score Tool")){
+		    temp = new AssetScoreThermalZone(zoneName);
+		}else if(tool.equalsIgnoreCase("DesignBuilder")){
+		    temp = new DesignBuilderThermalZone(zoneName);
+		}
 		double coolLoad = getZoneCoolingLoad(zoneName);
 		double heatLoad = getZoneHeatingLoad(zoneName);
 		double coolAirFlow = getZoneCoolingAirFlow(zoneName);

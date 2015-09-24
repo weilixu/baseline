@@ -12,12 +12,11 @@ import baseline.generator.EplusObject;
  */
 public class DesignBuilderThermalZone implements ThermalZone{
     private final static int blockIndex = 0;
-    private final static int zoneTypeIndex = 0;
-    private final static int zoneIdentificationIndex = 1;
-    //private final static int zoneHVACIndex = 2;
+    private final static int zoneTypeIndex = 1;
+    private final static int zoneIdentificationIndex = 2;
+    //private final static int zoneHVACIndex = 3;
     
-    private final static String seperator = "X";
-    private final static String blockSeperator = ":";
+    private final static String seperator = "%";
     
     private String block;
     private String zoneType;
@@ -36,10 +35,9 @@ public class DesignBuilderThermalZone implements ThermalZone{
     
     public DesignBuilderThermalZone(String zoneName){
 	originalZoneName = zoneName;
-	String[] zoneBlockLevel = zoneName.split(blockSeperator);
-	block = zoneBlockLevel[blockIndex];
-	floor = block;
-	String[] zoneCharacters = zoneBlockLevel[1].split(seperator);
+	String[] zoneCharacters = originalZoneName.split(seperator);
+	block = zoneCharacters[blockIndex];
+	floor = null;
 	zoneType = zoneCharacters[zoneTypeIndex];
 	zoneIdentification = zoneCharacters[zoneIdentificationIndex];
     }

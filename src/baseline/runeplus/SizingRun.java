@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import baseline.util.BaselineUtils;
 
@@ -62,6 +63,7 @@ public class SizingRun {
 	File eplusBatFile = createBatchFile();
 	String[] commandline = { eplusBatFile.getAbsolutePath(), pathToIDF,
 		weatherFile.getName() };
+	//System.out.println(Arrays.toString(commandline));
 
 	try {
 	    Process p = Runtime.getRuntime().exec(commandline, null, folder);
