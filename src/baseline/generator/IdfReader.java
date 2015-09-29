@@ -280,6 +280,21 @@ public class IdfReader {
 	}
 	return list;
     }
+    
+    public ArrayList<ValueNode> getObject(String object, String name){
+	HashMap<String, ArrayList<ValueNode>> temp = eplusMap.get(object);
+	Set<String> elementSet = temp.keySet();
+	Iterator<String> iterator = elementSet.iterator();
+	while(iterator.hasNext()){
+	    String s = iterator.next();
+	    ArrayList<ValueNode> nodeList = temp.get(s);
+	    if(nodeList.get(0).getAttribute().equalsIgnoreCase(name)){
+		return nodeList;
+	    }
+	}
+	return null;
+
+    }
 
     public HashMap<String, HashMap<String, ArrayList<ValueNode>>> getObjectList(
 	    String object) {

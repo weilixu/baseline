@@ -6,7 +6,23 @@ import java.util.HashMap;
 import baseline.generator.EplusObject;
 import baseline.hvac.SystemParser;
 import baseline.idfdata.EnergyPlusBuilding;
-
+/**
+ * This class represents HVAC System type 5 manufacturer
+ * The class behaviors includes:
+ * 1. Establish the template System Type 5
+ * 	Template implemented clauses: G3.1.2.1 (Not fully implemented), G3.1.2.2,G3.1.2.5, G3.1.3.12, G3.1.3.13, G3.1.3.15
+ * 2. Check Clauses for components modifications:
+ * 	G3.1.2.4 (Not implemented); G3.1.2.5; G3.1.2.7;G3.1.2.8;G3.1.2.9 (Not completed);
+ * 	G3.1.2.11 (Not implemented yet)
+ * 	G3.1.3.2; G3.1.3.3; G3.1.3.4; G3.1.3.5;
+ * 3. Check exceptions includes:
+ * 	G3.1.1 (not implemented); G3.1.1.1 (Not implemented); G3.1.1.2 (Not implemented)
+ * 	G3.1.1.3 (nOT implemented)
+ * 4. Manufactured correct system type 5 based on design case and merge it back to the whole building
+ *    energy model
+ * @author Weili
+ *
+ */
 public class HVACSystem5Factory {
     //extract the template system
     private final SystemParser system = new SystemParser("System Type 5");
@@ -34,9 +50,13 @@ public class HVACSystem5Factory {
     }
     
     private void processSystem(){
+	//System.out.println("###########################################" + building.hasReturnFan());
 	//judge if it is purchased heat or not
 	if(building.getBaselineModel().getObjectList("DistrictHeating")!=null){
 	    
+	}else if(building.hasReturnFan()){
+	    //System.out.println("I am here->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Sys5");
+	    systemType5 = new ReturnFanHVACSystem5(systemType5, building);
 	}
     }
     

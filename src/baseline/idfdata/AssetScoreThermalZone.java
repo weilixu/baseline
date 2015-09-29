@@ -27,11 +27,23 @@ public class AssetScoreThermalZone implements ThermalZone{
     private String originalZoneName;
     private EplusObject mechanicalVentilationRequirement;
     
+    /*
+     * Zone HVAC parameters
+     */
     private Double coolingLoad;
     private Double heatingLoad;    
     private Double coolingAirFlow;
     private Double heatingAirFlow;
     private Double minimumVentilation;
+    
+    /*
+     * Zone parameters
+     */
+    private Double area;
+    private Double grossWallArea;
+    private Double occupants;
+    private Double lpd;
+    private Double epd;
     
     
     public AssetScoreThermalZone(String zoneName){
@@ -160,5 +172,65 @@ public class AssetScoreThermalZone implements ThermalZone{
     @Override
     public Double getMinimumVentilation() {
 	return minimumVentilation;
+    }
+
+    @Override
+    public Double getZoneArea() {
+	return area;
+    }
+
+
+    @Override
+    public Double getZoneGrossWallArea() {
+	return grossWallArea;
+    }
+
+
+    @Override
+    public Double getZoneOccupants() {
+	return occupants;
+    }
+
+
+    @Override
+    public Double getZoneLPD() {
+	return lpd;
+    }
+
+
+    @Override
+    public Double getZoneEPD() {
+	return epd;
+    }
+
+    @Override
+    public void setZoneArea(Double area) {
+	this.area = area;
+    }
+
+
+    @Override
+    public void setZoneGrossWallArea(Double area) {
+	grossWallArea = area;
+    }
+
+
+    @Override
+    public void setZoneOccupants(Double occupants) {
+	this.occupants = occupants;
+	
+    }
+
+
+    @Override
+    public void setZoneLPD(Double lpd) {
+	this.lpd = lpd;
+	
+    }
+
+
+    @Override
+    public void setZoneEPD(Double epd) {
+	this.epd = epd;
     }
 }

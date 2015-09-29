@@ -12,6 +12,7 @@ import baseline.generator.EplusObject;
 import baseline.generator.IdfReader;
 import baseline.generator.IdfReader.ValueNode;
 import baseline.generator.OutdoorDesignSpecification;
+import baseline.htmlparser.SizingHTMLParser;
 import baseline.util.ClimateZone;
 
 public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
@@ -24,6 +25,9 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     private Double conditionedFloorArea;
     private Set<String> floorSet;
     private boolean electricHeating;
+    
+    private int numberOfSystem = 0;
+    private double supplyReturnRatio = 0.0;
 
     /**
      * set point not met
@@ -247,6 +251,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	Iterator<String> returnFanIterator = returnFan.iterator();
 	while (returnFanIterator.hasNext()) {
 	    String fan = returnFanIterator.next();
+	    System.out.println(fan+" " + returnFanMap.get(fan));
 	    if (returnFanMap.get(fan)) {
 		return true;
 	    }
@@ -294,8 +299,13 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     public Double getCoolingSetPointNotMet() {
 	return coolingSetPointNotMet;
     }
+    
+    public Double getSupplyReturnFanRatio(){
+	return supplyReturnRatio / numberOfSystem;
+    }
 
     private void checkForReturnFans() {
+	numberOfSystem ++;
 	HashMap<String, ArrayList<ValueNode>> airLoops = baselineModel
 		.getObjectList("AirLoopHVAC").get("AirLoopHVAC");
 	Set<String> airloopList = airLoops.keySet();
@@ -316,41 +326,45 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		}
 	    }
 	    // branch list to check system return fan
-	    Boolean returnFan = hasReturnFan(branchListName);
+	    String returnFan = hasReturnFan(branchListName);
+	    returnFanMap.put("Building", returnFan!=null);
 	    // demand side check thermal zones
-	    processFloorReturnFanMap(demandSideOutletName, returnFan);
+	    //processFloorReturnFanMap(demandSideOutletName, returnFan);
+	    String supplyFan = getSupplyFanName(branchListName, returnFan);
+	    
+	    supplyReturnRatio += SizingHTMLParser.getSupplyFanPowerRatio(supplyFan, returnFan);
 	}
     }
 
-    private void processFloorReturnFanMap(String demandOutlet, Boolean returnFan) {
-	HashMap<String, ArrayList<ValueNode>> mixerList = baselineModel
-		.getObjectList("AirLoopHVAC:ZoneMixer").get(
-			"AirLoopHVAC:ZoneMixer");
-	Set<String> mixerSet = mixerList.keySet();
-	Iterator<String> mixerIterator = mixerSet.iterator();
-	while (mixerIterator.hasNext()) {
-	    String mixer = mixerIterator.next();
-	    ArrayList<ValueNode> mixerObject = mixerList.get(mixer);
-	    // demand outlet is always at Outlet Node Name field
-	    if (mixerObject.get(1).getAttribute().equals(demandOutlet)) {
-		for (int i = 2; i < mixerObject.size(); i++) {
-		    String zoneName = baselineModel.getValue(
-			    "ZoneHVAC:EquipmentConnections", mixerObject.get(i)
-				    .getAttribute(), "Zone Name");
-		    for (ThermalZone tz : thermalZoneList) {
-			if (tz.getFullName().equals(zoneName)) {
-			    if (!returnFanMap.get(tz.getFloor())) {
-				returnFanMap.put(tz.getFloor(), returnFan);
-			    }// if
-			}// if
-		    }// for
-		}// for
-	    }// if
-	}// while
-    }
+//    private void processFloorReturnFanMap(String demandOutlet, Boolean returnFan) {
+//	HashMap<String, ArrayList<ValueNode>> mixerList = baselineModel
+//		.getObjectList("AirLoopHVAC:ZoneMixer").get(
+//			"AirLoopHVAC:ZoneMixer");
+//	Set<String> mixerSet = mixerList.keySet();
+//	Iterator<String> mixerIterator = mixerSet.iterator();
+//	while (mixerIterator.hasNext()) {
+//	    String mixer = mixerIterator.next();
+//	    ArrayList<ValueNode> mixerObject = mixerList.get(mixer);
+//	    // demand outlet is always at Outlet Node Name field
+//	    if (mixerObject.get(1).getAttribute().equals(demandOutlet)) {
+//		for (int i = 2; i < mixerObject.size(); i++) {
+//		    String zoneName = baselineModel.getValue(
+//			    "ZoneHVAC:EquipmentConnections", mixerObject.get(i)
+//				    .getAttribute(), "Zone Name");
+//		    for (ThermalZone tz : thermalZoneList) {
+//			if (tz.getFullName().equals(zoneName)) {
+//			    if (!returnFanMap.get(tz.getFloor())) {
+//				returnFanMap.put(tz.getFloor(), returnFan);
+//			    }// if
+//			}// if
+//		    }// for
+//		}// for
+//	    }// if
+//	}// while
+//    }
 
-    private Boolean hasReturnFan(String BranchList) {
-	Boolean returnFan = false;
+    private String hasReturnFan(String BranchList) {
+	String returnFan = null;
 	// 1. get the air loop branch name from branchlist
 	String branchName = baselineModel.getValue("BranchList", BranchList,
 		"Branch 1 Name");
@@ -360,9 +374,24 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		"Component 1 Object Type");
 	//System.out.println(componentName);
 	if (componentName.contains("Fan")) {
-	    returnFan = true;
+	    returnFan = baselineModel.getValue("Branch", branchName, "Component 1 Name");
 	}
+	//System.out.println("******************************************************"+returnFan);
 	return returnFan;
+    }
+    
+    private String getSupplyFanName(String BranchList, String returnFan){
+	// 1. get the air loop branch name from branchlist
+	String branchName = baselineModel.getValue("BranchList", BranchList,
+		"Branch 1 Name");
+	//baselineModel.get
+	ArrayList<ValueNode> nodeList = baselineModel.getObject("Branch", branchName);
+	for(ValueNode vn: nodeList){
+	    if(vn.getDescription().contains("Name") && vn.getAttribute().contains("Fan") && !vn.getAttribute().equalsIgnoreCase(returnFan)){
+		return vn.getAttribute();
+	    }
+	}
+	return null;
     }
 
     private EplusObject getDesignOutdoorAir(String zoneName) {

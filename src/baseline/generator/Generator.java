@@ -94,6 +94,7 @@ public class Generator {
 	System.out.println("Finish second round sizing");
 	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
 	//reprocess the building abstract information
+	SizingHTMLParser.setTool(this.tool);
 	SizingHTMLParser.processOutputs(htmlOutput);
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);

@@ -25,6 +25,7 @@ public final class SizingHTMLParser {
     private static Document doc;
     
     //All Summary tables
+    private static ZoneSummaryParser zoneSummary;
     private static HeatingLoadParser heatingLoad;
     private static CoolingLoadParser coolingLoad;
     private static MechanicalVentilation miniVent;
@@ -44,7 +45,7 @@ public final class SizingHTMLParser {
 	try {
 	    doc = Jsoup.parse(html, "UTF-8");
 	    preprocessTable();
-	    
+	    zoneSummary = new ZoneSummaryParser(doc);
 	    heatingLoad = new HeatingLoadParser(doc);
 	    coolingLoad = new CoolingLoadParser(doc);
 	    enduse = new EndUseParser(doc);
@@ -98,6 +99,11 @@ public final class SizingHTMLParser {
 		temp.setCoolingAirFlow(coolAirFlow);
 		temp.setHeatingAirFlow(heatAirFlow);
 		temp.setMechanicalVentilation(minimumVent);
+		temp.setZoneArea(getZoneArea(zoneName));
+		temp.setZoneGrossWallArea(getZoneGrossWallArea(zoneName));
+		temp.setZoneOccupants(getZoneOccupants(zoneName));
+		temp.setZoneLPD(getZoneLPD(zoneName));
+		temp.setZoneEPD(getZoneEPD(zoneName));
 		building.addThermalZone(temp);
 	    }
 	}
@@ -118,11 +124,14 @@ public final class SizingHTMLParser {
 	int powerIndex = 5;
 	for(int i=1; i<fanList.size(); i++){
 	    Elements info = fanList.get(i).getElementsByTag("td");
-	    if(info.get(i).text().equalsIgnoreCase(supplyFan)){
-		supplyFanPower = Double.parseDouble(info.get(i+powerIndex).text());
+	    System.out.println(info.get(0).text() + " " + supplyFan + " " + anotherFan);
+	    if(info.get(0).text().equalsIgnoreCase(supplyFan)){
+		supplyFanPower = Double.parseDouble(info.get(0+powerIndex).text());
+		//System.out.println(supplyFanPower);
 	    }
-	    if(info.get(i).text().equalsIgnoreCase(anotherFan)){
-		anotherFanPower = Double.parseDouble(info.get(i+powerIndex).text());
+	    if(info.get(0).text().equalsIgnoreCase(anotherFan)){
+		anotherFanPower = Double.parseDouble(info.get(0+powerIndex).text());
+		//System.out.println(supplyFanPower);
 	    }
 	}
 	return supplyFanPower / (supplyFanPower + anotherFanPower);
@@ -196,6 +205,31 @@ public final class SizingHTMLParser {
     private static Double getZoneMinimumVentilation(String zone){
 	Double vent = miniVent.getMinimumVentilationRate(zone);
 	return vent;
+    }
+    
+    private static Double getZoneArea(String zone){
+	Double area = zoneSummary.getZoneArea(zone);
+	return area;
+    }
+    
+    private static Double getZoneGrossWallArea(String zone){
+	Double grossWallArea = zoneSummary.getZoneGrossWallArea(zone);
+	return grossWallArea;
+    }
+    
+    private static Double getZoneLPD(String zone){
+	Double lpd = zoneSummary.getZoneLPD(zone);
+	return lpd;
+    }
+    
+    private static Double getZoneOccupants(String zone){
+	Double occupants = zoneSummary.getZoneOccupants(zone);
+	return occupants;
+    }
+    
+    private static Double getZoneEPD(String zone){
+	Double epd = zoneSummary.getZoneEPD(zone);
+	return epd;
     }
 
     private static void preprocessTable() {

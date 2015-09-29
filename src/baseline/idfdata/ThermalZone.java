@@ -86,6 +86,36 @@ public interface ThermalZone {
     public void setOAVentilation(EplusObject OAObject);
     
     /**
+     * set the zone area
+     * @return
+     */
+    public void setZoneArea(Double area);
+    
+    /**
+     * get Zone's gross wall area
+     * @return
+     */
+    public void setZoneGrossWallArea(Double area);
+    
+    /**
+     * set zone's occupants
+     * @return
+     */
+    public void setZoneOccupants(Double occupants);
+    
+    /**
+     * set zone's LPD
+     * @return
+     */
+    public void setZoneLPD(Double lpd);
+    
+    /**
+     * set Zone's Window Glass Area
+     * @return
+     */
+    public void setZoneEPD(Double epd);
+
+    /**
      * get the block of the thermal zone
      * @param block
      */
@@ -150,5 +180,35 @@ public interface ThermalZone {
      * @return
      */
     public EplusObject getOutdoorAirObject();
+    
+    /**
+     * get the zone area
+     * @return
+     */
+    public Double getZoneArea();
+    
+    /**
+     * get Zone's gross wall area
+     * @return
+     */
+    public Double getZoneGrossWallArea();
+    
+    /**
+     * get zone's occupants
+     * @return
+     */
+    public Double getZoneOccupants();
+    
+    /**
+     * get zone's LPD
+     * @return
+     */
+    public Double getZoneLPD();
+    
+    /**
+     * get Zone's Window Glass Area
+     * @return
+     */
+    public Double getZoneEPD();
 
 }

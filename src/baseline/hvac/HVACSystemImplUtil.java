@@ -105,11 +105,11 @@ public final class HVACSystemImplUtil {
      * @param supplyAir: supply air flow rate
      * @param anotherAir: the another fan air flow rate
      */
-    public static void updatedFanPowerforSystem5To8TwoFans(EplusObject supply, EplusObject another, double supplyAir, double anotherAir){
+    public static void updatedFanPowerforSystem5To8TwoFans(EplusObject supply, EplusObject another, double supplyAir, double anotherAir, double ratio){
 	Double totalFanPower = FanPowerCalculation.getFanPowerForSystem5To8(supplyAir);
-	String supplyFanname = supply.getKeyValuePair(0).getValue();
-	String anotherFanname = another.getKeyValuePair(0).getValue();
-	double ratio = SizingHTMLParser.getSupplyFanPowerRatio(supplyFanname, anotherFanname);
+	//String supplyFanname = supply.getKeyValuePair(0).getValue();
+	//String anotherFanname = another.getKeyValuePair(0).getValue();
+	//double ratio = SizingHTMLParser.getSupplyFanPowerRatio(supplyFanname, anotherFanname);
 	
 	double supplyFanPower = totalFanPower * ratio;
 	double anotherFanPower = totalFanPower - supplyFanPower;
