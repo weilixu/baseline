@@ -49,19 +49,20 @@ public class ReturnFanHVACSystem7 implements SystemType7 {
 	return objectLists;
     }
 
+    
     private void addReturnFanToSystem() {
 	// leave a space to combine with system name
 	String returnNode = " Return Fan Outlet";
 	// String inputNode = " Air Loop Inlet";
 	ArrayList<EplusObject> supplySystem = objectLists
 		.get("Supply Side System");
+	ArrayList<EplusObject> returnFanList = new ArrayList<EplusObject>();
 	for (EplusObject eo : supplySystem) {
 	    if (eo.getObjectName().equalsIgnoreCase("CONTROLLER:OUTDOORAIR")) {
 		// Index 2 is the return air node name, we should change this
 		String hvacName = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		eo.getKeyValuePair(outdoorAirControllerIndex).setValue(
 			hvacName + returnNode);
-		;
 	    } else if (eo.getObjectName().equalsIgnoreCase("OutdoorAir:Mixer")) {
 		String hvacName = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		eo.getKeyValuePair(outdoorAirMixer).setValue(
@@ -70,20 +71,24 @@ public class ReturnFanHVACSystem7 implements SystemType7 {
 		// find an air loop, change node + add a new fan object to the
 		// objectlists
 		// air loop first field is hvac name, no need to split
-		String hvacName = eo.getKeyValuePair(0).getValue();
+		String hvacFloorName = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		//generate the object
 		EplusObject returnFan = Manufacturer.generateObject(
-			"Return Fan", hvacName);
+			"Return Fan", hvacFloorName);
 		//adjust the return fan and supply fan's power ratio
-		adjustPower(returnFan, hvacName);
+		adjustPower(returnFan, hvacFloorName);
 		//add the return fan back to system
-		objectLists.get("Supply Side System").add(returnFan);
-
+		//objectLists.get("Supply Side System").add(returnFan);//to avoid cocurrentmodification
+		returnFanList.add(returnFan);
 	    } else if (eo.getKeyValuePair(0).getValue().contains("Main Branch")) {
 		// find main HVAC branch, start modify the branch
 		String hvacName = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		eo = Manufacturer.insertReturnFanToBranch(eo, hvacName);
 	    }
+	}
+	
+	for(EplusObject e: returnFanList){
+	    objectLists.get("Supply Side System").add(e);
 	}
     }
 
@@ -104,6 +109,6 @@ public class ReturnFanHVACSystem7 implements SystemType7 {
 	    }
 	}
 	HVACSystemImplUtil.updatedFanPowerforSystem5To8TwoFans(supplyFan,
-		returnFan, maxAirFlow, returnFanFlow);
+		returnFan, maxAirFlow, returnFanFlow, building.getSupplyReturnFanRatio());
     }
 }
