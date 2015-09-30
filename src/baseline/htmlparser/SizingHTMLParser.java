@@ -122,9 +122,10 @@ public final class SizingHTMLParser {
 	double supplyFanPower = 0.0;
 	double anotherFanPower = 0.0;
 	int powerIndex = 5;
+	System.out.println(supplyFan + " this is another fan" + anotherFan);
 	for(int i=1; i<fanList.size(); i++){
 	    Elements info = fanList.get(i).getElementsByTag("td");
-	    System.out.println(info.get(0).text() + " " + supplyFan + " " + anotherFan);
+	    //System.out.println(info.get(0).text() + " " + supplyFan + " " + anotherFan);
 	    if(info.get(0).text().equalsIgnoreCase(supplyFan)){
 		supplyFanPower = Double.parseDouble(info.get(0+powerIndex).text());
 		//System.out.println(supplyFanPower);
@@ -134,6 +135,8 @@ public final class SizingHTMLParser {
 		//System.out.println(supplyFanPower);
 	    }
 	}
+	System.out.println(supplyFanPower + " " + anotherFanPower);
+
 	return supplyFanPower / (supplyFanPower + anotherFanPower);
     }
     

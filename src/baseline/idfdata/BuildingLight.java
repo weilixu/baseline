@@ -29,7 +29,15 @@ public interface BuildingLight {
      * @param zoneName
      * @param lpd
      */
-    public void setZoneLPD(String zoneName, Double lpd);
+    public void setZoneLPDinSpaceBySpace(String zoneName, Double lpd);
+    
+    /**
+     * set a zone's lpd. The lpd value should always in W/m2 unit.
+     * and this has to be mapped to either ASHRAE 90.1 Table 9.5.1 or Table 9.6.1
+     * @param zoneName
+     * @param lpd
+     */
+    public void setZoneLPDinBuildingTypeMethod(Double lpd);
     
     /**
      * get the total number of zones in this model

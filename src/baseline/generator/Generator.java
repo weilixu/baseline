@@ -6,6 +6,7 @@ import java.io.IOException;
 import baseline.construction.opaque.BaselineEnvelope;
 import baseline.htmlparser.SizingHTMLParser;
 import baseline.hvac.BaselineHVAC;
+import baseline.idfdata.BuildingLight;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.lighting.LightingGenerator;
 import baseline.runeplus.SizingRun;
@@ -22,6 +23,7 @@ public class Generator {
     private final SizingRun eplusSizing;
 
     private BaselineEnvelope envelopeProcessor;
+    private LightingGenerator lightGenerator;
     private BaselineHVAC baselineHVAC;
     
     private final File energyplusFile;
@@ -64,7 +66,7 @@ public class Generator {
 	//this simulation is mainly to create abstract building info
 	//on top of the basic data structure
 	try {
-	    sizingRun();
+	    firstSizingRun();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -80,11 +82,12 @@ public class Generator {
 	building.processModelInfo();
 	
 	envelopeProcessor = new BaselineEnvelope(building);
+	lightGenerator = new LightingGenerator(building);
 	//change the envelope materials and lighting power densities
 	processOpaqueEnvelope();
+	lightGenerator.processBuildingTypeLPD();
 	//modify lighting and WWR Skylights
 	processWindowToWallRatio();
-	processLighting();
 	//second round of sizing simulation - to provide update thermal load
 	try {
 	    sizingRun();
@@ -92,6 +95,7 @@ public class Generator {
 	    e.printStackTrace();
 	}
 	System.out.println("Finish second round sizing");
+	//IdfReader updatedReader = building.getBaselineModel();
 	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
 	//reprocess the building abstract information
 	SizingHTMLParser.setTool(this.tool);
@@ -141,11 +145,10 @@ public class Generator {
      * Process all the lighting power densities according to table 9.5.1 or table 9.6.1
      * This will implement later...
      */
-    private void processLighting(){
-	LightingGenerator lgtGen = new LightingGenerator(building);
-	//1. create lighting objects
-	//2. process lights
-    }
+//    private void processLighting(BuildingLight bldg){
+//	LightingGenerator lgtGen = new LightingGenerator(bldg);
+//	lgtGen.processBuildingTypeLPD();
+//    }
     
     private void buildingHVAC(){
 	BuildingType bldgType = BuildingType.NONRESIDENTIAL;
@@ -161,8 +164,14 @@ public class Generator {
 	}
     }
     
-    //simple write out method, needs to be update later
     private void sizingRun() throws IOException{
+	building.generateEnergyPlusModel(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
+	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));;
+	htmlOutput = eplusSizing.runEnergyPlus();
+    }
+    
+    //simple write out method, needs to be update later
+    private void firstSizingRun() throws IOException{
 	baselineModel.WriteIdf(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));
 	htmlOutput = eplusSizing.runEnergyPlus();

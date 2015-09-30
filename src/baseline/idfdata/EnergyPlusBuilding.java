@@ -26,7 +26,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     private Set<String> floorSet;
     private boolean electricHeating;
     
-    private int numberOfSystem = 0;
+    private double numberOfSystem = 0.0;
     private double supplyReturnRatio = 0.0;
 
     /**
@@ -305,7 +305,6 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     }
 
     private void checkForReturnFans() {
-	numberOfSystem ++;
 	HashMap<String, ArrayList<ValueNode>> airLoops = baselineModel
 		.getObjectList("AirLoopHVAC").get("AirLoopHVAC");
 	Set<String> airloopList = airLoops.keySet();
@@ -332,7 +331,9 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    //processFloorReturnFanMap(demandSideOutletName, returnFan);
 	    String supplyFan = getSupplyFanName(branchListName, returnFan);
 	    
-	    supplyReturnRatio += SizingHTMLParser.getSupplyFanPowerRatio(supplyFan, returnFan);
+	    numberOfSystem =numberOfSystem + 1;
+	    supplyReturnRatio = supplyReturnRatio + SizingHTMLParser.getSupplyFanPowerRatio(supplyFan, returnFan);
+
 	}
     }
 
@@ -386,9 +387,13 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		"Branch 1 Name");
 	//baselineModel.get
 	ArrayList<ValueNode> nodeList = baselineModel.getObject("Branch", branchName);
-	for(ValueNode vn: nodeList){
-	    if(vn.getDescription().contains("Name") && vn.getAttribute().contains("Fan") && !vn.getAttribute().equalsIgnoreCase(returnFan)){
-		return vn.getAttribute();
+	for(int i = 0; i<nodeList.size(); i++){
+	    ValueNode vn = nodeList.get(i);
+	    if(vn.getDescription().contains("Object Type") && vn.getAttribute().contains("Fan")){
+		//if this is not return fan, then we assume it is the supply fan
+		if(!nodeList.get(i+1).getAttribute().equalsIgnoreCase(returnFan)){
+		    return nodeList.get(i+1).getAttribute();
+		}
 	    }
 	}
 	return null;
@@ -469,102 +474,98 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     }
 
     @Override
-    public void setZoneLPD(String zoneName, Double lpd) {
+    public void setZoneLPDinBuildingTypeMethod(Double lpd) {
 	// 1. Loop over lights object to find zones
 	HashMap<String, HashMap<String, ArrayList<ValueNode>>> lights = baselineModel
 		.getObjectList(LIGHT);
-	HashMap<String, HashMap<String, ArrayList<ValueNode>>> zoneList = baselineModel
-		.getObjectList(ZONELIST);
+//	HashMap<String, HashMap<String, ArrayList<ValueNode>>> zoneList = baselineModel
+//		.getObjectList(ZONELIST);
 	if (lights != null) {
 	    Set<String> elementCount = lights.get(LIGHT).keySet();
 	    Iterator<String> elementIterator = elementCount.iterator();
-	    boolean zoneExist = false; // flag indicate whether it uses zone
-				       // name or zone list name
-	    while (elementIterator.hasNext() && !zoneExist) {
+//	    boolean zoneExist = false; // flag indicate whether it uses zone
+//				       // name or zone list name
+	    while (elementIterator.hasNext()) {
 		// if there is still element left and we haven't find the zone,
 		// continue loop
 		String count = elementIterator.next();
 		ArrayList<ValueNode> lightsList = lights.get(LIGHT).get(count);
-		boolean find = false;
 		for (ValueNode v : lightsList) {
-		    if (v.getDescription().equalsIgnoreCase(
-			    "ZONE OR ZONELIST NAME")
-			    && v.getAttribute().equals(zoneName)) {
-			// if we find zone name matches, we need to revise its
-			// lighting power density
-			// so we turn the flag to true
-			find = true;
-			zoneExist = true; // we find the zone, turn the flag to
-					  // true and we are about done
-		    } else if (find
-			    && v.getDescription().equalsIgnoreCase(
+
+		    if ( v.getDescription().equalsIgnoreCase(
 				    "DESIGN LEVEL CALCULATION METHOD")) {
 			v.setAttribute("Watts/Area");
-		    } else if (find
-			    && v.getDescription().contains(
-				    "WATTS PER ZONE FLOOR AREA")) {
+		    } 
+		    if ( v.getDescription().equalsIgnoreCase(
+				    "Watts per Zone Floor Area")) {
 			v.setAttribute(lpd.toString());
 		    }
 		}
 	    }
-	    // 2. Once we confirm we cannot find the lights object for this
-	    // particular zone
-	    // we need to look for the correspondent light object in zonelist
-	    // object
-	    if (!zoneExist && zoneList != null) {
-		// lets first loop through zone list, zone by zone
-		Set<String> zoneListElement = lights.get(ZONELIST).keySet();
-		Iterator<String> zoneListElementIterator = zoneListElement
-			.iterator();
-		String targetZoneListName = null;
-		while (zoneListElementIterator.hasNext()) {
-		    String count = zoneListElementIterator.next();
-		    ArrayList<ValueNode> zoneListList = lights.get(ZONELIST)
-			    .get(count);
-		    String zoneListName = zoneListList.get(0).getAttribute();
-		    for (ValueNode v : zoneListList) {
-			// we find the zone in a particular zone list
-			if (v.getAttribute().equals(zoneName)) {
-			    targetZoneListName = zoneListName;
-			}
-		    }
-		}
-		if (targetZoneListName != null) {// this means we find the
-						 // zonelist
-		    // look at the lights objects again to find correspondent
-		    // zoneList name
-		    elementIterator = elementCount.iterator();
-		    while (elementIterator.hasNext()) {
-			// if there is still element left and we haven't find
-			// the zone, continue loop
-			String count = elementIterator.next();
-			ArrayList<ValueNode> lightsList = lights.get(LIGHT)
-				.get(count);
-			boolean find = false;
-			for (ValueNode v : lightsList) {
-			    if (v.getDescription().equalsIgnoreCase(
-				    "ZONE OR ZONELIST NAME")
-				    && v.getAttribute().equals(
-					    targetZoneListName)) {
-				// if we find zone name matches, we need to
-				// revise its lighting power density
-				// so we turn the flag to true
-				find = true;
-				zoneExist = true;
-			    } else if (find
-				    && v.getDescription().equalsIgnoreCase(
-					    "DESIGN LEVEL CALCULATION METHOD")) {
-				v.setAttribute("Watts/Area");
-			    } else if (find
-				    && v.getDescription().contains(
-					    "WATTS PER ZONE FLOOR AREA")) {
-				v.setAttribute(lpd.toString());
-			    }// if
-			}// for
-		    }// while
-		}// if
-	    }// if
+//	    // 2. Once we confirm we cannot find the lights object for this
+//	    // particular zone
+//	    // we need to look for the correspondent light object in zonelist
+//	    // object
+//	    if (!zoneExist && zoneList != null) {
+//		// lets first loop through zone list, zone by zone
+//		Set<String> zoneListElement = lights.get(ZONELIST).keySet();
+//		Iterator<String> zoneListElementIterator = zoneListElement
+//			.iterator();
+//		String targetZoneListName = null;
+//		while (zoneListElementIterator.hasNext()) {
+//		    String count = zoneListElementIterator.next();
+//		    ArrayList<ValueNode> zoneListList = lights.get(ZONELIST)
+//			    .get(count);
+//		    String zoneListName = zoneListList.get(0).getAttribute();
+//		    for (ValueNode v : zoneListList) {
+//			// we find the zone in a particular zone list
+//			if (v.getAttribute().equals(zoneName)) {
+//			    targetZoneListName = zoneListName;
+//			}
+//		    }
+//		}
+//		if (targetZoneListName != null) {// this means we find the
+//						 // zonelist
+//		    // look at the lights objects again to find correspondent
+//		    // zoneList name
+//		    elementIterator = elementCount.iterator();
+//		    while (elementIterator.hasNext()) {
+//			// if there is still element left and we haven't find
+//			// the zone, continue loop
+//			String count = elementIterator.next();
+//			ArrayList<ValueNode> lightsList = lights.get(LIGHT)
+//				.get(count);
+//			boolean find = false;
+//			for (ValueNode v : lightsList) {
+//			    if (v.getDescription().equalsIgnoreCase(
+//				    "ZONE OR ZONELIST NAME")
+//				    && v.getAttribute().equals(
+//					    targetZoneListName)) {
+//				// if we find zone name matches, we need to
+//				// revise its lighting power density
+//				// so we turn the flag to true
+//				find = true;
+//				zoneExist = true;
+//			    } else if (find
+//				    && v.getDescription().equalsIgnoreCase(
+//					    "DESIGN LEVEL CALCULATION METHOD")) {
+//				v.setAttribute("Watts/Area");
+//			    } else if (find
+//				    && v.getDescription().contains(
+//					    "WATTS PER ZONE FLOOR AREA")) {
+//				v.setAttribute(lpd.toString());
+//			    }// if
+//			}// for
+//		    }// while
+//		}// if
+//	    }// if
 	}// if
+	baselineModel.replaceEnergyPlusObjects(lights);
+    }
+    
+    @Override
+    public void setZoneLPDinSpaceBySpace(String zoneName, Double lpd) {
+	
     }
 
     @Override
@@ -832,4 +833,6 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    baselineModel.replaceEnergyPlusObjects(surfaces);
 	}
     }
+
+
 }
