@@ -47,7 +47,13 @@ public interface ThermalZone {
      * set the hvac system of the thermal zone
      * @param block
      */
-    public void setHVACZone(String hvacZone);
+    public void setZoneCoolHeat(String zonehvac);
+    
+    /**
+     * Set the zone ventilation method for the thermal zone
+     * @param zoneVent
+     */
+    public void setZoneVentilate(String zoneVent);
     
     /**
      * set the cooling load of this thermal zone
@@ -143,7 +149,13 @@ public interface ThermalZone {
      * get the hvac system of the thermal zone
      * @param block
      */
-    public String getHVACZone();
+    public String getZoneCoolHeat();
+    
+    /**
+     * get the zone ventilation method
+     * @return
+     */
+    public String getZoneVent();
     
     /**
      * get the cooling load of this thermal zone

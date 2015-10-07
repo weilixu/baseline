@@ -24,6 +24,7 @@ public class AssetScoreThermalZone implements ThermalZone{
     private String floor;
     private String zoneIdentification;
     private String hvac;
+    private String vent;
     private String originalZoneName;
     private EplusObject mechanicalVentilationRequirement;
     
@@ -76,7 +77,7 @@ public class AssetScoreThermalZone implements ThermalZone{
     }
 
     @Override
-    public void setHVACZone(String hvacZone) {
+    public void setZoneCoolHeat(String hvacZone) {
 	this.hvac = hvacZone;
 	
     }
@@ -102,7 +103,7 @@ public class AssetScoreThermalZone implements ThermalZone{
     }
 
     @Override
-    public String getHVACZone() {
+    public String getZoneCoolHeat() {
 	return hvac;
     }
 
@@ -232,5 +233,15 @@ public class AssetScoreThermalZone implements ThermalZone{
     @Override
     public void setZoneEPD(Double epd) {
 	this.epd = epd;
+    }
+
+    @Override
+    public void setZoneVentilate(String zoneVent) {
+	vent = zoneVent;
+    }
+
+    @Override
+    public String getZoneVent() {
+	return vent;
     }
 }

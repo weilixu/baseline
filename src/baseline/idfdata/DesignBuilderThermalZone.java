@@ -14,6 +14,8 @@ public class DesignBuilderThermalZone implements ThermalZone{
     private final static int blockIndex = 0;
     private final static int zoneTypeIndex = 1;
     private final static int zoneIdentificationIndex = 2;
+    private final static int zoneHVACOrVentIndex = 3;
+    private final static int zoneHVACIndex = 4;
     //private final static int zoneHVACIndex = 3;
     
     private final static String seperator = "%";
@@ -23,6 +25,7 @@ public class DesignBuilderThermalZone implements ThermalZone{
     private String floor;
     private String zoneIdentification;
     private String hvac;
+    private String vent;
     private String originalZoneName;
     private EplusObject mechanicalVentilationRequirement;
     
@@ -48,10 +51,21 @@ public class DesignBuilderThermalZone implements ThermalZone{
     public DesignBuilderThermalZone(String zoneName){
 	originalZoneName = zoneName;
 	String[] zoneCharacters = originalZoneName.split(seperator);
-	block = zoneCharacters[blockIndex];
-	floor = null;
-	zoneType = zoneCharacters[zoneTypeIndex];
-	zoneIdentification = zoneCharacters[zoneIdentificationIndex];
+	//ventilation is in the same system with heating and cooling
+	if(zoneCharacters.length <= 4){
+		block = zoneCharacters[blockIndex];
+		floor = null;
+		zoneType = zoneCharacters[zoneTypeIndex];
+		zoneIdentification = zoneCharacters[zoneIdentificationIndex];
+		hvac = zoneCharacters[zoneHVACOrVentIndex];
+	}else if(zoneCharacters.length ==5){
+		block = zoneCharacters[blockIndex];
+		floor = null;
+		zoneType = zoneCharacters[zoneTypeIndex];
+		zoneIdentification = zoneCharacters[zoneIdentificationIndex];
+		vent = zoneCharacters[zoneHVACOrVentIndex];
+		hvac = zoneCharacters[zoneHVACIndex];
+	}
     }
     
 
@@ -85,8 +99,8 @@ public class DesignBuilderThermalZone implements ThermalZone{
     }
 
     @Override
-    public void setHVACZone(String hvacZone) {
-	this.hvac = hvacZone;
+    public void setZoneCoolHeat(String zonehvac) {
+	this.hvac = zonehvac;
 	
     }
 
@@ -147,7 +161,7 @@ public class DesignBuilderThermalZone implements ThermalZone{
     }
 
     @Override
-    public String getHVACZone() {
+    public String getZoneCoolHeat() {
 	return hvac;
     }
 
@@ -240,5 +254,18 @@ public class DesignBuilderThermalZone implements ThermalZone{
     @Override
     public void setZoneEPD(Double epd) {
 	this.epd = epd;
+    }
+
+
+    @Override
+    public void setZoneVentilate(String zoneVent) {
+	vent = zoneVent;
+	
+    }
+
+
+    @Override
+    public String getZoneVent() {
+	return vent;
     }
 }
