@@ -29,7 +29,7 @@ public class SystemParser {
     
     private String systemType;
     
-    private static final String FILE_NAME = "hvacsystem.xml";
+    private static final String FILE_NAME = "hvacsystem_demo.xml";
     
     public SystemParser(String systemType){
 	builder = new SAXBuilder();

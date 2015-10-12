@@ -72,6 +72,12 @@ public class Generator {
 	}
 	//creating the abstract building info for deeper level information process
 	System.out.println("Finish first round sizing");
+	//
+	//
+	//debug purpose
+	//
+	//
+	//htmlOutput = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Standard_Model\\Automate\\BaselineTable.html");
 	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
 	//for test only
 	//htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
@@ -168,6 +174,7 @@ public class Generator {
 	building.generateEnergyPlusModel(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));;
 	htmlOutput = eplusSizing.runEnergyPlus();
+	System.out.println(htmlOutput.getAbsolutePath());
     }
     
     //simple write out method, needs to be update later
@@ -175,5 +182,6 @@ public class Generator {
 	baselineModel.WriteIdf(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));
 	htmlOutput = eplusSizing.runEnergyPlus();
+	System.out.println(htmlOutput.getAbsolutePath());
     }
 }

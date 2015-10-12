@@ -122,20 +122,23 @@ public final class SizingHTMLParser {
 	double supplyFanPower = 0.0;
 	double anotherFanPower = 0.0;
 	int powerIndex = 5;
-	System.out.println(supplyFan + " this is another fan" + anotherFan);
+	//System.out.println(supplyFan + " this is another fan: " + anotherFan);
 	for(int i=1; i<fanList.size(); i++){
 	    Elements info = fanList.get(i).getElementsByTag("td");
+	    //System.out.println(info.get(0).text() + " " + info.get(powerIndex).text());
 	    //System.out.println(info.get(0).text() + " " + supplyFan + " " + anotherFan);
 	    if(info.get(0).text().equalsIgnoreCase(supplyFan)){
+		//System.out.println(info.get(0+powerIndex).text());
 		supplyFanPower = Double.parseDouble(info.get(0+powerIndex).text());
 		//System.out.println(supplyFanPower);
 	    }
 	    if(info.get(0).text().equalsIgnoreCase(anotherFan)){
+		//System.out.println(info.get(0+powerIndex).text());
 		anotherFanPower = Double.parseDouble(info.get(0+powerIndex).text());
 		//System.out.println(supplyFanPower);
 	    }
 	}
-	System.out.println(supplyFanPower + " " + anotherFanPower);
+	//System.out.println(supplyFanPower + " " + anotherFanPower);
 
 	return supplyFanPower / (supplyFanPower + anotherFanPower);
     }
@@ -180,29 +183,45 @@ public final class SizingHTMLParser {
     }
     
     private static Double getZoneHeatingAirFlow(String zone){
-	Double airFlow = Double.parseDouble(heatingLoad.getUserDefinedHeatingAirFlow(zone));
-	return airFlow;
+	String airflow = heatingLoad.getUserDefinedHeatingAirFlow(zone);
+	if(airflow.equals("")){
+	    return 0.0;
+	}else{
+	    return Double.parseDouble(airflow);
+	}
     }
     
     private static Double getZoneCoolingAirFlow(String zone){
-	Double airFlow = Double.parseDouble(coolingLoad.getUserDefinedCoolingAirFlow(zone));
-	return airFlow;
+	String airflow = coolingLoad.getUserDefinedCoolingAirFlow(zone);
+	if(airflow.equals("")){
+	    return 0.0;
+	}else{
+	    return Double.parseDouble(airflow);
+	}
     }
     
     /**
      * The method must be called after the output was processed.
      */
     private static Double getZoneHeatingLoad(String zone){
-	Double load = Double.parseDouble(heatingLoad.getUserDefinedHeatingLoad(zone));
-	return load; //round it to 2 decimal
+	String load = heatingLoad.getUserDefinedHeatingLoad(zone);
+	if(load.equals("")){
+	    return 0.0;
+	}else{
+	    return Double.parseDouble(load);
+	}
     }
     
     /**
      * The method must be called after the output was processed.
      */
     private static Double getZoneCoolingLoad(String zone){
-	Double load = Double.parseDouble(coolingLoad.getUserDefinedCoolingLoad(zone));
-	return load;
+	String load = coolingLoad.getUserDefinedCoolingLoad(zone);
+	if(load.equals("")){
+	    return 0.0;
+	}else{
+	    return Double.parseDouble(load);
+	}
     }
     
     private static Double getZoneMinimumVentilation(String zone){

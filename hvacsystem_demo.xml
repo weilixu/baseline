@@ -581,7 +581,7 @@
 			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Gross Rated Total Cooling Capacity" type = "Double or String">autosize</field>
 			<field description = "Gross Rated Sensible Heat Ratio" type = "Double or String">autosize</field>
-			<field description = "Gross Rated Cooling COP" type = "Double">3.00</field>
+			<field description = "Gross Rated Cooling COP" type = "Double">5.50</field>
 			<field description = "Rated Air Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Rated Evaporator Fan Power Per Volume Flow Rate" type = "Double">773.3000</field>
 			<field description = "Air Inlet Node Name" type = "String">Floor% Mixed Air Outlet</field>

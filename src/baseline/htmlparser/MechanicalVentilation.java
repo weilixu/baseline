@@ -28,7 +28,7 @@ public class MechanicalVentilation {
 		return ach/3600 * volume;
 	    }
 	}
-	return null;
+	return 0.0;
     }
     
 //    public String getUserDefinedHeatingAirFlow(String zone){

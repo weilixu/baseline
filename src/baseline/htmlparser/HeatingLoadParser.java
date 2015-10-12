@@ -26,7 +26,7 @@ public class HeatingLoadParser {
 		return zoneList.get(i+userDefinedLoadIndex).text();
 	    }
 	}
-	return null;
+	return "";
     }
     
     public String getUserDefinedHeatingAirFlow(String zone){
@@ -36,6 +36,6 @@ public class HeatingLoadParser {
 		return zoneList.get(i+userDefinedAirFlowIndex).text();
 	    }
 	}
-	return null;
+	return "";
     }
 }

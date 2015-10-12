@@ -158,7 +158,7 @@ public class SizingRun {
 		while (this != null) {
 		    int ch = is.read(by);
 		    if (ch != -1) { // -1 indicates the end of the stream
-			System.out.print((char) by[0]);
+			//System.out.print((char) by[0]);
 			sb.append((char) by[0]);
 		    } else {
 			break;

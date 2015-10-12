@@ -330,7 +330,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    // demand side check thermal zones
 	    //processFloorReturnFanMap(demandSideOutletName, returnFan);
 	    String supplyFan = getSupplyFanName(branchListName, returnFan);
-	    
+	    System.out.println(supplyReturnRatio + " " + numberOfSystem);
 	    numberOfSystem =numberOfSystem + 1;
 	    supplyReturnRatio = supplyReturnRatio + SizingHTMLParser.getSupplyFanPowerRatio(supplyFan, returnFan);
 

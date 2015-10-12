@@ -25,7 +25,7 @@ public class CoolingLoadParser {
 		return zoneList.get(i+userDefinedLoadIndex).text();
 	    }
 	}
-	return null;
+	return "";
     }
     
     public String getUserDefinedCoolingAirFlow(String zone){
@@ -35,6 +35,6 @@ public class CoolingLoadParser {
 		return zoneList.get(i+userDefinedAirFlowIndex).text();
 	    }
 	}
-	return null;
+	return "";
     }
 }

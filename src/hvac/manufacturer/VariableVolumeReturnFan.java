@@ -19,7 +19,7 @@ public class VariableVolumeReturnFan {
     
     private void assembleReturnFan(){
 	object.addField(new KeyValuePair("Name",hvacName+ " Return Fan"));
-	object.addField(new KeyValuePair("Availability Schedule Name","On"));
+	object.addField(new KeyValuePair("Availability Schedule Name","On_BAS"));
 	object.addField(new KeyValuePair("Fan Total Efficiency","0.6"));
 	object.addField(new KeyValuePair("Pressure Rise","2000"));
 	object.addField(new KeyValuePair("Maximum Flow Rate","autosize"));
