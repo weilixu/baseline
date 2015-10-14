@@ -16,28 +16,18 @@ public class WindowWallRatioParser {
 	
     public static final double THRESHOLD = 0.4;
     
-    private List<Coordinate3D> windowCoords;
-    private List<Coordinate3D> wallCoords;
-    
     private Polygon window;
     private Polygon wall;
     
     public WindowWallRatioParser(List<Coordinate3D> windowCoords, 
     		List<Coordinate3D> wallCoords){
-    	this.windowCoords = windowCoords;
-    	this.wallCoords = wallCoords;
-    	
     	this.window = new Polygon(windowCoords);
     	this.wall = new Polygon(wallCoords);
     }
     
-    public List<Coordinate3D> getWindowCoords() {
-		return windowCoords;
-	}
-
-	public List<Coordinate3D> getWallCoords() {
-		return wallCoords;
-	}
+    public List<Coordinate3D> getWindowCoords(){
+    	return this.window.getCoords();
+    }
 
 	public Polygon getWindow() {
 		return window;
@@ -65,7 +55,6 @@ public class WindowWallRatioParser {
     public boolean adjustToThreshold(){
     	double ratio = this.getWindowWallRatio();
     	if(ratio>WindowWallRatioParser.THRESHOLD){
-    		// need adjust
     		double areaToCut = wall.getArea()
     				* (ratio - WindowWallRatioParser.THRESHOLD);
     		

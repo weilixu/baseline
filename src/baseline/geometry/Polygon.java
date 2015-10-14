@@ -7,26 +7,39 @@ public class Polygon {
 	public static final int SCALE_SUCCESS = 0;
 	public static final int SCALE_POLYGON_INVALID = -1;
 	public static final int SHRINK_AREA_DELTA_EXCEED = -2;
+	public static final double NORMAL_SCALE = 100;
 	
 	private List<Coordinate3D> coords;
 	
 	private List<Triangle> triangles;
+	
 	private double area;
 	private boolean isValid;
+	private int numPoints;
 	
+	/**
+	 * Follow the sequence of the coordinates, 
+	 * the polygon should not be self-intersected
+	 * @param coords
+	 */
 	public Polygon(List<Coordinate3D> coords){
-		if(coords.size()<3){
+		this.numPoints = coords.size();
+		if(this.numPoints<3){
 			this.isValid = false;
 			this.coords = null;
-			this.triangles = null;
+			//this.triangles = null;
 			this.area = 0;
 		}else {
 			this.isValid = true;
 			this.coords = coords;
 			
-			this.buildTriangles();
+			//this.buildTriangles();
 			this.area = this.computeArea();
 		}
+	}
+	
+	public int getNumPoints(){
+		return this.numPoints;
 	}
 	
 	public List<Coordinate3D> getCoords() {
@@ -43,7 +56,9 @@ public class Polygon {
 
 	/**
 	 * Assume the polygon is convex
+	 * @deprecated
 	 */
+	@SuppressWarnings("unused")
 	private void buildTriangles(){
 		this.triangles = new ArrayList<Triangle>(coords.size()-2);
 		
@@ -62,7 +77,11 @@ public class Polygon {
 		}
 	}
 	
-	private double computeArea(){
+	/**
+	 * @deprecated
+	 */
+	@SuppressWarnings("unused")
+	private double computeArea_sum_triangle(){
 		if(!isValid){
 			return 0;
 		}
@@ -77,6 +96,38 @@ public class Polygon {
 			}
 		}
 		return area;
+	}
+	
+	/**
+	 * Polygon is not self-intersected
+	 * @return
+	 */
+	private double computeArea(){
+		if(!isValid){
+			return 0;
+		}
+		
+		Coordinate3D p1, p2;
+		Coordinate3D sum = new Coordinate3D();
+		for(int i=0;i<numPoints;i++){
+			p1 = coords.get(i);
+			if(i<numPoints-1){
+				p2 = coords.get(i+1);
+			}else {
+				p2 = coords.get(0);
+			}
+			
+			Coordinate3D cross = Utility.cross(p1, p2);
+			sum.setX(sum.getX() + cross.getX());
+			sum.setY(sum.getY() + cross.getY());
+			sum.setZ(sum.getZ() + cross.getZ());
+		}
+		
+		Coordinate3D normal = this.getNorm();
+		Utility.normalize(normal);
+		
+		double area = Utility.dot(sum, normal);
+		return Math.abs(area/2);
 	}
 	
 	/**
@@ -121,7 +172,7 @@ public class Polygon {
 		
 		Coordinate3D vectorNormal = this.getNorm();
 		Utility.normalize(vectorNormal);
-		Utility.scale(vectorNormal, triangles.get(0).maxEdgeLen());
+		Utility.scale(vectorNormal, Polygon.NORMAL_SCALE);
 		
 		Coordinate3D shiftedTop = Utility.pointVectorAdd(top, vectorNormal);
 		Coordinate3D vectorNomralShiftback = vectorNormal.duplicate();
@@ -141,7 +192,7 @@ public class Polygon {
 		}
 		
 		// update triangles
-		this.buildTriangles();
+		//this.buildTriangles();
 		
 		// update area
 		this.area = this.computeArea();
