@@ -186,6 +186,9 @@ public class HVACSystem5 implements SystemType5{
 	//calculate the number of boilers
 	int numberOfBoiler = HVACSystemImplUtil.boilerNumberCalculation(floorArea);
 	System.out.println("We Found " + numberOfBoiler + "Boilers");
+	if(numberOfBoiler==1){
+	    boilerList.add("Boiler%");
+	}
 	
 	ArrayList<EplusObject> plantTemp = new ArrayList<EplusObject>();
 	

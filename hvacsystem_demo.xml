@@ -965,7 +965,7 @@
 		</object>	
 		<object description = "PlantLoop" reference = "Plant">
 			<field description = "Name" type = "String">Hot Water Loop</field>
-			<field descritpion = "Fluid Type" type = "String">Water</field>
+			<field description = "Fluid Type" type = "String">Water</field>
 			<field description = "User Defined Fluid Type" type = "String"/>
 			<field description = "Plant Equipment Operation Scheme Name" type = "String">Hot Water Loop Operation</field>
 			<field description = "Loop Temperature Setpoint Node Name" type = "String">Hot Water Loop HW Supply Outlet</field>
@@ -1168,13 +1168,13 @@
 		</object>
 		<object description = "ScheduleTypeLimits" reference = "Schedule">
 			<field description = "Name" type = "String">On_Off_BAS</field>
-			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Lower Limit Value" type = "Double">0</field>
 			<field description = "Upper Limit Value" type = "Double">1</field>
 			<field description = "Numeric Type" type = "String">DISCRETE</field>
 		</object>
 		<object description = "ScheduleTypeLimits" reference = "Schedule">
 			<field description = "Name" type = "String">Fraction_BAS</field>
-			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Lower Limit Value" type = "Double">0</field>
 			<field description = "Upper Limit Value" type = "Double">1</field>
 			<field description = "Numeric Type" type = "String">CONTINUOUS</field>
 		</object>
@@ -1808,7 +1808,7 @@
 		</object>
 		<object description = "PlantLoop" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop</field>
-			<field descritpion = "Fluid Type" type = "String">Water</field>
+			<field description = "Fluid Type" type = "String">Water</field>
 			<field description = "User Defined Fluid Type" type = "String"/>
 			<field description = "Plant Equipment Operation Scheme Name" type = "String">Chilled Water Loop Chiller Operation</field>
 			<field description = "Loop Temperature Setpoint Node Name" type = "String">Chilled Water Loop ChW Supply Outlet</field>
@@ -1831,7 +1831,7 @@
 		</object>
 		<object description = "CondenserLoop" reference = "Plant">
 			<field description = "Name" type = "String">Condenser Water Loop</field>
-			<field descritpion = "Fluid Type" type = "String">Water</field>
+			<field description = "Fluid Type" type = "String">Water</field>
 			<field description = "User Defined Fluid Type" type = "String"/>
 			<field description = "Plant Equipment Operation Scheme Name" type = "String">Chilled Water Loop Condenser Operation</field>
 			<field description = "Loop Temperature Setpoint Node Name" type = "String">Chilled Water Loop CndW Supply Outlet</field>
@@ -2511,13 +2511,13 @@
 		</object>
 		<object description = "ScheduleTypeLimits" reference = "Schedule">
 			<field description = "Name" type = "String">On_Off_BAS</field>
-			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Lower Limit Value" type = "Double">0</field>
 			<field description = "Upper Limit Value" type = "Double">1</field>
 			<field description = "Numeric Type" type = "String">DISCRETE</field>
 		</object>
 		<object description = "ScheduleTypeLimits" reference = "Schedule">
 			<field description = "Name" type = "String">Fraction_BAS</field>
-			<field descirption = "Lower Limit Value" type = "Double">0</field>
+			<field description = "Lower Limit Value" type = "Double">0</field>
 			<field description = "Upper Limit Value" type = "Double">1</field>
 			<field description = "Numeric Type" type = "String">CONTINUOUS</field>
 		</object>		

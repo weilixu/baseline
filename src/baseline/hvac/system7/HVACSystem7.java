@@ -97,6 +97,9 @@ public class HVACSystem7 implements SystemType7 {
 	// calculate the number of boilers
 	int numberOfBoiler = HVACSystemImplUtil.boilerNumberCalculation(floorArea);
 	System.out.println("We Found " + numberOfBoiler + "Boilers");
+	if(numberOfBoiler==1){
+	    boilerList.add("Boiler%");
+	}
 
 	// calculate the number of chillers
 	int numberOfChiller = HVACSystemImplUtil
