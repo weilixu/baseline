@@ -48,4 +48,15 @@ public class Coordinate3D {
 		y = p.getY();
 		z = p.getZ();
 	}
+	
+	public double vectorLen(){
+		return Math.sqrt(
+				Math.pow(this.x, 2)+Math.pow(this.y, 2)+Math.pow(this.z, 2)
+			);
+	}
+	
+	@Override
+	public String toString(){
+		return "{"+x+", "+y+", "+z+"}";
+	}
 }

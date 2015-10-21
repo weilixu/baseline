@@ -6,8 +6,11 @@ import java.util.List;
 public class Polygon {
 	public static final int SCALE_SUCCESS = 0;
 	public static final int SCALE_POLYGON_INVALID = -1;
-	public static final int SHRINK_AREA_DELTA_EXCEED = -2;
-	public static final double NORMAL_SCALE = 100;
+	public static final int SCALE_RATIO_INVALID = -2;
+	
+	private static final double NORMAL_SCALE = 100;
+	
+	private static final double CONTAIN_TEST_EPSILON = 0.0001;
 	
 	private List<Coordinate3D> coords;
 	
@@ -150,21 +153,21 @@ public class Polygon {
 	}
 	
 	/**
-	 * If area is greater or equal to polygon's area,
-	 * return false and do nothing. Shrink and update
-	 * coordinates and triangles otherwise.
-	 * @param area
+	 * areaScaleRatio must be great than or equal to 0<br/>
+	 * areaScaleRatio<1 and >0 => shrink<br/>
+	 * areaScaleRatio>1 => enlarge<br/>
+	 * 
+	 * @param areaScaleRatio
 	 * @return
 	 */
-	public int scale(double areaDelta){
+	public int scale(double areaScaleRatio){
 		if(!isValid){
 			return Polygon.SCALE_POLYGON_INVALID;
 		}
-		if(areaDelta+this.area <= 0){
-			return Polygon.SHRINK_AREA_DELTA_EXCEED;
+		if(areaScaleRatio < 0){
+			return Polygon.SCALE_RATIO_INVALID;
 		}
 		
-		double areaScaleRatio = (this.area+areaDelta) / this.area;
 		double edgeScaleRatio = Math.sqrt(areaScaleRatio);
 		double vectorScaleRatio = edgeScaleRatio-1;
 		
@@ -198,5 +201,29 @@ public class Polygon {
 		this.area = this.computeArea();
 		
 		return Polygon.SCALE_SUCCESS;
+	}
+	
+	public boolean containsPoint(Coordinate3D point){
+		double angleSum = 0;
+		for(int i=0,j=coords.size()-1;i<coords.size();j=i,i++){
+			Coordinate3D v1 = coords.get(i);
+			Coordinate3D v2 = coords.get(j);
+			
+			Coordinate3D pv1Vector = Utility.makeVector(point, v1);
+			Coordinate3D pv2Vector = Utility.makeVector(point, v2);
+			
+			double pv1Len = pv1Vector.vectorLen();
+			double pv2Len = pv2Vector.vectorLen();
+			
+			double lenTimes = pv1Len * pv2Len;
+			if(lenTimes <= Polygon.CONTAIN_TEST_EPSILON){
+				return true; //point is on polygon's vertex, consider inside
+			}
+			
+			double cosAngle = Utility.dot(pv1Vector, pv2Vector) / lenTimes;
+			angleSum += Math.acos(cosAngle);
+		}
+		
+		return Math.abs(2*Math.PI-angleSum) < Polygon.CONTAIN_TEST_EPSILON;
 	}
 }
