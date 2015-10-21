@@ -303,6 +303,18 @@ public class IdfReader {
 	}
 	return deepCopyPartialMap(object);
     }
+    
+    /**
+     * Another version of getting object, this method won't duplicate the object map
+     * @param object
+     * @return
+     */
+    public HashMap<String, ArrayList<ValueNode>> getObjectListCopy(String object) {
+	if (eplusMap.get(object) == null) {
+	    return null;
+	}
+	return eplusMap.get(object);
+    }
 
     /**
      * get value from the database. This method will extract the value according
