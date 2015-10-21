@@ -52,7 +52,7 @@ public class DesignBuilderThermalZone implements ThermalZone{
 	originalZoneName = zoneName;
 	String[] zoneCharacters = originalZoneName.split(seperator);
 	//ventilation is in the same system with heating and cooling
-	if(zoneCharacters.length <= 4){
+	if(zoneCharacters.length == 4){
 		block = zoneCharacters[blockIndex];
 		floor = null;
 		zoneType = zoneCharacters[zoneTypeIndex];
@@ -65,6 +65,14 @@ public class DesignBuilderThermalZone implements ThermalZone{
 		zoneIdentification = zoneCharacters[zoneIdentificationIndex];
 		vent = zoneCharacters[zoneHVACOrVentIndex];
 		hvac = zoneCharacters[zoneHVACIndex];
+	}else{
+	    //plenum zone condition
+	    block = null;
+	    zoneType = null;
+	    floor = null;
+	    zoneIdentification = null;
+	    vent = null;
+	    hvac = null;
 	}
     }
     

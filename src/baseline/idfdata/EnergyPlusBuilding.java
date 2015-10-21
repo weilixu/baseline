@@ -25,7 +25,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     private Double conditionedFloorArea;
     private Set<String> floorSet;
     private boolean electricHeating;
-    
+
     private double numberOfSystem = 0.0;
     private double supplyReturnRatio = 0.0;
 
@@ -104,8 +104,8 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	cZone = zone;
 	this.baselineModel = baselineModel;
 	electricHeating = false;
-	
-	//remove unnecessary objects in the model
+
+	// remove unnecessary objects in the model
 	this.baselineModel.removeEnergyPlusObject("Daylighting:Controls");
     }
 
@@ -164,21 +164,26 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    String block = zone.getBlock();
 	    String floor = zone.getFloor();
 	    String level = null;
-	    if(floor == null){
+	    if (floor == null && block == null) {
+		level = null;
+	    } else if (floor == null && block != null) {
+		//plenum condition
 		floorSet.add(block);
 		level = block;
-	    }else{
+	    } else {
 		floorSet.add(floor);
 		level = block + ":" + floor;
 	    }
-	    
-	    if (!floorMap.containsKey(level)) {
-		floorMap.put(level, new ArrayList<ThermalZone>());
+
+	    if (level != null) {
+		if (!floorMap.containsKey(level)) {
+		    floorMap.put(level, new ArrayList<ThermalZone>());
+		}
+		zone.setOAVentilation(getDesignOutdoorAir(zone.getFullName()));
+		floorMap.get(level).add(zone);
+		totalCoolingLoad += zone.getCoolingLoad();
+		totalHeatingLoad += zone.getHeatingLoad();
 	    }
-	    zone.setOAVentilation(getDesignOutdoorAir(zone.getFullName()));
-	    floorMap.get(level).add(zone);
-	    totalCoolingLoad += zone.getCoolingLoad();
-	    totalHeatingLoad += zone.getHeatingLoad();
 	}
 	checkForReturnFans();
     }
@@ -251,7 +256,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	Iterator<String> returnFanIterator = returnFan.iterator();
 	while (returnFanIterator.hasNext()) {
 	    String fan = returnFanIterator.next();
-	    System.out.println(fan+" " + returnFanMap.get(fan));
+	    // System.out.println(fan+" " + returnFanMap.get(fan));
 	    if (returnFanMap.get(fan)) {
 		return true;
 	    }
@@ -299,8 +304,8 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     public Double getCoolingSetPointNotMet() {
 	return coolingSetPointNotMet;
     }
-    
-    public Double getSupplyReturnFanRatio(){
+
+    public Double getSupplyReturnFanRatio() {
 	return supplyReturnRatio / numberOfSystem;
     }
 
@@ -326,43 +331,46 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    }
 	    // branch list to check system return fan
 	    String returnFan = hasReturnFan(branchListName);
-	    returnFanMap.put("Building", returnFan!=null);
+	    returnFanMap.put("Building", returnFan != null);
 	    // demand side check thermal zones
-	    //processFloorReturnFanMap(demandSideOutletName, returnFan);
+	    // processFloorReturnFanMap(demandSideOutletName, returnFan);
 	    String supplyFan = getSupplyFanName(branchListName, returnFan);
 	    System.out.println(supplyReturnRatio + " " + numberOfSystem);
-	    numberOfSystem =numberOfSystem + 1;
-	    supplyReturnRatio = supplyReturnRatio + SizingHTMLParser.getSupplyFanPowerRatio(supplyFan, returnFan);
+	    numberOfSystem = numberOfSystem + 1;
+	    supplyReturnRatio = supplyReturnRatio
+		    + SizingHTMLParser.getSupplyFanPowerRatio(supplyFan,
+			    returnFan);
 
 	}
     }
 
-//    private void processFloorReturnFanMap(String demandOutlet, Boolean returnFan) {
-//	HashMap<String, ArrayList<ValueNode>> mixerList = baselineModel
-//		.getObjectList("AirLoopHVAC:ZoneMixer").get(
-//			"AirLoopHVAC:ZoneMixer");
-//	Set<String> mixerSet = mixerList.keySet();
-//	Iterator<String> mixerIterator = mixerSet.iterator();
-//	while (mixerIterator.hasNext()) {
-//	    String mixer = mixerIterator.next();
-//	    ArrayList<ValueNode> mixerObject = mixerList.get(mixer);
-//	    // demand outlet is always at Outlet Node Name field
-//	    if (mixerObject.get(1).getAttribute().equals(demandOutlet)) {
-//		for (int i = 2; i < mixerObject.size(); i++) {
-//		    String zoneName = baselineModel.getValue(
-//			    "ZoneHVAC:EquipmentConnections", mixerObject.get(i)
-//				    .getAttribute(), "Zone Name");
-//		    for (ThermalZone tz : thermalZoneList) {
-//			if (tz.getFullName().equals(zoneName)) {
-//			    if (!returnFanMap.get(tz.getFloor())) {
-//				returnFanMap.put(tz.getFloor(), returnFan);
-//			    }// if
-//			}// if
-//		    }// for
-//		}// for
-//	    }// if
-//	}// while
-//    }
+    // private void processFloorReturnFanMap(String demandOutlet, Boolean
+    // returnFan) {
+    // HashMap<String, ArrayList<ValueNode>> mixerList = baselineModel
+    // .getObjectList("AirLoopHVAC:ZoneMixer").get(
+    // "AirLoopHVAC:ZoneMixer");
+    // Set<String> mixerSet = mixerList.keySet();
+    // Iterator<String> mixerIterator = mixerSet.iterator();
+    // while (mixerIterator.hasNext()) {
+    // String mixer = mixerIterator.next();
+    // ArrayList<ValueNode> mixerObject = mixerList.get(mixer);
+    // // demand outlet is always at Outlet Node Name field
+    // if (mixerObject.get(1).getAttribute().equals(demandOutlet)) {
+    // for (int i = 2; i < mixerObject.size(); i++) {
+    // String zoneName = baselineModel.getValue(
+    // "ZoneHVAC:EquipmentConnections", mixerObject.get(i)
+    // .getAttribute(), "Zone Name");
+    // for (ThermalZone tz : thermalZoneList) {
+    // if (tz.getFullName().equals(zoneName)) {
+    // if (!returnFanMap.get(tz.getFloor())) {
+    // returnFanMap.put(tz.getFloor(), returnFan);
+    // }// if
+    // }// if
+    // }// for
+    // }// for
+    // }// if
+    // }// while
+    // }
 
     private String hasReturnFan(String BranchList) {
 	String returnFan = null;
@@ -370,29 +378,34 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	String branchName = baselineModel.getValue("BranchList", BranchList,
 		"Branch 1 Name");
 	// 2. check fan object at first component listed on branch
-	//System.out.println(branchName);
+	// System.out.println(branchName);
 	String componentName = baselineModel.getValue("Branch", branchName,
 		"Component 1 Object Type");
-	//System.out.println(componentName);
+	// System.out.println(componentName);
 	if (componentName.contains("Fan")) {
-	    returnFan = baselineModel.getValue("Branch", branchName, "Component 1 Name");
+	    returnFan = baselineModel.getValue("Branch", branchName,
+		    "Component 1 Name");
 	}
-	//System.out.println("******************************************************"+returnFan);
+	// System.out.println("******************************************************"+returnFan);
 	return returnFan;
     }
-    
-    private String getSupplyFanName(String BranchList, String returnFan){
+
+    private String getSupplyFanName(String BranchList, String returnFan) {
 	// 1. get the air loop branch name from branchlist
 	String branchName = baselineModel.getValue("BranchList", BranchList,
 		"Branch 1 Name");
-	//baselineModel.get
-	ArrayList<ValueNode> nodeList = baselineModel.getObject("Branch", branchName);
-	for(int i = 0; i<nodeList.size(); i++){
+	// baselineModel.get
+	ArrayList<ValueNode> nodeList = baselineModel.getObject("Branch",
+		branchName);
+	for (int i = 0; i < nodeList.size(); i++) {
 	    ValueNode vn = nodeList.get(i);
-	    if(vn.getDescription().contains("Object Type") && vn.getAttribute().contains("Fan")){
-		//if this is not return fan, then we assume it is the supply fan
-		if(!nodeList.get(i+1).getAttribute().equalsIgnoreCase(returnFan)){
-		    return nodeList.get(i+1).getAttribute();
+	    if (vn.getDescription().contains("Object Type")
+		    && vn.getAttribute().contains("Fan")) {
+		// if this is not return fan, then we assume it is the supply
+		// fan
+		if (!nodeList.get(i + 1).getAttribute()
+			.equalsIgnoreCase(returnFan)) {
+		    return nodeList.get(i + 1).getAttribute();
 		}
 	    }
 	}
@@ -478,13 +491,14 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	// 1. Loop over lights object to find zones
 	HashMap<String, HashMap<String, ArrayList<ValueNode>>> lights = baselineModel
 		.getObjectList(LIGHT);
-//	HashMap<String, HashMap<String, ArrayList<ValueNode>>> zoneList = baselineModel
-//		.getObjectList(ZONELIST);
+	// HashMap<String, HashMap<String, ArrayList<ValueNode>>> zoneList =
+	// baselineModel
+	// .getObjectList(ZONELIST);
 	if (lights != null) {
 	    Set<String> elementCount = lights.get(LIGHT).keySet();
 	    Iterator<String> elementIterator = elementCount.iterator();
-//	    boolean zoneExist = false; // flag indicate whether it uses zone
-//				       // name or zone list name
+	    // boolean zoneExist = false; // flag indicate whether it uses zone
+	    // // name or zone list name
 	    while (elementIterator.hasNext()) {
 		// if there is still element left and we haven't find the zone,
 		// continue loop
@@ -492,80 +506,80 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		ArrayList<ValueNode> lightsList = lights.get(LIGHT).get(count);
 		for (ValueNode v : lightsList) {
 
-		    if ( v.getDescription().equalsIgnoreCase(
-				    "DESIGN LEVEL CALCULATION METHOD")) {
+		    if (v.getDescription().equalsIgnoreCase(
+			    "DESIGN LEVEL CALCULATION METHOD")) {
 			v.setAttribute("Watts/Area");
-		    } 
-		    if ( v.getDescription().equalsIgnoreCase(
-				    "Watts per Zone Floor Area")) {
+		    }
+		    if (v.getDescription().equalsIgnoreCase(
+			    "Watts per Zone Floor Area")) {
 			v.setAttribute(lpd.toString());
 		    }
 		}
 	    }
-//	    // 2. Once we confirm we cannot find the lights object for this
-//	    // particular zone
-//	    // we need to look for the correspondent light object in zonelist
-//	    // object
-//	    if (!zoneExist && zoneList != null) {
-//		// lets first loop through zone list, zone by zone
-//		Set<String> zoneListElement = lights.get(ZONELIST).keySet();
-//		Iterator<String> zoneListElementIterator = zoneListElement
-//			.iterator();
-//		String targetZoneListName = null;
-//		while (zoneListElementIterator.hasNext()) {
-//		    String count = zoneListElementIterator.next();
-//		    ArrayList<ValueNode> zoneListList = lights.get(ZONELIST)
-//			    .get(count);
-//		    String zoneListName = zoneListList.get(0).getAttribute();
-//		    for (ValueNode v : zoneListList) {
-//			// we find the zone in a particular zone list
-//			if (v.getAttribute().equals(zoneName)) {
-//			    targetZoneListName = zoneListName;
-//			}
-//		    }
-//		}
-//		if (targetZoneListName != null) {// this means we find the
-//						 // zonelist
-//		    // look at the lights objects again to find correspondent
-//		    // zoneList name
-//		    elementIterator = elementCount.iterator();
-//		    while (elementIterator.hasNext()) {
-//			// if there is still element left and we haven't find
-//			// the zone, continue loop
-//			String count = elementIterator.next();
-//			ArrayList<ValueNode> lightsList = lights.get(LIGHT)
-//				.get(count);
-//			boolean find = false;
-//			for (ValueNode v : lightsList) {
-//			    if (v.getDescription().equalsIgnoreCase(
-//				    "ZONE OR ZONELIST NAME")
-//				    && v.getAttribute().equals(
-//					    targetZoneListName)) {
-//				// if we find zone name matches, we need to
-//				// revise its lighting power density
-//				// so we turn the flag to true
-//				find = true;
-//				zoneExist = true;
-//			    } else if (find
-//				    && v.getDescription().equalsIgnoreCase(
-//					    "DESIGN LEVEL CALCULATION METHOD")) {
-//				v.setAttribute("Watts/Area");
-//			    } else if (find
-//				    && v.getDescription().contains(
-//					    "WATTS PER ZONE FLOOR AREA")) {
-//				v.setAttribute(lpd.toString());
-//			    }// if
-//			}// for
-//		    }// while
-//		}// if
-//	    }// if
+	    // // 2. Once we confirm we cannot find the lights object for this
+	    // // particular zone
+	    // // we need to look for the correspondent light object in zonelist
+	    // // object
+	    // if (!zoneExist && zoneList != null) {
+	    // // lets first loop through zone list, zone by zone
+	    // Set<String> zoneListElement = lights.get(ZONELIST).keySet();
+	    // Iterator<String> zoneListElementIterator = zoneListElement
+	    // .iterator();
+	    // String targetZoneListName = null;
+	    // while (zoneListElementIterator.hasNext()) {
+	    // String count = zoneListElementIterator.next();
+	    // ArrayList<ValueNode> zoneListList = lights.get(ZONELIST)
+	    // .get(count);
+	    // String zoneListName = zoneListList.get(0).getAttribute();
+	    // for (ValueNode v : zoneListList) {
+	    // // we find the zone in a particular zone list
+	    // if (v.getAttribute().equals(zoneName)) {
+	    // targetZoneListName = zoneListName;
+	    // }
+	    // }
+	    // }
+	    // if (targetZoneListName != null) {// this means we find the
+	    // // zonelist
+	    // // look at the lights objects again to find correspondent
+	    // // zoneList name
+	    // elementIterator = elementCount.iterator();
+	    // while (elementIterator.hasNext()) {
+	    // // if there is still element left and we haven't find
+	    // // the zone, continue loop
+	    // String count = elementIterator.next();
+	    // ArrayList<ValueNode> lightsList = lights.get(LIGHT)
+	    // .get(count);
+	    // boolean find = false;
+	    // for (ValueNode v : lightsList) {
+	    // if (v.getDescription().equalsIgnoreCase(
+	    // "ZONE OR ZONELIST NAME")
+	    // && v.getAttribute().equals(
+	    // targetZoneListName)) {
+	    // // if we find zone name matches, we need to
+	    // // revise its lighting power density
+	    // // so we turn the flag to true
+	    // find = true;
+	    // zoneExist = true;
+	    // } else if (find
+	    // && v.getDescription().equalsIgnoreCase(
+	    // "DESIGN LEVEL CALCULATION METHOD")) {
+	    // v.setAttribute("Watts/Area");
+	    // } else if (find
+	    // && v.getDescription().contains(
+	    // "WATTS PER ZONE FLOOR AREA")) {
+	    // v.setAttribute(lpd.toString());
+	    // }// if
+	    // }// for
+	    // }// while
+	    // }// if
+	    // }// if
 	}// if
 	baselineModel.replaceEnergyPlusObjects(lights);
     }
-    
+
     @Override
     public void setZoneLPDinSpaceBySpace(String zoneName, Double lpd) {
-	
+
     }
 
     @Override
@@ -589,7 +603,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	baselineModel.removeEnergyPlusObject(CONSTRUCTION);
 	baselineModel.removeEnergyPlusObject(SIMPLE_WINDOW);
 
-	//add new building envelope related objects
+	// add new building envelope related objects
 	ArrayList<EplusObject> objects = envelope.getObjects(); // retrieve the
 								// data from
 								// database
@@ -614,43 +628,46 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	System.out.println("Start replacing the internal mass...");
 	replaceInternalMass();
     }
-    
+
     @Override
     public ClimateZone getClimateZone() {
 	return cZone;
     }
-    
+
     /**
-     * removes the HVAC objects and build service hot water model
-     * This method firstly will trace any inputs that relates to service hot water system
-     * Note the name of components in the service hot water must contain DHWSys strings.
-     * then this method will remove the whole objects.
+     * removes the HVAC objects and build service hot water model This method
+     * firstly will trace any inputs that relates to service hot water system
+     * Note the name of components in the service hot water must contain DHWSys
+     * strings. then this method will remove the whole objects.
+     * 
      * @param s
      */
-    public void removeHVACObject(String s){
+    public void removeHVACObject(String s) {
 	HashMap<String, HashMap<String, ArrayList<ValueNode>>> objectList = baselineModel
 		.getObjectList(s);
-	
-	if(objectList!=null){
+
+	if (objectList != null) {
 	    Set<String> elementCount = objectList.get(s).keySet();
 	    Iterator<String> elementIterator = elementCount.iterator();
-	    while(elementIterator.hasNext()){
+	    while (elementIterator.hasNext()) {
 		String count = elementIterator.next();
-		ArrayList<ValueNode> object = objectList.get(s)
-			.get(count);
-		for(ValueNode v: object){
-		    if (v.getDescription().contains("Name") && v.getAttribute().contains("DHWSys")){
-			if(!serviceHotWater.containsKey(s)){
-			    serviceHotWater.put(s, new HashMap<String, ArrayList<ValueNode>>());
+		ArrayList<ValueNode> object = objectList.get(s).get(count);
+		for (ValueNode v : object) {
+		    if (v.getDescription().contains("Name")
+			    && v.getAttribute().contains("DHWSys")) {
+			if (!serviceHotWater.containsKey(s)) {
+			    serviceHotWater
+				    .put(s,
+					    new HashMap<String, ArrayList<ValueNode>>());
 			}
-			serviceHotWater.get(s).put(count, object);			
+			serviceHotWater.get(s).put(count, object);
 		    }
 		}
 	    }
 	}
 	baselineModel.removeEnergyPlusObject(s);
     }
-    
+
     /**
      * allow other method to insert energyplus object to the model
      * 
@@ -658,28 +675,30 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
      * @param objectValues
      * @param objectDes
      */
-    public void insertEnergyPlusObject(String name, String[] objectValues, String[] objectDes){
+    public void insertEnergyPlusObject(String name, String[] objectValues,
+	    String[] objectDes) {
 	baselineModel.addNewEnergyPlusObject(name, objectValues, objectDes);
     }
-    
-    public void generateEnergyPlusModel(String filePath, String fileName){
-	//merge the all the information before write out
-	//1. add service hot water back to the model
+
+    public void generateEnergyPlusModel(String filePath, String fileName) {
+	// merge the all the information before write out
+	// 1. add service hot water back to the model
 	Set<String> objectList = serviceHotWater.keySet();
 	Iterator<String> objectIterator = objectList.iterator();
-	while(objectIterator.hasNext()){
+	while (objectIterator.hasNext()) {
 	    String objectName = objectIterator.next();
-	    HashMap<String, ArrayList<ValueNode>> elementList = serviceHotWater.get(objectName);
+	    HashMap<String, ArrayList<ValueNode>> elementList = serviceHotWater
+		    .get(objectName);
 	    Set<String> elementSet = elementList.keySet();
 	    Iterator<String> elementIterator = elementSet.iterator();
-	    while(elementIterator.hasNext()){
+	    while (elementIterator.hasNext()) {
 		String element = elementIterator.next();
 		ArrayList<ValueNode> object = elementList.get(element);
 		baselineModel.addNewEnergyPlusObject(objectName, object);
 	    }
 	}
-	
-	//2. write out the model
+
+	// 2. write out the model
 	baselineModel.WriteIdf(filePath, fileName);
     }
 
@@ -710,7 +729,6 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	}
     }
 
-
     /**
      * replace the fenestration surface. The checking algorithm depends on the
      * name generated from asset score tool. fenestration --> windows skylight
@@ -730,8 +748,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 
 		// first loop, find the criteria for the selection
 		for (ValueNode v : fenestrationList) {
-		    if (v.getDescription()
-			    .equalsIgnoreCase("Surface Type")) {
+		    if (v.getDescription().equalsIgnoreCase("Surface Type")) {
 			String construction = v.getAttribute();
 			if (construction.equalsIgnoreCase("window")) {
 			    surfaceType = "window";
@@ -833,6 +850,5 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    baselineModel.replaceEnergyPlusObjects(surfaces);
 	}
     }
-
 
 }
