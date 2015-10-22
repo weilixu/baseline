@@ -16,6 +16,12 @@ public class Triangle {
 	private boolean isValid;
 	private double area;
 	
+	/**
+	 * not used
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 */
 	public Triangle(Coordinate3D p1, Coordinate3D p2, Coordinate3D p3){
 		this.p1 = p1;
 		this.p2 = p2;
