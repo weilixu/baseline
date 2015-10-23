@@ -25,6 +25,50 @@
 			<field description = "Heating Maximum Air Flow Fraction" type = "Double">0.3</field>
 			<field description = "Design Specification Zone Air Distribution Object Name" type = "String">Zone% Air Distribution</field>			
 		</object>
+		<object description = "Sizing:System" reference = "Supply Side System">
+			<field description = "AirLoop Name" type="String">Zone% Air Loop</field>
+			<field description = "Type of Load to Size On" type="String">Sensible</field>
+			<field description = "Design Outdoor Air Flow Rate" type="Double or String">autosize</field>
+			<field description = "Minimum System Air Flow Ratio" type="Double">0.3</field>
+			<field description = "Preheat Design Temperature" type="Double">7.2</field>
+			<field description = "Preheat Design Humidity Ratio" type="Double">0.008</field>
+			<field description = "Precool Design Temperature" type="Double">11.0</field>
+			<field description = "Precool Design Humidity Ratio" type = "Double">0.008</field>
+			<field description = "Central Cooling Design Supply Air Temperature" type = "Double">12.8</field>
+			<field description = "Central Heating Design Supply Air Temperature" type = "Double">12.8</field>
+			<field description = "Sizing Option" type = "String">NonCoincident</field>
+			<field description = "100% Outdoor Air in Cooling" type = "String">No</field>
+			<field description = "100% Outdoor Air in Heating" type = "String">No</field>
+			<field description = "Central Cooling Design Supply Air Humidity Ratio" type = "Double">0.008</field>
+			<field description = "Central Heating Design Supply Air Temperature" type = "Double">0.008</field>
+			<field description = "Cooling Design Air Flow Method" type = "String">DesignDay</field>
+			<field description = "Cooling Design Air Flow Rate" type = "Double">0.0</field>
+			<field description = "Supply Air Flow Rate Per Floor Area During Cooling Operation" type = "Double"/>
+			<field description = "Fraction of Autosized Design Cooling Supply Air Flow Rate" type = "Double"/>
+			<field description = "Design Supply Air Flow Rate Per Unit Cooling Capacity" type = "Double"/>
+			<field description = "Heating Design Air Flow Method" type = "String">DesignDay</field>
+			<field description = "Heating Design Air Flow Rate" type = "Double">0.0</field>
+			<field description = "Supply Air Flow Rate Per Floor Area During Heating Operation" type = "Double"/>
+			<field description = "Fraction of Autosized Design Heating Supply Air Flow Rate" type = "Double"/>
+			<field description = "Fraction of Autosized Design Cooling Supply Air Flow Rate" type = "Double"/>
+			<field description = "Design Supply Air Flow Rate Per Unit Heating Capacity" type = "Double"/>
+			<field description = "System Outdoor Air Method" type = "String">ZoneSum</field>
+			<field description = "Zone Maximum Outdoor Air Fraction" type = "Double">1.0</field>
+			<field description = "Cooling Design Capacity Method" type = "String">CoolingDesignCapacity</field>
+			<field description = "Cooling Design Capacity" type = "Double or String">autosize</field>
+			<field description = "Cooling Design Capacity Per Floor Area" type = "Double"/>
+			<field description = "Fraction of Autosized Cooling Design Capacity" type = "Double"/>
+			<field description = "Heating Design Capacity Method" type = "String">HeatingDesignCapacity</field>
+			<field description = "Heating Design Capacity" type = "Double or String">autosize</field>
+			<field description = "Heating Design Capacity Per Floor Area" type = "Double or String"/>
+			<field description = "Fraction of Autosized Heating Design Capacity" type = "Double"/>
+			<field description = "Central Cooling Capacity Control Method" type = "String">VAV</field>
+		</object>		
+		<object description = "DesignSpecification:ZoneAirDistribution" reference = "Demand Side System">
+			<field description = "Name" type = "String">Zone% Air Distribution</field>
+			<field description = "Zone Air Distribution Effectiveness in Cooling Mode" type = "Double">1</field>
+			<field description = "Zone Air Distribution Effectiveness in Heating Mode" type = "Double">0.8</field>
+		</object>		
 		<object description = "AirTerminal:SingleDuct:Uncontrolled" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% Air Terminal</field>
 			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
@@ -38,6 +82,14 @@
 			<field description = "Zone Equipment 1 Cooling Sequence" type = "Integer">1</field>
 			<field description = "Zone Equipment 1 Heating or NoLoad Sequence" type = "Integer">1</field>
 		</object>
+		<object description = "ZoneHVAC:EquipmentConnections" reference="Demand Side System">
+			<field description = "Zone Name" type="String">Zone%</field>
+			<field description = "Zone Conditioning Equipment List Name" type="String">Zone% Equipment</field>
+			<field description = "Zone Air Inlet Node or NodeList Name" type="String">Zone% Zone Equip Inlet</field>
+			<field description = "Zone Air Exhaust Node or NodeList Name" type="String"/>
+			<field description = "Zone Air Node Name" type="String">Zone% Zone Air Node</field>
+			<field description = "Zone Return Air Node Name" type="String">Zone% Return Outlet</field>
+		</object>		
 		<object description = "AirLoopHVAC:Unitary:Furnace:HeatCool" reference = "Supply Side System">
 			<field description = "Name" type = "String">zone% Furnace with DX Cooling</field>
 			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
@@ -166,7 +218,7 @@
 			<field description = "Inlet Node Name" type = "String">Zone% Return Air Outlet</field>
 			<field description = "Outlet 1 Node Name" type = "String">Zone% Return Outlet</field>
 		</object>	
-		<object description = "AirLoopHVAC:Return Path" reference = "Supply Side System">
+		<object description = "AirLoopHVAC:ReturnPath" reference = "Supply Side System">
 			<field description = "Name" type = "String">Zone% Return Path</field>
 			<field description = "Supply Air Path Inlet Node Name" type = "String">Zone% Return Air Outlet</field>
 			<field description = "Component 1 Object Type" type = "String">AirLoopHVAC:ZoneMixer</field>
@@ -274,7 +326,7 @@
 			<field description = "Part Load Fraction Correlation Curve Name" type = "String">PSZAC Heating Coil PLF-FPLR</field>
 			<field description = "Parasitic Gas Load " type = "Double">0.0</field>
 		</object>	
-		<object description = "Curve:Cubic" reference = "Supply Side System">
+		<object description = "Curve:Cubic" reference = "Global">
 			<field description = "Name" type = "String">PSZAC Heating Coil PLF-FPLR</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.8</field>
 			<field description = "Coefficient2 x" type = "Double">0.2</field>
@@ -283,7 +335,7 @@
 			<field description = "Minimum Value of x" type = "Double">0.0</field>
 			<field description = "Maximum Value of x" type = "Double">1.0</field>
 		</object>	
-		<object description = "Curve:Quadratic" reference = "Supply Side System">
+		<object description = "Curve:Quadratic" reference = "Global">
 			<field description = "Name" type = "String">PSZAC DX Coil Cap-FF</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.8</field>
 			<field description = "Coefficient2 x" type = "Double">0.2</field>
@@ -291,7 +343,7 @@
 			<field description = "Minimum Value of x" type = "Double">0.5</field>
 			<field description = "Maximum Value of x" type = "Double">1.5</field>
 		</object>	
-		<object description = "Curve:Quadratic" reference = "Supply Side System">
+		<object description = "Curve:Quadratic" reference = "Global">
 			<field description = "Name" type = "String">PSZAC DX Coil EIR-FF</field>
 			<field description = "Coefficient1 Constant" type = "Double">1.1552</field>
 			<field description = "Coefficient2 x" type = "Double">-0.1808</field>
@@ -299,7 +351,7 @@
 			<field description = "Minimum Value of x" type = "Double">0.5</field>
 			<field description = "Maximum Value of x" type = "Double">1.5</field>
 		</object>	
-		<object description = "Curve:Quadratic" reference = "Supply Side System">
+		<object description = "Curve:Quadratic" reference = "Global">
 			<field description = "Name" type = "String">PSZAC DX Coil PLF</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.85</field>
 			<field description = "Coefficient2 x" type = "Double">0.15</field>
@@ -307,7 +359,7 @@
 			<field description = "Minimum Value of x" type = "Double">0.0</field>
 			<field description = "Maximum Value of x" type = "Double">1.0</field>
 		</object>	
-		<object description = "Curve:Biquadratic" reference = "Supply Side System">
+		<object description = "Curve:Biquadratic" reference = "Global">
 			<field description = "Name" type = "String">PSZAC DX Coil Cap-FT</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.942587793</field>
 			<field description = "Coefficient2 x" type = "Double">0.009543347</field>
@@ -320,7 +372,7 @@
 			<field description = "Minimum Value of y" type = "Double">18.0</field>
 			<field description = "Maximum Value of y" type = "Double">46.11111</field>			
 		</object>	
-		<object description = "Curve:Biquadratic" reference = "Supply Side System">
+		<object description = "Curve:Biquadratic" reference = "Global">
 			<field description = "Name" type = "String">PSZAC DX Coil EIR-FT</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.342414409</field>
 			<field description = "Coefficient2 x" type = "Double">0.034885008</field>

@@ -167,7 +167,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    if (floor == null && block == null) {
 		level = null;
 	    } else if (floor == null && block != null) {
-		//plenum condition
+		// plenum condition
 		floorSet.add(block);
 		level = block;
 	    } else {
@@ -310,37 +310,44 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     }
 
     private void checkForReturnFans() {
-	HashMap<String, ArrayList<ValueNode>> airLoops = baselineModel
-		.getObjectList("AirLoopHVAC").get("AirLoopHVAC");
-	Set<String> airloopList = airLoops.keySet();
-	Iterator<String> airLoopIterator = airloopList.iterator();
-	while (airLoopIterator.hasNext()) {
-	    String airloop = airLoopIterator.next();
-	    String branchListName = "";
-	    String demandSideOutletName = "";
-	    for (int i = 0; i < airLoops.get(airloop).size(); i++) {
-		if (airLoops.get(airloop).get(i).getDescription()
-			.equals("Branch List Name")) {
-		    branchListName = airLoops.get(airloop).get(i)
-			    .getAttribute();
-		} else if (airLoops.get(airloop).get(i).getDescription()
-			.equals("Demand Side Outlet Node Name")) {
-		    demandSideOutletName = airLoops.get(airloop).get(i)
-			    .getAttribute();
+	HashMap<String, ArrayList<ValueNode>> airLoops;
+	try {
+	    airLoops = baselineModel.getObjectList("AirLoopHVAC").get(
+		    "AirLoopHVAC");
+	} catch (NullPointerException e) {
+	    airLoops = null;
+	}
+	if (airLoops != null) {
+	    Set<String> airloopList = airLoops.keySet();
+	    Iterator<String> airLoopIterator = airloopList.iterator();
+	    while (airLoopIterator.hasNext()) {
+		String airloop = airLoopIterator.next();
+		String branchListName = "";
+		String demandSideOutletName = "";
+		for (int i = 0; i < airLoops.get(airloop).size(); i++) {
+		    if (airLoops.get(airloop).get(i).getDescription()
+			    .equals("Branch List Name")) {
+			branchListName = airLoops.get(airloop).get(i)
+				.getAttribute();
+		    } else if (airLoops.get(airloop).get(i).getDescription()
+			    .equals("Demand Side Outlet Node Name")) {
+			demandSideOutletName = airLoops.get(airloop).get(i)
+				.getAttribute();
+		    }
 		}
-	    }
-	    // branch list to check system return fan
-	    String returnFan = hasReturnFan(branchListName);
-	    returnFanMap.put("Building", returnFan != null);
-	    // demand side check thermal zones
-	    // processFloorReturnFanMap(demandSideOutletName, returnFan);
-	    String supplyFan = getSupplyFanName(branchListName, returnFan);
-	    System.out.println(supplyReturnRatio + " " + numberOfSystem);
-	    numberOfSystem = numberOfSystem + 1;
-	    supplyReturnRatio = supplyReturnRatio
-		    + SizingHTMLParser.getSupplyFanPowerRatio(supplyFan,
-			    returnFan);
+		// branch list to check system return fan
+		String returnFan = hasReturnFan(branchListName);
+		returnFanMap.put("Building", returnFan != null);
+		// demand side check thermal zones
+		// processFloorReturnFanMap(demandSideOutletName, returnFan);
+		String supplyFan = getSupplyFanName(branchListName, returnFan);
+		System.out.println(supplyReturnRatio + " " + numberOfSystem);
+		numberOfSystem = numberOfSystem + 1;
+		supplyReturnRatio = supplyReturnRatio
+			+ SizingHTMLParser.getSupplyFanPowerRatio(supplyFan,
+				returnFan);
 
+	    }
 	}
     }
 
