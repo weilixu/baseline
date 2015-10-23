@@ -20,6 +20,8 @@ public final class HVACSystemImplUtil {
     private static final double coolingChillerSmallThreshold = 10550558;// watt
     private static final double coolingChillerLargeThreshold = 21101115;// watt
     private static final double chillerCapacityThreshold = 28134820;
+    private static final double coolingSmallFloorArea = 11148;
+    private static final double coolingMediumFloorArea = 22296;
 
     /**
      * control the economizer, if economizer is needed, then modify the
@@ -159,13 +161,12 @@ public final class HVACSystemImplUtil {
      * @param coolingLoad
      * @return
      */
-    public static int chillerNumberCalculation(double coolingLoad) {
+    public static int chillerNumberCalculation(double coolingLoad, double floorArea) {
 	int numberOfChiller = 1;
-	if (coolingLoad > coolingChillerSmallThreshold
-		&& coolingLoad < coolingChillerLargeThreshold) {
+	if(floorArea > coolingSmallFloorArea && floorArea <= coolingMediumFloorArea){
 	    numberOfChiller = 2;
-	} else if (coolingLoad >= coolingChillerLargeThreshold) {
-	    numberOfChiller = 2; // minimum is two chillers;
+	}else if(floorArea >= coolingMediumFloorArea){
+	    numberOfChiller = 2;
 	    boolean converged = false;
 	    while (!converged) {
 		double singleChillerCapacity = coolingLoad / numberOfChiller;
@@ -176,6 +177,23 @@ public final class HVACSystemImplUtil {
 		}
 	    }
 	}
+	//ASHRAE 2010
+//	if (coolingLoad > coolingChillerSmallThreshold
+//		&& coolingLoad < coolingChillerLargeThreshold) {
+//	    numberOfChiller = 2;
+//	} else if (coolingLoad >= coolingChillerLargeThreshold) {
+//	    numberOfChiller = 2; // minimum is two chillers;
+//	    boolean converged = false;
+//	    while (!converged) {
+//		double singleChillerCapacity = coolingLoad / numberOfChiller;
+//		if (singleChillerCapacity < chillerCapacityThreshold) {
+//		    converged = true;
+//		} else {
+//		    numberOfChiller++;
+//		}
+//	    }
+//	}
+	//ASHRAE 2010
 	return numberOfChiller;
     }
 

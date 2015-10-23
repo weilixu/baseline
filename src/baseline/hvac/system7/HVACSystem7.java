@@ -51,6 +51,8 @@ public class HVACSystem7 implements SystemType7 {
     // threshold for determine the HVAC components.
     private static final double heatingFloorThreshold = 11150; // m2
     private static final double coolingLoadThreshold = 10550558;// watt
+    
+    private int numberOfChiller = 1;
 
     public HVACSystem7(HashMap<String, ArrayList<EplusObject>> objects,
 	    EnergyPlusBuilding bldg) {
@@ -95,15 +97,16 @@ public class HVACSystem7 implements SystemType7 {
 	double coolingLoad = building.getTotalCoolingLoad();// G3.1.3.7
 
 	// calculate the number of boilers
-	int numberOfBoiler = HVACSystemImplUtil.boilerNumberCalculation(floorArea);
+	int numberOfBoiler = HVACSystemImplUtil
+		.boilerNumberCalculation(floorArea);
 	System.out.println("We Found " + numberOfBoiler + "Boilers");
-	if(numberOfBoiler==1){
+	if (numberOfBoiler == 1) {
 	    boilerList.add("Boiler%");
 	}
 
 	// calculate the number of chillers
-	int numberOfChiller = HVACSystemImplUtil
-		    .chillerNumberCalculation(coolingLoad);;
+	numberOfChiller = HVACSystemImplUtil.chillerNumberCalculation(
+		coolingLoad, building.getTotalFloorArea());
 
 	System.out.println("We Found " + numberOfChiller + " Chillers");
 
@@ -205,17 +208,27 @@ public class HVACSystem7 implements SystemType7 {
 	ArrayList<EplusObject> tempList = new ArrayList<EplusObject>();
 
 	String name = temp.getKeyValuePair(0).getValue();
-	if (temp.getObjectName().equalsIgnoreCase("CoolingTower:TwoSpeed")
-		|| name.equalsIgnoreCase("Tower% CndW Branch")
-		|| name.equals("Tower% Cooling Tower Outdoor Air Inlet Node")) {
+	if (temp.getObjectName().equalsIgnoreCase("CoolingTower:TwoSpeed")) {
 	    changedTower = true;
 	    towerList.add("Tower1");
-	    for (int i = 1; i < chillerList.size(); i++) {
+	    for (int i = 1; i < numberOfChiller; i++) {
+		// System.out.println(chillerList.get(i));
 		EplusObject anotherTower = temp.clone();
 		String towerCount = i + 1 + "";
 		String towerName = "Tower" + towerCount;
 		anotherTower.replaceSpecialCharacters(towerName);
 		towerList.add(towerName);
+		tempList.add(anotherTower);
+	    }
+	} else if (name.equalsIgnoreCase("Tower% CndW Branch")
+		|| name.equals("Tower% Cooling Tower Outdoor Air Inlet Node")) {
+	    changedTower = true;
+	    for (int i = 1; i < numberOfChiller; i++) {
+		// System.out.println(chillerList.get(i));
+		EplusObject anotherTower = temp.clone();
+		String towerCount = i + 1 + "";
+		String towerName = "Tower" + towerCount;
+		anotherTower.replaceSpecialCharacters(towerName);
 		tempList.add(anotherTower);
 	    }
 	} else {
@@ -236,9 +249,7 @@ public class HVACSystem7 implements SystemType7 {
 	ArrayList<EplusObject> tempList = new ArrayList<EplusObject>();
 	// insert Chiller 1 branch into the chiller list first
 	String name = temp.getKeyValuePair(0).getValue();
-	if (temp.getObjectName().equalsIgnoreCase("Chiller:Electric:EIR")
-		|| name.equalsIgnoreCase("Chiller% ChW Branch")
-		|| name.equalsIgnoreCase("Chiller% CndW Branch")) {
+	if (temp.getObjectName().equalsIgnoreCase("Chiller:Electric:EIR")) {
 	    chillerList.add("Chiller1");
 	    changedChiller = true;
 	    for (int i = 1; i < numberOfChiller; i++) {
@@ -250,9 +261,20 @@ public class HVACSystem7 implements SystemType7 {
 		// fix the chiller name from the template
 		anotherChiller.replaceSpecialCharacters(chillerName);
 		// add the branch into the chiller list
+		// System.out.println(chillerName);
 		chillerList.add(chillerName);
 		// add it to the plant plant temp list
 		tempList.add(anotherChiller);
+	    }
+	} else if (name.equalsIgnoreCase("Chiller% ChW Branch")
+		|| name.equalsIgnoreCase("Chiller% CndW Branch")) {
+	    changedChiller = true;
+	    for (int i = 1; i < numberOfChiller; i++) {
+		EplusObject anotherBranch = temp.clone();
+		String chillerCount = i + 1 + "";
+		String chillerName = "Chiller" + chillerCount;
+		anotherBranch.replaceSpecialCharacters(chillerName);
+		tempList.add(anotherBranch);
 	    }
 	} else {
 	    changedChiller = false;
@@ -451,7 +473,7 @@ public class HVACSystem7 implements SystemType7 {
 		}
 	    } else if (eo.getObjectName()
 		    .equalsIgnoreCase("Fan:VariableVolume")) {
-		//get the floor name
+		// get the floor name
 		String floor = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		HVACSystemImplUtil.updateFanPowerforSystem5To8(eo,
 			building.getFloorMaximumFlowRate(floor));
@@ -464,8 +486,8 @@ public class HVACSystem7 implements SystemType7 {
      */
     private void processConnections() {
 	ArrayList<EplusObject> plantSystem = objectLists.get("Plant");
-	HVACSystemImplUtil.plantConnectionForSys7And8(plantSystem, chillerList, towerList,
-		boilerList, systemCoolingCoilList, systemHeatingCoilList,
-		zoneHeatingCoilList);
+	HVACSystemImplUtil.plantConnectionForSys7And8(plantSystem, chillerList,
+		towerList, boilerList, systemCoolingCoilList,
+		systemHeatingCoilList, zoneHeatingCoilList);
     }
 }
