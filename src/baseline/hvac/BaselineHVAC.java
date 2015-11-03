@@ -98,7 +98,7 @@ public class BaselineHVAC {
 	    //system = factory.createSystem();
 	    if (floorNumber > mediumFloorNumber && floorSize > mediumFloorArea) {
 		if (building.getHeatingMethod()) {
-		    
+		    factory = new HVACSystemFactory("System Type 8", building);
 		}else{
 		    factory = new HVACSystemFactory("System Type 7", building); 
 		}
