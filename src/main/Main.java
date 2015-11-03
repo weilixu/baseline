@@ -21,7 +21,7 @@ public class Main {
 	//File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 5\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3");	
 	File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 7\\Sys7_Sample.idf");
 	File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 7\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3");	
-				
+	
 	ClimateZone zone = ClimateZone.CLIMATEZONE4A;
 	String tool = "DesignBuilder";
 	//String tool = "Asset Score Tool";

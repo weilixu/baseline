@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import baseline.construction.opaque.BaselineEnvelope;
 import baseline.htmlparser.SizingHTMLParser;
+import baseline.htmlparser.WindowWallRatioParser;
 import baseline.hvac.BaselineHVAC;
 import baseline.idfdata.BuildingLight;
 import baseline.idfdata.EnergyPlusBuilding;
@@ -21,10 +22,15 @@ public class Generator {
     private final IdfReader baselineModel;
     private final ClimateZone cZone;
     private final SizingRun eplusSizing;
-
+    
+    /*
+     * generation engines
+     */
     private BaselineEnvelope envelopeProcessor;
     private LightingGenerator lightGenerator;
     private BaselineHVAC baselineHVAC;
+    private WindowWallRatioParser wwrParser;
+    
     
     private final File energyplusFile;
     private final File weatherFile;
@@ -143,8 +149,12 @@ public class Generator {
 	}
     }
     
+    /**
+     * adjust window to wall ratio
+     */
     private void processWindowToWallRatio(){
-	
+	wwrParser = new WindowWallRatioParser(building.getBaselineModel());
+	wwrParser.adjustToThreshold();
     }
     
     /**
