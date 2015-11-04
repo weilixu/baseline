@@ -3561,7 +3561,7 @@
 		</object>
 		<object description = "ZoneHVAC:AirDistributionUnit" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% Parallel PIU ATU</field>
-			<field description = "Air Distribution Unit Outlet Node Name" type = "String">Zone% Supply Inlet</field>
+			<field description = "Air Distribution Unit Outlet Node Name" type = "String">Zone% Parallel PIU Supply Inlet</field>
 			<field description = "Air Terminal Object Type" type = "String">AirTerminal:SingleDuct:ParallelPIU:Reheat</field>
 			<field description = "Air Terminal Name" type = "String">Zone% Parallel PIU</field>
 			<field description = "Nominal Upstream Leakage Fraction" type = "Double">0.0</field>
@@ -3600,7 +3600,7 @@
 			<field description = "Nominal Capacity" type = "Double or String">autosize</field>
 			<field description = "Air Inlet Node Name" type = "String">Zone% Parallel PIU Mixer Outlet</field>
 			<field description = "Air Outlet Node Name" type = "String">Zone% Parallel PIU Supply Inlet</field>
-			<field description = "Temperature Setpoint Node Name" type = "String">Zone% Parallel PIU Supply Inlet</field>
+			<field description = "Temperature Setpoint Node Name" type = "String"/>
 		</object>
 		<object description = "Fan:ConstantVolume" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% Parallel PIU Supply Fan</field>

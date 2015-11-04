@@ -19,7 +19,7 @@ public final class HVACSystemImplUtil {
     private static final double heatingBoilerThreshold = 1393.55;// m2
     private static final double coolingChillerSmallThreshold = 10550558;// watt
     private static final double coolingChillerLargeThreshold = 21101115;// watt
-    private static final double chillerCapacityThreshold = 28134820;
+    private static final double chillerCapacityThreshold = 2813482;
     private static final double coolingSmallFloorArea = 11148;
     private static final double coolingMediumFloorArea = 22296;
 
@@ -170,6 +170,7 @@ public final class HVACSystemImplUtil {
 	    boolean converged = false;
 	    while (!converged) {
 		double singleChillerCapacity = coolingLoad / numberOfChiller;
+		System.out.println("This is single Chiller Capacity " + singleChillerCapacity);
 		if (singleChillerCapacity < chillerCapacityThreshold) {
 		    converged = true;
 		} else {

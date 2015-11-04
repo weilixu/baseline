@@ -9,7 +9,7 @@ import baseline.idfdata.EnergyPlusBuilding;
 
 public class HVACSystem8Factory {
     //extract the template system
-    private final SystemParser system = new SystemParser("System Type 7");
+    private final SystemParser system = new SystemParser("System Type 8");
     
     private HashMap<String,ArrayList<EplusObject>> systemObjects;
     
@@ -25,7 +25,7 @@ public class HVACSystem8Factory {
     }
     
     /**
-     * Control the creation of the system type 7
+     * Control the creation of the system type 8
      * @return
      */
     public SystemType8 getSystem(){

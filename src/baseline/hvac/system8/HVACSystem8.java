@@ -350,6 +350,8 @@ public class HVACSystem8 implements SystemType8{
 	// insert Chiller 1 branch into the chiller list first
 	String name = temp.getKeyValuePair(0).getValue();
 	if (temp.getObjectName().equalsIgnoreCase("Chiller:Electric:EIR")) {
+	    Double load = building.getTotalCoolingLoad()/numberOfChiller;
+	    temp.getKeyValuePair(1).setValue(load.toString());
 	    chillerList.add("Chiller1");
 	    changedChiller = true;
 	    for (int i = 1; i < numberOfChiller; i++) {
@@ -364,6 +366,7 @@ public class HVACSystem8 implements SystemType8{
 		// System.out.println(chillerName);
 		chillerList.add(chillerName);
 		// add it to the plant plant temp list
+		anotherChiller.getKeyValuePair(1).setValue(load.toString());
 		tempList.add(anotherChiller);
 	    }
 	} else if (name.equalsIgnoreCase("Chiller% ChW Branch")

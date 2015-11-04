@@ -29,6 +29,7 @@ public class WindowWallRatioParser {
     private HashMap<String, ArrayList<ValueNode>> feneSurfaces;
     
     public WindowWallRatioParser(IdfReader reader){
+	this.walls = new LinkedList<Wall>();
     	int buildSurfaceNameLoc = 3;
     	
     	HashMap<String, Wall> idfWalls = new HashMap<String, Wall>();
@@ -42,7 +43,7 @@ public class WindowWallRatioParser {
     		ValueNode type = info.get(1);
     		if(type.getAttribute().equals("Wall")){
     			List<Coordinate3D> coords = this.readSurfaceCoords(info);
-    			idfWalls.put(name, new Wall(coords));
+    			idfWalls.put(info.get(0).getAttribute(), new Wall(coords));
     		}
     	}
     	
@@ -57,7 +58,7 @@ public class WindowWallRatioParser {
     			String buildSurfaceName = 
     					info.get(buildSurfaceNameLoc).getAttribute();
     			if(idfWalls.containsKey(buildSurfaceName)){
-    				idfWalls.get(buildSurfaceName).addWindow(coords, name);
+    				idfWalls.get(buildSurfaceName).addWindow(coords, info.get(0).getAttribute());
     			}else {
     				System.err.println("Window has no wall: "+name+", missing wall name:"+buildSurfaceName);
     			}
