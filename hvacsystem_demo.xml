@@ -1971,6 +1971,15 @@
 			<field description = "Outdoor High Temperature" type = "Double">27</field>
 			<field description = "Setpoint Node or NodeList Name" type = "String">Chilled Water Loop ChW Supply Setpoint Nodes</field>
 		</object>
+		<object description = "SetpointManager:FollowOutdoorAirTemperature" reference = "Plant">
+			<field description = "Name" type = "String">Condenser Loop CndWTemp Manager</field>
+			<field description = "Control Variable" type = "String">Temperature</field>
+			<field description = "Reference Temperature Type" type = "Double">OutdoorAirWetBulb</field>
+			<field description = "Offset Temperature Difference" type = "Double">0</field>
+			<field description = "Maximum Setpoint Temperature" type="Double">29</field>
+			<field description = "Minimum Setpoint Temperature" type = "Double">21</field>
+			<field description = "Setpoint Node or NodeList Name" type = "String">Chilled Water Loop CndW Supply Setpoint Nodes</field>
+		</object>				
 		<object description = "Curve:Quadratic" reference = "Plant">
 			<field description = "Name" type = "String">Boiler Efficiency Curve</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.97</field>
@@ -3166,12 +3175,6 @@
 			<field description = "Control Scheme 1 Name" type = "String">Chilled Water Loop Condenser Operation All Hours</field>
 			<field description = "Control Scheme 1 Schedule Name" type = "String">On_BAS</field>
 		</object>
-		<object description = "SetpointManager:Scheduled" reference = "Plant">
-			<field description = "Name" type = "String">Chilled Water Loop CndW Temp Manager</field>
-			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Schedule Name" type = "String">Always 29_BAS</field>
-			<field description = "Setpoint Node or NodeList Name">Chilled Water Loop CndW Supply Setpoint Nodes</field>
-		</object>
 		<object description = "SetpointManager:OutdoorAirReset" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop ChW Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
@@ -3181,6 +3184,15 @@
 			<field description = "Outdoor High Temperature" type = "Double">27</field>
 			<field description = "Setpoint Node or NodeList Name" type = "String">Chilled Water Loop ChW Supply Setpoint Nodes</field>
 		</object>
+		<object description = "SetpointManager:FollowOutdoorAirTemperature" reference = "Plant">
+			<field description = "Name" type = "String">Condenser Loop CndWTemp Manager</field>
+			<field description = "Control Variable" type = "String">Temperature</field>
+			<field description = "Reference Temperature Type" type = "Double">OutdoorAirWetBulb</field>
+			<field description = "Offset Temperature Difference" type = "Double">0</field>
+			<field description = "Maximum Setpoint Temperature" type="Double">29</field>
+			<field description = "Minimum Setpoint Temperature" type = "Double">21</field>
+			<field description = "Setpoint Node or NodeList Name" type = "String">Chilled Water Loop CndW Supply Setpoint Nodes</field>
+		</object>		
 		<object description = "Curve:Quadratic" reference = "Plant">
 			<field description = "Name" type = "String">Chiller CentEIRPLR</field>
 			<field description = "Coefficient1 Constant" type = "Double">0.222903</field>
