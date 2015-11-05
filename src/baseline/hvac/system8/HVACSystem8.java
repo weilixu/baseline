@@ -39,6 +39,7 @@ public class HVACSystem8 implements SystemType8{
     // threshold for determine the HVAC components.
     private static final double coolingLoadThreshold = 10550558;// watt
     private int numberOfChiller = 1;
+    private final int fanFlowRateSizeIndex = 4;
     
     public HVACSystem8(HashMap<String, ArrayList<EplusObject>> objects,
 	    EnergyPlusBuilding bldg){
@@ -83,7 +84,15 @@ public class HVACSystem8 implements SystemType8{
 	    if (temp.hasSpecialCharacters()) {
 		temp.replaceSpecialCharacters(zone);
 	    }
+	    //size the fan to 50% of max design flow
+//	    if (temp.getObjectName().equals("Fan:ConstantVolume")){
+//		
+//		Double flowRate = building.getZoneMaximumFlowRate(zone)/2;
+//		//System.out.println(zone + " " + flowRate);
+//		temp.getKeyValuePair(fanFlowRateSizeIndex).setValue(flowRate.toString());
+//	    }
 	    demandTemp.add(temp);
+
 	}
 	// record the connection links in the HVAC system
 	String zoneSplitter = zone + " Splitter Outlet Node";

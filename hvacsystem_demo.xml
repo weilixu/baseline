@@ -3578,8 +3578,8 @@
 			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Maximum Primary Air Flow Rate" type = "String">autosize</field>
 			<field description = "Maximum Secondary Air Flow Rate" type = "String">autosize</field>
-			<field description = "Maximum Primary Air Flow Fraction" type = "String">autosize</field>
-			<field description = "Fan On Flow Fraction" type = "String">autosize</field>
+			<field description = "Minimum Primary Air Flow Fraction" type = "String">autosize</field>
+			<field description = "Fan On Flow Fraction" type = "String">0.3</field>
 			<field description = "Supply Air Inlet Node Name" type = "String">Zone% Splitter Outlet Node</field>
 			<field description = "Secondary Air Inlet Node Name" type = "String">Zone% Parallel PIU Secondary From Zone</field>
 			<field description = "Outlet Node Name" type = "String">Zone% Parallel PIU Supply Inlet</field>
@@ -3605,8 +3605,8 @@
 		<object description = "Fan:ConstantVolume" reference = "Demand Side System">
 			<field description = "Name" type = "String">Zone% Parallel PIU Supply Fan</field>
 			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
-			<field description = "Fan Total Efficiency" type = "Double">0.70</field>
-			<field description = "Pressure Rise" type = "Double">259.79</field>
+			<field description = "Fan Total Efficiency" type = "Double">0.60</field>
+			<field description = "Pressure Rise" type = "Double">444.0</field>
 			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Motor In Airstream Fraction" type = "Double">1.0</field>

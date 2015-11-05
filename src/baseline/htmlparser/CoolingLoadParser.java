@@ -5,7 +5,7 @@ import org.jsoup.select.Elements;
 
 public class CoolingLoadParser {
     private final int userDefinedLoadIndex = 2;
-    private final int userDefinedAirFlowIndex = 4;
+    private final int userDefinedAirFlowIndex = 5;
     
     private final Document doc;
     private final Elements coolingLoadSummary;

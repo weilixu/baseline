@@ -82,9 +82,9 @@ public class Generator {
 	//
 	//debug purpose
 	//
-	//
+	IdfReader sizeModel = baselineModel.cloneIdf();
 	//htmlOutput = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Standard_Model\\Automate\\BaselineTable.html");
-	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
+	building = new EnergyPlusBuilding(bldgType,cZone, sizeModel);
 	//for test only
 	//htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
 	SizingHTMLParser.setTool(this.tool);
@@ -101,12 +101,15 @@ public class Generator {
 	//modify lighting and WWR Skylights
 	processWindowToWallRatio();
 	//second round of sizing simulation - to provide update thermal load
+	//build HVAC system
+	buildingHVAC();
+	
 	try {
 	    sizingRun();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	System.out.println("Finish second round sizing");
+	System.out.println("Finish third round sizing");
 	//IdfReader updatedReader = building.getBaselineModel();
 	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
 	//reprocess the building abstract information
@@ -115,9 +118,22 @@ public class Generator {
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);
 	building.processModelInfo();
-
+	envelopeProcessor = new BaselineEnvelope(building);
+	lightGenerator = new LightingGenerator(building);
+	//change the envelope materials and lighting power densities
+	processOpaqueEnvelope();
+	lightGenerator.processBuildingTypeLPD();
+	//modify lighting and WWR Skylights
+	processWindowToWallRatio();
+	//second round of sizing simulation - to provide update thermal load
 	//build HVAC system
 	buildingHVAC();
+	try {
+	    sizingRun();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+
     }
 
     
@@ -170,19 +186,18 @@ public class Generator {
 	BuildingType bldgType = BuildingType.NONRESIDENTIAL;
 	baselineHVAC = new BaselineHVAC(bldgType,building);
 	baselineHVAC.selectSystem();
-	try{
-		baselineHVAC.replaceHVACObjects();
-		building.generateEnergyPlusModel(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
-		eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));
-		htmlOutput = eplusSizing.runEnergyPlus();
-	}catch(IOException e){
+	try {
+	    baselineHVAC.replaceHVACObjects();
+	} catch (IOException e) {
 	    e.printStackTrace();
 	}
+
     }
     
     private void sizingRun() throws IOException{
 	building.generateEnergyPlusModel(energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
-	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));;
+	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile().getAbsolutePath()+"\\Baseline.idf"));
+	eplusSizing.setBaselineSizing();
 	htmlOutput = eplusSizing.runEnergyPlus();
 	System.out.println(htmlOutput.getAbsolutePath());
     }
