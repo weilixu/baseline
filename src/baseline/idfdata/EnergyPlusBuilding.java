@@ -93,7 +93,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     private static final String BLDG_INTERNAL_MASS = "InternalMass";
 
     public EnergyPlusBuilding(String bldgType, ClimateZone zone,
-	    IdfReader baselineModel) {
+	    IdfReader baselineModel, BaselineInfo info) {
 	buildingType = bldgType;
 	thermalZoneList = new ArrayList<ThermalZone>();
 	floorMap = new HashMap<String, ArrayList<ThermalZone>>();

@@ -7,6 +7,7 @@ import baseline.construction.opaque.BaselineEnvelope;
 import baseline.htmlparser.SizingHTMLParser;
 import baseline.htmlparser.WindowWallRatioParser;
 import baseline.hvac.BaselineHVAC;
+import baseline.idfdata.BaselineInfo;
 import baseline.idfdata.BuildingLight;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.lighting.LightingGenerator;
@@ -40,6 +41,7 @@ public class Generator {
     private EnergyPlusBuilding building;
     private String bldgType;
     private String tool;
+    private BaselineInfo info;
 
     public Generator(File idfFile, File wea, ClimateZone zone, String buildingType,
 	    boolean existing, String tool) {
@@ -84,7 +86,7 @@ public class Generator {
 	//
 	IdfReader sizeModel = baselineModel.cloneIdf();
 	//htmlOutput = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Standard_Model\\Automate\\BaselineTable.html");
-	building = new EnergyPlusBuilding(bldgType,cZone, sizeModel);
+	building = new EnergyPlusBuilding(bldgType,cZone, sizeModel,info);
 	//for test only
 	//htmlOutput = new File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
 	SizingHTMLParser.setTool(this.tool);
@@ -111,7 +113,7 @@ public class Generator {
 	}
 	System.out.println("Finish third round sizing");
 	//IdfReader updatedReader = building.getBaselineModel();
-	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel);
+	building = new EnergyPlusBuilding(bldgType,cZone, baselineModel,info);
 	//reprocess the building abstract information
 	SizingHTMLParser.setTool(this.tool);
 	SizingHTMLParser.processOutputs(htmlOutput);
