@@ -35,35 +35,44 @@ public class SizingRun {
     // folder should be the folder that contains the idf file
     private File folder;
 
+    private boolean baseline;
+
     public SizingRun(File wea) {
-	//idfFile = idf;
+	// idfFile = idf;
 	weatherFile = wea;
+	baseline = false;
     }
-    
+
     /**
      * This method should always be called prior to runEnergyPlus method
+     * 
      * @param idf
      */
-    public void setEplusFile(File idf){
+    public void setEplusFile(File idf) {
 	idfFile = idf;
 	folder = idfFile.getParentFile();
     }
-    
+
+    public void setBaselineSizing() {
+	baseline = true;
+    }
+
     /**
-     * Run EnergyPlus with defined idf file and weather file.
-     * This is not parametric simulation - it only use for sizing purpose
-     * This method will return the html results file once the simulation completed.
+     * Run EnergyPlus with defined idf file and weather file. This is not
+     * parametric simulation - it only use for sizing purpose This method will
+     * return the html results file once the simulation completed.
+     * 
      * @throws IOException
      */
     public File runEnergyPlus() throws IOException {
 	File resultsFile = null;
-	
+
 	String path = idfFile.getAbsolutePath();
 	String pathToIDF = path.substring(0, path.indexOf("."));
 	File eplusBatFile = createBatchFile();
 	String[] commandline = { eplusBatFile.getAbsolutePath(), pathToIDF,
 		weatherFile.getName() };
-	//System.out.println(Arrays.toString(commandline));
+	// System.out.println(Arrays.toString(commandline));
 
 	try {
 	    Process p = Runtime.getRuntime().exec(commandline, null, folder);
@@ -81,10 +90,16 @@ public class SizingRun {
 	} catch (IOException | InterruptedException e) {
 	    e.printStackTrace();
 	}
-	
-	for(File f:folder.listFiles()){
-	    if(f.getName().contains("html")){
-		resultsFile = f;
+
+	for (File f : folder.listFiles()) {
+	    if (baseline) {
+		if (f.getName().contains("BaselineTable.html")) {
+		    resultsFile = f;
+		}
+	    } else {
+		if (f.getName().contains("html")) {
+		    resultsFile = f;
+		}
 	    }
 	}
 	return resultsFile;
@@ -115,7 +130,7 @@ public class SizingRun {
 		if (line.contains(keyWord)) {
 		    sb.append(keyWord);
 		    sb.append(BaselineUtils.getEnergyPlusDirectory()); // fixed
-								      // version
+								       // version
 		} else if (line.contains(weaWord)) {
 		    sb.append(weaWord);
 		    sb.append(folder.getAbsolutePath() + "\\");
@@ -158,7 +173,7 @@ public class SizingRun {
 		while (this != null) {
 		    int ch = is.read(by);
 		    if (ch != -1) { // -1 indicates the end of the stream
-			//System.out.print((char) by[0]);
+			// System.out.print((char) by[0]);
 			sb.append((char) by[0]);
 		    } else {
 			break;

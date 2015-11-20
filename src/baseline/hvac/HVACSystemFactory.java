@@ -3,6 +3,7 @@ package baseline.hvac;
 import baseline.hvac.system3.HVACSystem3Factory;
 import baseline.hvac.system5.HVACSystem5Factory;
 import baseline.hvac.system7.HVACSystem7Factory;
+import baseline.hvac.system8.HVACSystem8Factory;
 import baseline.idfdata.EnergyPlusBuilding;
 
 public class HVACSystemFactory {
@@ -29,6 +30,9 @@ public class HVACSystemFactory {
 	    system = factory.getSystem();
 	}else if(systemType.equals("System Type 5")){
 	    HVACSystem5Factory factory = new HVACSystem5Factory(building);
+	    system = factory.getSystem();
+	}else if(systemType.equals("System Type 8")){
+	    HVACSystem8Factory factory = new HVACSystem8Factory(building);
 	    system = factory.getSystem();
 	}
 	    

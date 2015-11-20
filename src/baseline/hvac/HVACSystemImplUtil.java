@@ -19,7 +19,7 @@ public final class HVACSystemImplUtil {
     private static final double heatingBoilerThreshold = 1393.55;// m2
     private static final double coolingChillerSmallThreshold = 10550558;// watt
     private static final double coolingChillerLargeThreshold = 21101115;// watt
-    private static final double chillerCapacityThreshold = 28134820;
+    private static final double chillerCapacityThreshold = 2813482;
     private static final double coolingSmallFloorArea = 11148;
     private static final double coolingMediumFloorArea = 22296;
 
@@ -170,6 +170,7 @@ public final class HVACSystemImplUtil {
 	    boolean converged = false;
 	    while (!converged) {
 		double singleChillerCapacity = coolingLoad / numberOfChiller;
+		System.out.println("This is single Chiller Capacity " + singleChillerCapacity);
 		if (singleChillerCapacity < chillerCapacityThreshold) {
 		    converged = true;
 		} else {
@@ -198,7 +199,7 @@ public final class HVACSystemImplUtil {
     }
 
     /**
-     * For system type 7-8 where plant is available on-site and require to
+     * For system type 7 where plant is available on-site and require to
      * connect to air distribution system
      * 
      * This method connects all the chillers, towers, boilers, heating and cooling
@@ -212,7 +213,7 @@ public final class HVACSystemImplUtil {
      * @param sysHeatingCoilList
      * @param zoneHeatingCoilList
      */
-    public static void plantConnectionForSys7And8(ArrayList<EplusObject> plantSystem,
+    public static void plantConnectionForSys7(ArrayList<EplusObject> plantSystem,
 	    ArrayList<String> chillerList, ArrayList<String> towerList,
 	    ArrayList<String> boilerList, ArrayList<String> sysCooilngCoilList,
 	    ArrayList<String> sysHeatingCoilList,
@@ -273,6 +274,61 @@ public final class HVACSystemImplUtil {
 	    }
 	}
     }
+    
+    /**
+     * For system type 8 where plant is available on-site and require to
+     * connect to air distribution system
+     * 
+     * This method connects all the chillers, towers, boilers, heating and cooling
+     * coils in the plant side system
+     * 
+     * @param plantSystem
+     * @param chillerList
+     * @param towerList
+     * @param sysCooilngCoilList
+     */
+    public static void plantConnectionForSys8(ArrayList<EplusObject> plantSystem,
+	    ArrayList<String> chillerList, ArrayList<String> towerList, ArrayList<String> sysCooilngCoilList) {
+
+	// use for additional eplus objects
+	for (EplusObject eo : plantSystem) {
+	    String name = eo.getKeyValuePair(0).getValue();
+	    if (name.equals("Chilled Water Loop ChW Demand Side Branches")) {
+		insertCoolingCoils(2, eo, sysCooilngCoilList);
+	    } else if (name.equals("Chilled Water Loop ChW Demand Splitter")
+		    || name.equals("Chilled Water Loop ChW Demand Mixer")) {
+		insertCoolingCoils(eo.getSize(), eo, sysCooilngCoilList);
+	    } else if (name
+		    .equals("Chilled Water Loop ChW Supply Side Branches")) {
+		insertChillerRelatedInputs(2, eo, " ChW Branch", chillerList);
+	    } else if (name.equals("Chilled Water Loop ChW Supply Splitter")
+		    || name.equals("Chilled Water Loop ChW Supply Mixer")) {
+		insertChillerRelatedInputs(3, eo, " ChW Branch", chillerList);
+	    } else if (name
+		    .equals("Chilled Water Loop CndW Demand Side Branches")) {
+		insertChillerRelatedInputs(2, eo, " CndW Branch", chillerList);
+	    } else if (name.equals("Chilled Water Loop CndW Demand Splitter")
+		    || name.equals("Chilled Water Loop CndW Demand Mixer")) {
+		insertChillerRelatedInputs(3, eo, " CndW Branch", chillerList);
+	    } else if (name
+		    .equals("Chilled Water Loop CndW Supply Side Branches")) {
+		insertTowerRelatedInputs(2, eo, " CndW Branch", towerList);
+	    } else if (name.equals("Chilled Water Loop CndW Supply Splitter")
+		    || name.equals("Chilled Water Loop CndW Supply Mixer")) {
+		insertTowerRelatedInputs(3, eo, " CndW Branch", towerList);
+	    } else if (name
+		    .equals("Chilled Water Loop ChW Supply Setpoint Nodes")) {
+		insertChillerRelatedInputs(1, eo, " ChW Outlet", chillerList);
+	    } else if (name
+		    .equals("Chilled Water Loop CndW Supply Setpoint Nodes")) {
+		insertTowerRelatedInputs(1, eo, " CndW Outlet", towerList);
+	    } else if (name.equals("Chilled Water Loop All Chillers")) {
+		insertChillerEquipmentList(eo, chillerList);
+	    } else if (name.equals("Chilled Water Loop All Condensers")) {
+		insertTowerEquipmentList(eo, towerList);
+	    }
+	}
+    }    
 
     /**
      * For system type 5-6 where plant is available on-site and require to

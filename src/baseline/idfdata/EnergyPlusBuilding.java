@@ -93,7 +93,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     private static final String BLDG_INTERNAL_MASS = "InternalMass";
 
     public EnergyPlusBuilding(String bldgType, ClimateZone zone,
-	    IdfReader baselineModel) {
+	    IdfReader baselineModel, BaselineInfo info) {
 	buildingType = bldgType;
 	thermalZoneList = new ArrayList<ThermalZone>();
 	floorMap = new HashMap<String, ArrayList<ThermalZone>>();
@@ -203,6 +203,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		heatingFlowRate = zone.getHeatingAirFlow();
 	    }
 	}
+	//System.out.println(coolingFlowRate + " " + heatingFlowRate);
 	return Math.max(coolingFlowRate, heatingFlowRate);
     }
 
@@ -661,7 +662,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		ArrayList<ValueNode> object = objectList.get(s).get(count);
 		for (ValueNode v : object) {
 		    if (v.getDescription().contains("Name")
-			    && v.getAttribute().contains("DHWSys")) {
+			    && v.getAttribute().contains("SHWSys")) {
 			if (!serviceHotWater.containsKey(s)) {
 			    serviceHotWater
 				    .put(s,

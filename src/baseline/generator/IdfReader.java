@@ -801,7 +801,7 @@ public class IdfReader {
 	public ValueNode(String att, String des) {
 	    if(des!=null){
 		    if (des.indexOf("{") > -1) {
-			description = des.substring(0, des.indexOf(" {"));
+			description = des.substring(0, des.indexOf("{")).trim();
 			unit = des.substring(des.indexOf("{"));
 		    } else {
 			description = des;
