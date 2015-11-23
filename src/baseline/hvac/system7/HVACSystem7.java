@@ -51,7 +51,7 @@ public class HVACSystem7 implements SystemType7 {
     // threshold for determine the HVAC components.
     private static final double heatingFloorThreshold = 11150; // m2
     private static final double coolingLoadThreshold = 10550558;// watt
-    
+
     private int numberOfChiller = 1;
 
     public HVACSystem7(HashMap<String, ArrayList<EplusObject>> objects,
@@ -107,7 +107,9 @@ public class HVACSystem7 implements SystemType7 {
 	// calculate the number of chillers
 	numberOfChiller = HVACSystemImplUtil.chillerNumberCalculation(
 		coolingLoad, building.getTotalFloorArea());
-	building.getInfoObject().setNumChiller(numberOfChiller);
+	if(building.getInfoObject()!=null){
+		building.getInfoObject().setNumChiller(numberOfChiller);	    
+	}
 	System.out.println("We Found " + numberOfChiller + " Chillers");
 
 	ArrayList<EplusObject> plantTemp = new ArrayList<EplusObject>();
@@ -428,7 +430,7 @@ public class HVACSystem7 implements SystemType7 {
 	int roomCounter = 0;
 	int floorCounter = 0;
 	while (floorMapIterator.hasNext()) {
-	    floorCounter ++;
+	    floorCounter++;
 	    zoneSplitterList.clear();
 	    zoneMixerList.clear();
 	    String floor = floorMapIterator.next();
@@ -447,8 +449,10 @@ public class HVACSystem7 implements SystemType7 {
 	    supplySideSystem.addAll(processSupplyTemp(floor,
 		    supplySideSystemTemplate));
 	}
-	//number of similar systems
-	building.getInfoObject().setNumOfSystem(floorCounter);
+	// number of similar systems
+	if (building.getInfoObject() != null) {
+	    building.getInfoObject().setNumOfSystem(floorCounter);
+	}
 
 	plantSystem.addAll(processPlantTemp(plantSystemTemplate));
 	System.out.println("Counting the rooms: " + roomCounter);

@@ -122,7 +122,9 @@ public class BaselineHVAC {
 		system = factory.createSystem();
 	    }
 	}
-	building.initialInfoForSystem(systemType);
+	if (building.getInfoObject() != null) {
+	    building.initialInfoForSystem(systemType);
+	}
     }
 
     // HVAC objects list is read from local list file

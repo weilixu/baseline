@@ -2,8 +2,11 @@ package baseline.generator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import baseline.construction.opaque.BaselineEnvelope;
+import baseline.generator.IdfReader.ValueNode;
 import baseline.htmlparser.SizingHTMLParser;
 import baseline.htmlparser.WindowWallRatioParser;
 import baseline.hvac.BaselineHVAC;
@@ -48,6 +51,7 @@ public class Generator {
 	cZone = zone;
 	isExisting = existing;
 	bldgType = buildingType;
+	info = new BaselineInfo();
 
 	// establish the design model
 	energyplusFile = idfFile;
@@ -87,7 +91,7 @@ public class Generator {
 	IdfReader sizeModel = baselineModel.cloneIdf();
 	// htmlOutput = new
 	// File("E:\\02_Weili\\01_Projects\\12_ILEED\\Standard_Model\\Automate\\BaselineTable.html");
-	building = new EnergyPlusBuilding(bldgType, cZone, sizeModel, info);
+	building = new EnergyPlusBuilding(bldgType, cZone, sizeModel, null);
 	// for test only
 	// htmlOutput = new
 	// File("C:\\Users\\Weili\\Desktop\\AssetScoreTool\\1MPTest\\BaselineTable.html");
@@ -137,6 +141,7 @@ public class Generator {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
+	postprocessInfo();
     }
     
     public BaselineInfo getBaselineInfo(){
@@ -209,9 +214,9 @@ public class Generator {
 
     private void sizingRun() throws IOException {
 	building.generateEnergyPlusModel(energyplusFile.getParentFile()
-		.getAbsolutePath(), "Baseline");
+		.getAbsolutePath(), "Baseline_0");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
-		.getAbsolutePath() + "\\Baseline.idf"));
+		.getAbsolutePath() + "\\Baseline_0.idf"));
 	eplusSizing.setBaselineSizing();
 	htmlOutput = eplusSizing.runEnergyPlus();
 	System.out.println(htmlOutput.getAbsolutePath());
@@ -220,9 +225,9 @@ public class Generator {
     // simple write out method, needs to be update later
     private void firstSizingRun() throws IOException {
 	baselineModel.WriteIdf(
-		energyplusFile.getParentFile().getAbsolutePath(), "Baseline");
+		energyplusFile.getParentFile().getAbsolutePath(), "Baseline_0");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
-		.getAbsolutePath() + "\\Baseline.idf"));
+		.getAbsolutePath() + "\\Baseline_0.idf"));
 	htmlOutput = eplusSizing.runEnergyPlus();
 	System.out.println(htmlOutput.getAbsolutePath());
     }
@@ -231,7 +236,10 @@ public class Generator {
 	String[] baselineList = { "0", "90", "180", "270" };
 	for (String degree : baselineList) {
 	    String filename = "Baseline" + "_" + degree;
-	    baselineModel.WriteIdf(energyplusFile.getParentFile()
+	    IdfReader copiedModel = baselineModel.cloneIdf();
+	    HashMap<String, ArrayList<ValueNode>> buildingObject = copiedModel.getObjectListCopy("Building");
+	    buildingObject.get("0").get(1).setAttribute(degree);
+	    copiedModel.WriteIdf(energyplusFile.getParentFile()
 		    .getAbsolutePath(), filename);
 	    eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
 		    .getAbsolutePath() + "\\" + filename + ".idf"));
