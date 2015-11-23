@@ -214,7 +214,7 @@ public class Generator {
 
     private void sizingRun() throws IOException {
 	building.generateEnergyPlusModel(energyplusFile.getParentFile()
-		.getAbsolutePath(), "Baseline_0");
+		.getAbsolutePath(), "Baseline_0","0");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
 		.getAbsolutePath() + "\\Baseline_0.idf"));
 	eplusSizing.setBaselineSizing();
@@ -236,11 +236,8 @@ public class Generator {
 	String[] baselineList = { "0", "90", "180", "270" };
 	for (String degree : baselineList) {
 	    String filename = "Baseline" + "_" + degree;
-	    IdfReader copiedModel = baselineModel.cloneIdf();
-	    HashMap<String, ArrayList<ValueNode>> buildingObject = copiedModel.getObjectListCopy("Building");
-	    buildingObject.get("0").get(1).setAttribute(degree);
-	    copiedModel.WriteIdf(energyplusFile.getParentFile()
-		    .getAbsolutePath(), filename);
+		building.generateEnergyPlusModel(energyplusFile.getParentFile()
+			.getAbsolutePath(), filename,degree);
 	    eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
 		    .getAbsolutePath() + "\\" + filename + ".idf"));
 	    if(degree == "0"){

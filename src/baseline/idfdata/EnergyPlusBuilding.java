@@ -735,7 +735,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	baselineModel.addNewEnergyPlusObject(name, objectValues, objectDes);
     }
 
-    public void generateEnergyPlusModel(String filePath, String fileName) {
+    public void generateEnergyPlusModel(String filePath, String fileName, String degree) {
 	// merge the all the information before write out
 	// 1. add service hot water back to the model
 	Set<String> objectList = serviceHotWater.keySet();
@@ -752,6 +752,8 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		baselineModel.addNewEnergyPlusObject(objectName, object);
 	    }
 	}
+	HashMap<String, ArrayList<ValueNode>> buildingObject = baselineModel.getObjectListCopy("Building");
+	    buildingObject.get("0").get(1).setAttribute(degree);
 
 	// 2. write out the model
 	baselineModel.WriteIdf(filePath, fileName);
