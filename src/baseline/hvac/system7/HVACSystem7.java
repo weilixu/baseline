@@ -107,7 +107,7 @@ public class HVACSystem7 implements SystemType7 {
 	// calculate the number of chillers
 	numberOfChiller = HVACSystemImplUtil.chillerNumberCalculation(
 		coolingLoad, building.getTotalFloorArea());
-
+	building.getInfoObject().setNumChiller(numberOfChiller);
 	System.out.println("We Found " + numberOfChiller + " Chillers");
 
 	ArrayList<EplusObject> plantTemp = new ArrayList<EplusObject>();
@@ -426,7 +426,9 @@ public class HVACSystem7 implements SystemType7 {
 	Iterator<String> floorMapIterator = floorMapSet.iterator();
 
 	int roomCounter = 0;
+	int floorCounter = 0;
 	while (floorMapIterator.hasNext()) {
+	    floorCounter ++;
 	    zoneSplitterList.clear();
 	    zoneMixerList.clear();
 	    String floor = floorMapIterator.next();
@@ -445,6 +447,8 @@ public class HVACSystem7 implements SystemType7 {
 	    supplySideSystem.addAll(processSupplyTemp(floor,
 		    supplySideSystemTemplate));
 	}
+	//number of similar systems
+	building.getInfoObject().setNumOfSystem(floorCounter);
 
 	plantSystem.addAll(processPlantTemp(plantSystemTemplate));
 	System.out.println("Counting the rooms: " + roomCounter);
@@ -470,6 +474,7 @@ public class HVACSystem7 implements SystemType7 {
 	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {
 		if (economizer > -1) {
 		    HVACSystemImplUtil.economizer(eo, economizer);
+		    building.getInfoObject().setHasEconomizer(economizer);
 		}
 	    } else if (eo.getObjectName()
 		    .equalsIgnoreCase("Fan:VariableVolume")) {
