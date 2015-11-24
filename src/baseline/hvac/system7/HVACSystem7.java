@@ -107,8 +107,8 @@ public class HVACSystem7 implements SystemType7 {
 	// calculate the number of chillers
 	numberOfChiller = HVACSystemImplUtil.chillerNumberCalculation(
 		coolingLoad, building.getTotalFloorArea());
-	if(building.getInfoObject()!=null){
-		building.getInfoObject().setNumChiller(numberOfChiller);	    
+	if (building.getInfoObject() != null) {
+	    building.getInfoObject().setNumChiller(numberOfChiller);
 	}
 	System.out.println("We Found " + numberOfChiller + " Chillers");
 
@@ -474,6 +474,8 @@ public class HVACSystem7 implements SystemType7 {
 	// determine the economizers.
 	double economizer = building.getClimateZone()
 		.getEconomizerShutoffLimit();
+	building.getInfoObject().setHasEconomizer(economizer);
+	double totalFanPower = 0;
 	for (EplusObject eo : supplySystem) {
 	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {
 		if (economizer > -1) {
@@ -486,8 +488,17 @@ public class HVACSystem7 implements SystemType7 {
 		String floor = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		HVACSystemImplUtil.updateFanPowerforSystem5To8(eo,
 			building.getFloorMaximumFlowRate(floor));
+		for (int i = 0; i < eo.getSize(); i++) {
+		    if (eo.getKeyValuePair(i).getKey().equals("Pressure Rise")) {
+			double pressureRise = Double.parseDouble(eo
+				.getKeyValuePair(i).getValue());
+			totalFanPower += (pressureRise / 0.6 * building
+				.getFloorMaximumFlowRate(floor));
+		    }
+		}
 	    }
 	}
+	building.getInfoObject().setFanPower(totalFanPower);
     }
 
     /**

@@ -42,12 +42,13 @@ public class HVACSystem3 implements SystemType3 {
 		.getFloorMap();
 	Set<String> floorMapSet = floorMap.keySet();
 	Iterator<String> floorMapIterator = floorMapSet.iterator();
-
+	int zoneCounter = 0;
 	// every zone has one set of the system
 	while (floorMapIterator.hasNext()) {
 	    String floor = floorMapIterator.next();
 	    ArrayList<ThermalZone> zones = floorMap.get(floor);
 	    for (ThermalZone zone : zones) {
+		zoneCounter ++;
 		demandSideSystem.addAll(processDemandTemp(zone.getFullName(),
 			demandSideSystemTemplate));
 		// add the outdoor air object for demand zone
@@ -56,7 +57,7 @@ public class HVACSystem3 implements SystemType3 {
 			supplySideSystemTemplate));
 	    }
 	}
-	
+	building.getInfoObject().setNumOfSystem(zoneCounter);
 	objectLists.put("Supply Side System", supplySideSystem);
 	objectLists.put("Demand Side System", demandSideSystem);
 	System.out.println("Re-tunning the supply side system...");
@@ -72,6 +73,8 @@ public class HVACSystem3 implements SystemType3 {
 	// determine the economizers.
 	double economizer = building.getClimateZone()
 		.getEconomizerShutoffLimit();
+	building.getInfoObject().setHasEconomizer(economizer);
+	double totalFanPower = 0;
 	for (EplusObject eo : supplySystem) {
 	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {
 		if (economizer > -1) {
@@ -83,7 +86,14 @@ public class HVACSystem3 implements SystemType3 {
 		String zone = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		HVACSystemImplUtil.updateFanPowerforSystem3To4(eo,
 			building.getZoneMaximumFlowRate(zone));
+		for(int i=0; i<eo.getSize(); i++){
+		    if(eo.getKeyValuePair(i).getKey().equals("Pressure Rise")){
+			double pressureRise = Double.parseDouble(eo.getKeyValuePair(i).getValue());
+			totalFanPower += (pressureRise/0.6 * building.getZoneMaximumFlowRate(zone));
+		    }
+		}
 	    }
+	    building.getInfoObject().setFanPower(totalFanPower);
 	}
     }
     

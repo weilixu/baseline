@@ -148,6 +148,11 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    info.setSystemType("System Type 6");
 	    info.setFanControlType("Variable Control Fans");
 	    info.setCoolingEER(10.78);
+	}else if(system.equals("System Type 3")){
+	    info.setSystemType("System Type 3");
+	    info.setFanControlType("Constant Control Fans");
+	    info.setCoolingEER(10.78);
+	    info.setUnitaryHeatingCOP(3.2);
 	}
 	info.setSupplyAirFlow(getSupplyAirFlow());
 	info.setOutdoorAirFlow(getOutdoorAir());
