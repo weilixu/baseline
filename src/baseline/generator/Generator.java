@@ -179,7 +179,6 @@ public class Generator {
     private void processOpaqueEnvelope() {
 	if (!isExisting) {
 	    envelopeProcessor.replaceConstruction();
-	    ;
 	}
     }
 
