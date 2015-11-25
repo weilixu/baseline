@@ -743,6 +743,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     public void generateEnergyPlusModel(String filePath, String fileName, String degree) {
 	// merge the all the information before write out
 	// 1. add service hot water back to the model
+    IdfReader coipedIDF = baselineModel.cloneIdf();
 	Set<String> objectList = serviceHotWater.keySet();
 	Iterator<String> objectIterator = objectList.iterator();
 	while (objectIterator.hasNext()) {
@@ -754,14 +755,14 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    while (elementIterator.hasNext()) {
 		String element = elementIterator.next();
 		ArrayList<ValueNode> object = elementList.get(element);
-		baselineModel.addNewEnergyPlusObject(objectName, object);
+		coipedIDF.addNewEnergyPlusObject(objectName, object);
 	    }
 	}
-	HashMap<String, ArrayList<ValueNode>> buildingObject = baselineModel.getObjectListCopy("Building");
+	HashMap<String, ArrayList<ValueNode>> buildingObject = coipedIDF.getObjectListCopy("Building");
 	    buildingObject.get("0").get(1).setAttribute(degree);
 
 	// 2. write out the model
-	baselineModel.WriteIdf(filePath, fileName);
+	    coipedIDF.WriteIdf(filePath, fileName);
     }
     
     private double getSupplyAirFlow(){
