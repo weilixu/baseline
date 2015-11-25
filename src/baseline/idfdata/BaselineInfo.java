@@ -20,11 +20,11 @@ public class BaselineInfo {
     private double SupplyAirFlow;
     private double outdoorAirFlow;
     private boolean demandControl;
-    private double hasEconomizer;
+    private double hasEconomizer = -1.0;
     private boolean energyRecovery;
     private double recoveryEffect;
     private double fanPower;
-    private double returnFanPower;
+    private double returnFanPower = -1.0;
     
     /**
      * Water-side HVAC Baseline
@@ -38,7 +38,7 @@ public class BaselineInfo {
     private double cwPumpFlow;
     private double buildingArea;
     private double boilerCapacity;
-    private double boilerEfficiency;
+    private double boilerEfficiency = 80;
     private double hwPumpFlow;
     
     /**
@@ -50,9 +50,34 @@ public class BaselineInfo {
     private final String BASELINE180 = "baseline_180";
     private final String BASELINE270 = "baseline_270";
     
-    public String getHeatSource() {
-        return heatSource;
+    public BaselineInfo(){
+	
     }
+    
+    /*
+     * Setter and Getter Methods
+     */
+    public int heatNaturalGas() {
+	if(heatSource.equals("NaturalGas")){
+	    return 1;
+	}
+        return 0;
+    }
+    
+    public int heatElectric(){
+	if(heatSource.equals("Electric")){
+	    return 1;
+	}
+	return 0;
+    }
+    
+    public int heatPurchase(){
+	if(heatSource.equals("Purchase")){
+	    return 1;
+	}
+	return 0;
+    }
+    
     public void setHeatSource(String heatSource) {
         this.heatSource = heatSource;
     }
@@ -173,8 +198,16 @@ public class BaselineInfo {
     public int getNumChiller() {
         return numChiller;
     }
+    
+    public int getCoolingTowerNum(){
+	return numChiller;
+    }
+    
     public void setNumChiller(int numChiller) {
         this.numChiller = numChiller;
+        numCHWPump = this.numChiller;
+        
+        
     }
     public double getChillerCapacity() {
         return chillerCapacity;
@@ -196,9 +229,6 @@ public class BaselineInfo {
     }
     public int getNumCHWPump() {
         return numCHWPump;
-    }
-    public void setNumCHWPump(int numCHWPump) {
-        this.numCHWPump = numCHWPump;
     }
     public double getChwPumpFlow() {
         return chwPumpFlow;

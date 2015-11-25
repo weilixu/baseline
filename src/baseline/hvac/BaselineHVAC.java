@@ -73,7 +73,7 @@ public class BaselineHVAC {
 		    objectDes[i] = eo.getKeyValuePair(i).getKey();
 		}
 		// add the object to the baseline model
-		
+
 		building.insertEnergyPlusObject(eo.getObjectName(),
 			objectValues, objectDes);
 	    }
@@ -89,33 +89,41 @@ public class BaselineHVAC {
 	double floorSize = building.getTotalFloorArea();
 	int floorNumber = building.getNumberOfFloor();
 	// first, exam the building type
+	String systemType = null;
 	if (bldgType.toString().equalsIgnoreCase("NONRESIDENTIAL")) {
 	    // second exam the floor size and area
 	    System.out.println(floorNumber + " " + floorSize);
 	    // haven't implement the heating resource to distinguish the
 	    // two different types of systems
-	    //factory = new HVACSystemFactory("System Type 7", building);
-	    //system = factory.createSystem();
+	    // factory = new HVACSystemFactory("System Type 7", building);
+	    // system = factory.createSystem();
 	    if (floorNumber > mediumFloorNumber && floorSize > mediumFloorArea) {
 		if (building.getHeatingMethod()) {
-		    factory = new HVACSystemFactory("System Type 8", building);
+		    systemType = "System Type 8";
+		    factory = new HVACSystemFactory(systemType, building);
 		    System.out.println("We select System Type 8");
-		}else{
-		    factory = new HVACSystemFactory("System Type 7", building); 
+		} else {
+		    systemType = "System Type 7";
+		    factory = new HVACSystemFactory("System Type 7", building);
 		    System.out.println("We select System Type 7");
 		}
 		system = factory.createSystem();
 	    } else if (floorNumber <= smallFloorNumber
 		    && floorSize <= smallFloorArea) {
+		systemType = "System Type 3";
 		factory = new HVACSystemFactory("System Type 3", building);
-		 System.out.println("We select System Type 3");
+		System.out.println("We select System Type 3");
 
 		system = factory.createSystem();
-	    }else{
+	    } else {
+		systemType = "System Type 5";
 		factory = new HVACSystemFactory("System Type 5", building);
 		System.out.println("We select System Type 5");
 		system = factory.createSystem();
 	    }
+	}
+	if (building.getInfoObject() != null) {
+	    building.initialInfoForSystem(systemType);
 	}
     }
 

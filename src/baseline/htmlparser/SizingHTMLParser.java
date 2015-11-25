@@ -30,6 +30,7 @@ public final class SizingHTMLParser {
     private static CoolingLoadParser coolingLoad;
     private static MechanicalVentilation miniVent;
     private static EndUseParser enduse;
+    private static EquipmentSummary equipment;
     
     private static String tool;
     
@@ -50,6 +51,7 @@ public final class SizingHTMLParser {
 	    coolingLoad = new CoolingLoadParser(doc);
 	    enduse = new EndUseParser(doc);
 	    miniVent = new MechanicalVentilation(doc);
+	    equipment = new EquipmentSummary(doc);
 	} catch (IOException e) {
 	    // do nothing
 	}
@@ -109,6 +111,8 @@ public final class SizingHTMLParser {
 	}
     }
     
+    
+    
     /**
      * Get the ratio of supply fan power in the total fan power. This method is only useful when
      * the system has supply fan and return fan / supply fan and exhaust fan only.
@@ -141,6 +145,10 @@ public final class SizingHTMLParser {
 	//System.out.println(supplyFanPower + " " + anotherFanPower);
 
 	return supplyFanPower / (supplyFanPower + anotherFanPower);
+    }
+    
+    public static double getPumpWaterFlowRate(String type){
+	return Double.parseDouble(equipment.getPumpWaterFlow(type));
     }
     
     private static void extractBuildingFloorArea(EnergyPlusBuilding building){

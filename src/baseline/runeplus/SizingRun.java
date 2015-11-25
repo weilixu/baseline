@@ -93,7 +93,7 @@ public class SizingRun {
 
 	for (File f : folder.listFiles()) {
 	    if (baseline) {
-		if (f.getName().contains("BaselineTable.html")) {
+		if (f.getName().contains("Baseline_0Table.html")) {
 		    resultsFile = f;
 		}
 	    } else {
