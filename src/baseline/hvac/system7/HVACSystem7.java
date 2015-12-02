@@ -474,7 +474,9 @@ public class HVACSystem7 implements SystemType7 {
 	// determine the economizers.
 	double economizer = building.getClimateZone()
 		.getEconomizerShutoffLimit();
-	building.getInfoObject().setHasEconomizer(economizer);
+	if(building.getInfoObject()!=null){
+		building.getInfoObject().setHasEconomizer(economizer);	    
+	}
 	double totalFanPower = 0;
 	for (EplusObject eo : supplySystem) {
 	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {
@@ -498,7 +500,9 @@ public class HVACSystem7 implements SystemType7 {
 		}
 	    }
 	}
-	building.getInfoObject().setFanPower(totalFanPower);
+	if(building.getInfoObject()!=null){
+		building.getInfoObject().setFanPower(totalFanPower);	    
+	}
     }
 
     /**

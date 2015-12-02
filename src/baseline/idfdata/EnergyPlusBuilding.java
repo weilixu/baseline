@@ -55,6 +55,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     private HashMap<String, ArrayList<ThermalZone>> floorMap;
     private HashMap<String, Boolean> returnFanMap;
     private HashMap<String, HashMap<String, ArrayList<ValueNode>>> serviceHotWater;
+    private boolean addedServiceWater = false;
 
     /**
      * EnergyPlus data
@@ -106,7 +107,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	this.baselineModel = baselineModel;
 	electricHeating = false;
 	this.info = infomation;
-	if(info!=null){
+	if (info != null) {
 	    info.setHeatSource("NaturalGas");
 	}
 
@@ -124,31 +125,31 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	totalCoolingLoad = 0.0;
 	totalHeatingLoad = 0.0;
     }
-    
-    public void initialInfoForSystem(String system){
-	if(system.equals("System Type 7")){
+
+    public void initialInfoForSystem(String system) {
+	if (system.equals("System Type 7")) {
 	    info.setSystemType("System Type 7");
 	    info.setFanControlType("Variable Control Fans");
 	    info.setChillerCOP(6.1);
 	    info.setChillerIPLV(6.4);
 	    info.setChillerCapacity(info.getCoolingCapacity());
 	    info.setBoilerCapacity(info.getHeatingCpacity());
-	}else if(system.equals("System Type 5")){
+	} else if (system.equals("System Type 5")) {
 	    info.setSystemType("System Type 5");
 	    info.setFanControlType("Variable Control Fans");
 	    info.setCoolingEER(10.78);
-	}else if(system.equals("System Type 8")){
+	} else if (system.equals("System Type 8")) {
 	    info.setSystemType("System Type 8");
 	    info.setFanControlType("Variable Control Fans");
 	    info.setChillerCOP(6.1);
-	    info.setChillerIPLV(6.4); 
+	    info.setChillerIPLV(6.4);
 	    info.setChillerCapacity(info.getCoolingCapacity());
 
-	}else if(system.equals("System Type 6")){
+	} else if (system.equals("System Type 6")) {
 	    info.setSystemType("System Type 6");
 	    info.setFanControlType("Variable Control Fans");
 	    info.setCoolingEER(10.78);
-	}else if(system.equals("System Type 3")){
+	} else if (system.equals("System Type 3")) {
 	    info.setSystemType("System Type 3");
 	    info.setFanControlType("Constant Control Fans");
 	    info.setCoolingEER(10.78);
@@ -157,8 +158,8 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	info.setSupplyAirFlow(getSupplyAirFlow());
 	info.setOutdoorAirFlow(getOutdoorAir());
     }
-    
-    public BaselineInfo getInfoObject(){
+
+    public BaselineInfo getInfoObject() {
 	return info;
     }
 
@@ -167,7 +168,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
      */
     public void setTotalFloorArea(Double area) {
 	totalFloorArea = area;
-	if(info!=null){
+	if (info != null) {
 	    info.setBuildingArea(area);
 	}
     }
@@ -186,7 +187,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 
     public void setElectricHeating() {
 	electricHeating = true;
-	if(info!=null){
+	if (info != null) {
 	    info.setHeatSource("Electric");
 	}
     }
@@ -233,7 +234,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		totalHeatingLoad += zone.getHeatingLoad();
 	    }
 	}
-	if(info!=null){
+	if (info != null) {
 	    info.setCoolingCapacity(totalCoolingLoad);
 	    info.setHeatingCpacity(totalHeatingLoad);
 	}
@@ -255,7 +256,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		heatingFlowRate = zone.getHeatingAirFlow();
 	    }
 	}
-	//System.out.println(coolingFlowRate + " " + heatingFlowRate);
+	// System.out.println(coolingFlowRate + " " + heatingFlowRate);
 	return Math.max(coolingFlowRate, heatingFlowRate);
     }
 
@@ -725,6 +726,8 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		}
 	    }
 	}
+
+	addedServiceWater = false;
 	baselineModel.removeEnergyPlusObject(s);
     }
 
@@ -740,49 +743,54 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	baselineModel.addNewEnergyPlusObject(name, objectValues, objectDes);
     }
 
-    public void generateEnergyPlusModel(String filePath, String fileName, String degree) {
+    public void generateEnergyPlusModel(String filePath, String fileName,
+	    String degree) {
 	// merge the all the information before write out
 	// 1. add service hot water back to the model
-    IdfReader coipedIDF = baselineModel.cloneIdf();
-	Set<String> objectList = serviceHotWater.keySet();
-	Iterator<String> objectIterator = objectList.iterator();
-	while (objectIterator.hasNext()) {
-	    String objectName = objectIterator.next();
-	    HashMap<String, ArrayList<ValueNode>> elementList = serviceHotWater
-		    .get(objectName);
-	    Set<String> elementSet = elementList.keySet();
-	    Iterator<String> elementIterator = elementSet.iterator();
-	    while (elementIterator.hasNext()) {
-		String element = elementIterator.next();
-		ArrayList<ValueNode> object = elementList.get(element);
-		coipedIDF.addNewEnergyPlusObject(objectName, object);
+	if (!addedServiceWater) {
+	    Set<String> objectList = serviceHotWater.keySet();
+	    Iterator<String> objectIterator = objectList.iterator();
+	    while (objectIterator.hasNext()) {
+		String objectName = objectIterator.next();
+		HashMap<String, ArrayList<ValueNode>> elementList = serviceHotWater
+			.get(objectName);
+		Set<String> elementSet = elementList.keySet();
+		Iterator<String> elementIterator = elementSet.iterator();
+		while (elementIterator.hasNext()) {
+		    String element = elementIterator.next();
+		    ArrayList<ValueNode> object = elementList.get(element);
+		    baselineModel.addNewEnergyPlusObject(objectName, object);
+		}
 	    }
+	    addedServiceWater = true;
 	}
-	HashMap<String, ArrayList<ValueNode>> buildingObject = coipedIDF.getObjectListCopy("Building");
-	    buildingObject.get("0").get(1).setAttribute(degree);
+
+	HashMap<String, ArrayList<ValueNode>> buildingObject = baselineModel
+		.getObjectListCopy("Building");
+	buildingObject.get("0").get(1).setAttribute(degree);
 
 	// 2. write out the model
-	    coipedIDF.WriteIdf(filePath, fileName);
+	baselineModel.WriteIdf(filePath, fileName);
     }
-    
-    private double getSupplyAirFlow(){
+
+    private double getSupplyAirFlow() {
 	double supplyAir = 0.0;
 	Set<String> floors = floorMap.keySet();
 	Iterator<String> floorIterator = floors.iterator();
-	while(floorIterator.hasNext()){
+	while (floorIterator.hasNext()) {
 	    String floor = floorIterator.next();
-	    supplyAir = getFloorMaximumFlowRate(floor); 
+	    supplyAir = getFloorMaximumFlowRate(floor);
 	}
 	return supplyAir;
     }
-    
-    private double getOutdoorAir(){
+
+    private double getOutdoorAir() {
 	double outdoorAir = 0.0;
 	Set<String> floors = floorMap.keySet();
 	Iterator<String> floorIterator = floors.iterator();
-	while(floorIterator.hasNext()){
+	while (floorIterator.hasNext()) {
 	    String floor = floorIterator.next();
-	    outdoorAir = getFloorMinimumVentilationRate(floor); 
+	    outdoorAir = getFloorMinimumVentilationRate(floor);
 	}
 	return outdoorAir;
     }
