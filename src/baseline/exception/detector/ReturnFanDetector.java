@@ -83,11 +83,12 @@ public class ReturnFanDetector implements Detector{
 		// demand side check thermal zones
 		// processFloorReturnFanMap(demandSideOutletName, returnFan);
 		String supplyFan = getSupplyFanName(baselineModel, branchListName, returnFan);
-		System.out.println(supplyReturnRatio + " " + numberOfSystem);
+		System.out.println(supplyFan + " " + returnFan);
 		numberOfSystem = numberOfSystem + 1;
 		supplyReturnRatio = supplyReturnRatio
 			+ SizingHTMLParser.getSupplyFanPowerRatio(supplyFan,
 				returnFan);
+		//System.out.println(numberOfSystem + " " + supplyReturnRatio);
 	    }
 	}
     }

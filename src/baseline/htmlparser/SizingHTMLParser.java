@@ -142,7 +142,7 @@ public final class SizingHTMLParser {
 		//System.out.println(supplyFanPower);
 	    }
 	}
-	//System.out.println(supplyFanPower + " " + anotherFanPower);
+	System.out.println(supplyFanPower + " " + anotherFanPower);
 
 	return supplyFanPower / (supplyFanPower + anotherFanPower);
     }

@@ -853,7 +853,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     }
     
     private void registerExceptionDetectors(){
-	List<Detector> detectorList = new ArrayList<Detector>();
+	detectorList = new ArrayList<Detector>();
 	detectorList.add(new ReturnFanDetector());
     }
 
