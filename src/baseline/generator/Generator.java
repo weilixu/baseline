@@ -2,16 +2,12 @@ package baseline.generator;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import baseline.construction.opaque.BaselineEnvelope;
-import baseline.generator.IdfReader.ValueNode;
 import baseline.htmlparser.SizingHTMLParser;
 import baseline.htmlparser.WindowWallRatioParser;
 import baseline.hvac.BaselineHVAC;
 import baseline.idfdata.BaselineInfo;
-import baseline.idfdata.BuildingLight;
 import baseline.idfdata.EnergyPlusBuilding;
 import baseline.lighting.LightingGenerator;
 import baseline.runeplus.SizingRun;
@@ -122,6 +118,7 @@ public class Generator {
 	baselineModel.removeEnergyPlusObject("OutputControl:Table:Style");
 	baselineModel
 		.removeEnergyPlusObject("OutputControl:ReportingTolerances");
+	baselineModel.removeEnergyPlusObject("Output:Table:SummaryReports");
 	baselineModel.removeEnergyPlusObject("Output:Meter");
 	baselineModel.removeEnergyPlusObject("Output:Variable");
 	String[] objectValue = { "HTML", "JtoKWH" };
@@ -137,6 +134,11 @@ public class Generator {
 	baselineModel.addNewEnergyPlusObject(
 		"OutputControl:ReportingTolerances", toleranceValue,
 		toleranceDes);
+	
+	//change the report summaries
+	String[] reports = {"AllSummary","ZoneComponentLoadSummary"};
+	String[] reportsDes = {"Report 1 Name","Report 2 Name"};
+	baselineModel.addNewEnergyPlusObject("Output:Table:SummaryReports",reports, reportsDes);
     }
 
     /**
@@ -180,15 +182,15 @@ public class Generator {
 
     }
 
-    private void sizingRun() throws IOException {
-	building.generateEnergyPlusModel(energyplusFile.getParentFile()
-		.getAbsolutePath(), "Baseline_0","0");
-	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
-		.getAbsolutePath() + "\\Baseline_0.idf"));
-	eplusSizing.setBaselineSizing();
-	htmlOutput = eplusSizing.runEnergyPlus();
-	System.out.println(htmlOutput.getAbsolutePath());
-    }
+//    private void sizingRun() throws IOException {
+//	building.generateEnergyPlusModel(energyplusFile.getParentFile()
+//		.getAbsolutePath(), "Baseline_0","0");
+//	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
+//		.getAbsolutePath() + "\\Baseline_0.idf"));
+//	eplusSizing.setBaselineSizing();
+//	htmlOutput = eplusSizing.runEnergyPlus();
+//	System.out.println(htmlOutput.getAbsolutePath());
+//    }
 
     // simple write out method, needs to be update later
     private void firstSizingRun() throws IOException {

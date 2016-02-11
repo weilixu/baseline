@@ -212,11 +212,11 @@ public final class SizingHTMLParser {
      * The method must be called after the output was processed.
      */
     private static Double getZoneHeatingLoad(String zone){
-	String load = heatingLoad.getUserDefinedHeatingLoad(zone);
+	String load = heatingLoad.getHeatingLoad(zone);
 	if(load.equals("")){
 	    return 0.0;
 	}else{
-	    return Double.parseDouble(load);
+	    return -Double.parseDouble(load);
 	}
     }
     
@@ -224,7 +224,7 @@ public final class SizingHTMLParser {
      * The method must be called after the output was processed.
      */
     private static Double getZoneCoolingLoad(String zone){
-	String load = coolingLoad.getUserDefinedCoolingLoad(zone);
+	String load = coolingLoad.getCoolingLoad(zone);
 	if(load.equals("")){
 	    return 0.0;
 	}else{
@@ -267,12 +267,21 @@ public final class SizingHTMLParser {
 	Elements htmlNodes = doc.getAllElements();
 	for (int i = 0; i < htmlNodes.size(); i++) {
 	    if (htmlNodes.get(i).text().contains("Report:")) {
-		report = htmlNodes.get(i + 1).text();
+		report = htmlNodes.get(i + 1).text().trim();
+		if(report.equals("Zone Component Load Summary")){
+		    report = report + ":" + htmlNodes.get(i+3).text();
+		}
 	    }
 	    if (htmlNodes.get(i).hasAttr("cellpadding")) {
 		String tableName = htmlNodes.get(i - 3).text();
 		htmlNodes.get(i).attr("tableID", report + ":" + tableName);
 	    }
 	}
+    }
+    
+    public static void main(String[] args){
+	processOutputs(new File("C:\\Users\\Weili\\Desktop\\New folder\\Sys5_SampleTable.html"));
+	System.out.println(getZoneCoolingLoad("3%OFFICE%WEST%1%W1"));
+	System.out.println(getZoneHeatingLoad("4%OFFICE%CORE%1%C1"));
     }
 }
