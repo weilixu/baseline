@@ -720,13 +720,14 @@ public class IdfReader {
 	    Writer writer = null;
 	    try {
 		writer = new BufferedWriter(new OutputStreamWriter(
-			new FileOutputStream(path + fileID + ".idf"), "UTF-8"));
+			new FileOutputStream(path + fileID + ".idf"), "Cp1252"));
 
 		Set<String> eplusObjects = eplusMap.keySet();
 		Iterator<String> objectIterator = eplusObjects.iterator();
 
 		while (objectIterator.hasNext()) {
 		    String objectKey = objectIterator.next();
+		    writer.write("!-   ===========  ALL OBJECTS IN CLASS: " + objectKey.toUpperCase() + " =========== \r\n");		    
 		    Set<String> objectElements = eplusMap.get(objectKey)
 			    .keySet();
 		    Iterator<String> elementIterator = objectElements
@@ -734,7 +735,7 @@ public class IdfReader {
 
 		    while (elementIterator.hasNext()) {
 			String elementKey = elementIterator.next();
-			writer.write(objectKey + "," + "\n");
+			writer.write(objectKey + "," + "\r\n");
 			ArrayList<ValueNode> nodeList = eplusMap.get(objectKey)
 				.get(elementKey);
 			// loop the nodes through the list
@@ -742,9 +743,10 @@ public class IdfReader {
 			    ValueNode n = nodeList.get(i);
 			    // end statement needs to be end by ;
 			    if (i == nodeList.size() - 1) {
-				writer.write(n.getAttribute() + "; \n");
+				writer.write("  " + n.getAttribute() + "; !-" + n.getDescription() + " \r\n");
+				writer.write("\r\n");
 			    } else {
-				writer.write(n.getAttribute() + ", \n");
+				writer.write("  " + n.getAttribute() + ", !-" + n.getDescription() + " \r\n");
 			    }
 			}
 		    }

@@ -1,4 +1,4 @@
-package baseline.htmlparser;
+package main;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import baseline.geometry.Coordinate3D;
 import baseline.geometry.Wall;
 import baseline.geometry.Window;
+import baseline.htmlparser.WindowWallRatioParser;
 
 public class Test {
 	public static void main(String[] args){
