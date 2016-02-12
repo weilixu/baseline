@@ -11,6 +11,7 @@ import org.jdom2.input.SAXBuilder;
 
 import baseline.generator.EplusObject;
 import baseline.generator.KeyValuePair;
+import baseline.util.BaselineUtils;
 import baseline.util.ClimateZone;
 
 /**
@@ -35,7 +36,7 @@ public class OpaqueEnvelopeParser {
 	cZone = zone;
 
 	builder = new SAXBuilder();
-	envelope = new File(FILE_NAME);
+	envelope = new File(BaselineUtils.getAbsolutionDir()+FILE_NAME);
 	// read the file
 	try {
 	    document = (Document) builder.build(envelope);

@@ -11,6 +11,7 @@ import java.util.Set;
 import baseline.generator.EplusObject;
 import baseline.generator.IdfReader;
 import baseline.idfdata.EnergyPlusBuilding;
+import baseline.util.BaselineUtils;
 import baseline.util.BuildingType;
 
 public class BaselineHVAC {
@@ -129,7 +130,7 @@ public class BaselineHVAC {
 
     // HVAC objects list is read from local list file
     private void processObjectLists() throws IOException {
-	BufferedReader br = new BufferedReader(new FileReader(FILE_NAME));
+	BufferedReader br = new BufferedReader(new FileReader(BaselineUtils.getAbsolutionDir()+FILE_NAME));
 
 	try {
 	    StringBuilder sb = new StringBuilder();

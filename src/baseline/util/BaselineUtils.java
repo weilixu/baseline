@@ -9,6 +9,8 @@ public final class BaselineUtils {
     
     private static String directory = null;
     
+    private static String absoluteDir = "";
+    
     private static Properties baselineProps;
     
     static{
@@ -20,7 +22,7 @@ public final class BaselineUtils {
 	
 	try{
 	    baselineProps = new Properties();
-	    FileInputStream baselineIn = new FileInputStream(CONFIG_PROPERTIES);
+	    FileInputStream baselineIn = new FileInputStream(absoluteDir + CONFIG_PROPERTIES);
 	    
 	    baselineProps.load(baselineIn);
 	    baselineIn.close();
@@ -33,5 +35,15 @@ public final class BaselineUtils {
     
     public static String getEnergyPlusDirectory(){
 	return directory;
+    }
+    
+    public static void setAbsoluteDir(String abs){
+	absoluteDir = abs;
+	//reinite properties because the change of directory
+	initProperties();
+    }
+    
+    public static String getAbsolutionDir(){
+	return absoluteDir;
     }
 }

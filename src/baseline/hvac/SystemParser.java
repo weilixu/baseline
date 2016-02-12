@@ -11,6 +11,7 @@ import org.jdom2.input.SAXBuilder;
 
 import baseline.generator.EplusObject;
 import baseline.generator.KeyValuePair;
+import baseline.util.BaselineUtils;
 
 /**
  * This class extracts system template from database <file>hvacsystem.xml<file>
@@ -29,11 +30,11 @@ public class SystemParser {
     
     private String systemType;
     
-    private static final String FILE_NAME = "hvacsystem_demo.xml";
+    private static final String FILE_NAME = "hvacsystem.xml";
     
     public SystemParser(String systemType){
 	builder = new SAXBuilder();
-	system = new File(FILE_NAME);
+	system = new File(BaselineUtils.getAbsolutionDir()+FILE_NAME);
 	
 	this.systemType = systemType;
 	

@@ -51,6 +51,8 @@ public class SizingRun {
     public void setEplusFile(File idf) {
 	idfFile = idf;
 	folder = idfFile.getParentFile();
+	System.out.println(idfFile.getAbsolutePath());
+	System.out.println(folder.getAbsolutePath());
     }
 
     public void setBaselineSizing() {
@@ -68,11 +70,14 @@ public class SizingRun {
 	File resultsFile = null;
 
 	String path = idfFile.getAbsolutePath();
-	String pathToIDF = path.substring(0, path.indexOf("."));
+	String pathToIDF = path.substring(0, path.lastIndexOf("."));
+	String weatherName = weatherFile.getName();
+	String weather = weatherName.substring(0,weatherName.lastIndexOf("."));
 	File eplusBatFile = createBatchFile();
 	String[] commandline = { eplusBatFile.getAbsolutePath(), pathToIDF,
-		weatherFile.getName() };
-	// System.out.println(Arrays.toString(commandline));
+		weather};
+	
+	 System.out.println(Arrays.toString(commandline));
 
 	try {
 	    Process p = Runtime.getRuntime().exec(commandline, null, folder);
@@ -86,8 +91,8 @@ public class SizingRun {
 
 	    errStr.join();
 	    outStr.join();
-	    eplusBatFile.delete();
-	} catch (IOException | InterruptedException e) {
+	    //eplusBatFile.delete();
+	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 
@@ -117,10 +122,9 @@ public class SizingRun {
 	String weaWord = "set weather_path=";
 	File file = new File(folder.getAbsolutePath() + "\\" + EPLUSBAT);
 	file.createNewFile();
-
 	// reading file and write to the new file
-
-	BufferedReader br = new BufferedReader(new FileReader(EPLUSBAT));
+	File newBat = new File(BaselineUtils.getAbsolutionDir()+ EPLUSBAT);
+	BufferedReader br = new BufferedReader(new FileReader(newBat));
 	StringBuilder sb = new StringBuilder();
 
 	try {

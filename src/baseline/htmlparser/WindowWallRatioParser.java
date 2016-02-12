@@ -81,7 +81,7 @@ public class WindowWallRatioParser {
      * @return
      */
     private List<Coordinate3D> readSurfaceCoords(ArrayList<ValueNode> attrs){
-    	List<Coordinate3D> coords = new LinkedList<>();
+    	List<Coordinate3D> coords = new LinkedList<Coordinate3D>();
     	int numVertices = Integer.valueOf(attrs.get(SurfaceNumVerticeLoc).getAttribute());
     	for(int i=0;i<numVertices;i++){
     		double x = Double.parseDouble(attrs.get(i*3+SurfaceCoordsOffset).getAttribute());

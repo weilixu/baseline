@@ -1,0 +1,909 @@
+<economic>
+	<utilitycost>
+		<dataset setname = "Template" category = "Utility Cost">
+			<object description = "UtilityCost:Tariff" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Output Meter Name" type = "String">
+					<electricity>Electricity:Facility</electricity>
+					<naturalgas>Heating:Gas</naturalgas>
+				</field>
+				<field description = "Conversion Factor Choice" type = "String">
+					<kwh>kWh</kwh>
+					<therm>Therm</therm>
+					<mmbtu>MMBtu</mmbtu>
+					<mj>MJ</mj>
+					<kBtu>kBtu</kBtu>
+					<mcf>MCF</mcf>
+					<ccf>CCF</ccf>
+				</field>
+				<field description = "Energy Conversion Factor" type = "Double" minimum = "" maximum = ""/>
+				<field description = "Demand Conversion Factor" type = "Double" minimum = "" maximum = ""/>
+				<field description = "Time of Use Period Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Season Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Month Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Demand Window Length" type = "String">
+					<quarter>QuarterHour</quarter>
+					<half>HalfHour</half>
+					<full>FullHour</full>
+					<day>Day</day>
+					<week>Week</week>
+				</field>
+				<field description = "Monthly Charge or Variable Name" type = "String/Double" minimum = "" maximum = ""/>
+				<field description = "Minimum Monthly Charge or Variable Name" type = "String/Double" minimum = "" maximum = ""/>
+				<field description = "Real Time Pricing Charge Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Customer Baseline Load Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Group Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Buy Or Sell" type = "String">
+					<buy>BuyFromUtility</buy>
+					<sell>SellToUtility</sell>
+					<net>NetMetering</net>
+				</field>
+			</object>
+			<object description = "UtilityCost:Qualify" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Tariff Name" type = "String"/>
+				<field description = "Variable Name" type = "String"/>
+				<field description = "Qualify Type" type = "String">
+					<max>Maximum</max>
+					<min>Minimum</min>
+				</field>
+				<field description = "Threshold Value or Variable Name" type = "String"/>
+				<field description = "Season" type = "String">
+					<annual>Annual</annual>
+					<summer>Summer</summer>
+					<winter>Winter</winter>
+					<spring>Spring</spring>
+					<fall>Fall</fall>
+				</field>
+				<field description = "Threshold Test" type = "String">	
+					<consecutive>Consecutive</consecutive>
+					<count>Count</count>
+				</field>
+				<field description = "Number of Months" type = "Integer" minimum="1" maximum="12"/>
+			</object>
+			<object description = "UtilitCost:Charge:Simple" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Tariff Name" type = "String"/>
+				<field description = "Source Variable" type = "String"/>
+				<field description = "Season" type = "String">
+					<annual>Annual</annual>
+					<summer>Summer</summer>
+					<winter>Winter</winter>
+					<spring>Spring</spring>
+					<fall>Fall</fall>
+				</field>
+				<field description = "Category Variable Name" type = "String">
+					<energy>EnergyCharges</energy>
+					<demand>DemandCharges</demand>
+					<service>ServiceCharges</service>
+					<basis>Basis</basis>
+					<adjustment>Adjustment</adjustment>
+					<surcharge>Surcharge</surcharge>
+					<subtotal>Subtotal</subtotal>
+					<taxes>Taxes</taxes>
+					<total>Total</total>
+					<notincluded>NotIncluded</notincluded>
+				</field>
+				<field description = "Cost per Unit Value or Variable Name" type = "Double" minimum="" maximum=""/>
+			</object>
+			<object description = "UtilityCost:Charge:Block" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Tariff Name" type = "String"/>
+				<field description = "Source Variable" type = "String"/>
+				<field description = "Season" type = "String">
+					<annual>Annual</annual>
+					<summer>Summer</summer>
+					<winter>Winter</winter>
+					<spring>Spring</spring>
+					<fall>Fall</fall>
+				</field>
+				<field description = "Category Variable Name" type = "String">
+					<energy>EnergyCharges</energy>
+					<demand>DemandCharges</demand>
+					<service>ServiceCharges</service>
+					<basis>Basis</basis>
+					<adjustment>Adjustment</adjustment>
+					<surcharge>Surcharge</surcharge>
+					<subtotal>Subtotal</subtotal>
+					<taxes>Taxes</taxes>
+					<total>Total</total>
+					<notincluded>NotIncluded</notincluded>
+				</field>
+				<field description = "Remaining Into Variable" type = "String"/>
+				<field description = "Block Size Multiplier Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 1 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 1 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 2 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 2 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 3 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 3 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 4 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 4 Cost per Unit Value or Variable Name" type = "String/Double"/>			
+				<field description = "Block Size 5 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 5 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 6 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 6 Cost per Unit Value or Variable Name" type = "String/Double"/>			
+				<field description = "Block Size 7 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 7 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 8 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 8 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 9 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 9 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 10 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 10 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 11 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 11 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 12 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 12 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 13 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 13 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 14 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 14 Cost per Unit Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 15 Value or Variable Name" type = "String/Double"/>
+				<field description = "Block 15 Cost per Unit Value or Variable Name" type = "String/Double"/>
+			</object>
+			<object description = "UtilityCost:Ratchet" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Tariff Name" type = "String"/>
+				<field description = "Baseline Source Variable" type = "String"/>
+				<field description = "Adjustment Source Variable" type = "String"/>		
+				<field description = "Season From" type = "String">
+					<annual>Annual</annual>
+					<summer>Summer</summer>
+					<winter>Winter</winter>
+					<spring>Spring</spring>
+					<fall>Fall</fall>
+				</field>	
+				<field description = "Season To" type = "String">
+					<annual>Annual</annual>
+					<summer>Summer</summer>
+					<winter>Winter</winter>
+					<spring>Spring</spring>
+					<fall>Fall</fall>
+				</field>			
+				<field description = "Multiplier Value or Variable Name" type = "String/Double"/>
+				<field description = "Offset Value or Variable Name" type = "String/Double"/>
+			</object>
+			<object description = "UtilityCost:Variable" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Tariff Name" type = "String"/>
+				<field description = "January Value" type = "Double" minimum="" maximum=""/>
+				<field description = "February Value" type = "Double" minimum="" maximum=""/>
+				<field description = "March Value" type = "Double" minimum="" maximum=""/>
+				<field description = "April Value" type = "Double" minimum="" maximum=""/>
+				<field description = "May Value" type = "Double" minimum="" maximum=""/>
+				<field description = "June Value" type = "Double" minimum="" maximum=""/>
+				<field description = "July Value" type = "Double" minimum="" maximum=""/>
+				<field description = "August Value" type = "Double" minimum="" maximum=""/>
+				<field description = "September Value" type = "Double" minimum="" maximum=""/>
+				<field description = "October Value" type = "Double" minimum="" maximum=""/>
+				<field description = "November Value" type = "Double" minimum="" maximum=""/>
+				<field description = "December Value" type = "Double" minimum="" maximum=""/>
+		</object>
+			<object description = "UtilityCost:Computation" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Tariff Name" type = "String"/>
+				<field description = "Compute Step 1" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 2" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 3" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 4" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 5" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 6" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 7" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 8" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 9" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 10" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 11" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 12" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 13" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 14" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 15" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 16" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 17" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 18" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 19" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 20" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 21" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 22" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 23" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 24" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 25" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 26" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 27" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 28" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 29" type = "Double" minimum="" maximum=""/>
+				<field description = "Compute Step 30" type = "Double" minimum="" maximum=""/>
+				</object>
+		</dataset>
+		<dataset setname = "PECO" category = "Utility Cost">
+			<object description = "UtilityCost:Tariff" reference = "PECO Utility Tariff">
+				<field description = "Name" type = "String">PECO_HT</field>
+				<field description = "Output Meter Name" type = "String">Electricity:Facility</field>
+				<field description = "Conversion Factor Choice" type = "String">kWh</field>
+				<field description = "Energy Conversion Factor" type = "Double" minimum = "" maximum = ""/>
+				<field description = "Demand Conversion Factor" type = "Double" minimum = "" maximum = ""/>
+				<field description = "Time of Use Period Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Season Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Month Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Demand Window Length" type = "String">QuarterHour</field>
+				<field description = "Monthly Charge or Variable Name" type = "String/Double" minimum = "" maximum = "">298.92</field>
+				<field description = "Minimum Monthly Charge or Variable Name" type = "String/Double" minimum = "" maximum = ""/>
+				<field description = "Real Time Pricing Charge Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Customer Baseline Load Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Group Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Buy Or Sell" type = "String">BuyFromUtility</field>
+			</object>
+			<object description = "UtilityCost:Tariff" reference = "PECO Utility Tariff">
+				<field description = "Name" type = "String">PECO_Gas_GC</field>
+				<field description = "Output Meter Name" type = "String">Heating:Gas</field>
+				<field description = "Conversion Factor Choice" type = "String">MCF</field>
+				<field description = "Energy Conversion Factor" type = "Double" minimum = "" maximum = ""/>
+				<field description = "Demand Conversion Factor" type = "Double" minimum = "" maximum = ""/>
+				<field description = "Time of Use Period Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Season Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Month Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Demand Window Length" type = "String">QuarterHour</field>
+				<field description = "Monthly Charge or Variable Name" type = "String/Double" minimum = "" maximum = "">28.55</field>
+				<field description = "Minimum Monthly Charge or Variable Name" type = "String/Double" minimum = "" maximum = ""/>
+				<field description = "Real Time Pricing Charge Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Customer Baseline Load Schedule Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Group Name" type = "String" minimum = "" maximum = ""/>
+				<field description = "Buy Or Sell" type = "String">BuyFromUtility</field>
+			</object>
+			<object description = "UtilitCost:Charge:Simple" reference = "PECO Utility Tariff">
+				<field description = "Name" type = "String">Flat Energy Supply Charge</field>
+				<field description = "Tariff Name" type = "String">PECO_HT</field>
+				<field description = "Source Variable" type = "String">totalEnergy</field>
+				<field description = "Season" type = "String">Annual</field>
+				<field description = "Category Variable Name" type = "String">EnergyCharges</field>
+				<field description = "Cost per Unit Value or Variable Name" type = "Double" minimum="" maximum="">0.0748</field>
+			</object>
+			<object description = "UtilitCost:Charge:Simple" reference = "PECO Utility Tariff">
+				<field description = "Name" type = "String">Energy Charge</field>
+				<field description = "Tariff Name" type = "String">PECO_HT</field>
+				<field description = "Source Variable" type = "String">totalDemand</field>
+				<field description = "Season" type = "String">Annual</field>
+				<field description = "Category Variable Name" type = "String">DemandCharges</field>
+				<field description = "Cost per Unit Value or Variable Name" type = "Double" minimum="" maximum="">3.55</field>
+			</object>
+			<object description = "UtilitCost:Charge:Simple" reference = "PECO Utility Tariff">
+				<field description = "Name" type = "String">Transmission Charge</field>
+				<field description = "Tariff Name" type = "String">PECO_HT</field>
+				<field description = "Source Variable" type = "String">totalDemand</field>
+				<field description = "Season" type = "String">Annual</field>
+				<field description = "Category Variable Name" type = "String">DemandCharges</field>
+				<field description = "Cost per Unit Value or Variable Name" type = "Double" minimum="" maximum="">2.34</field>
+			</object>
+			<object description = "UtilitCost:Charge:Simple" reference = "PECO Utility Tariff">
+				<field description = "Name" type = "String">Variable Distribution Service</field>
+				<field description = "Tariff Name" type = "String">PECO_HT</field>
+				<field description = "Source Variable" type = "String">totalEnergy</field>
+				<field description = "Season" type = "String">Annual</field>
+				<field description = "Category Variable Name" type = "String">EnergyCharges</field>
+				<field description = "Cost per Unit Value or Variable Name" type = "Double" minimum="" maximum="">0.0015</field>
+			</object>
+			<object description = "UtilitCost:Charge:Simple" reference = "PECO Utility Tariff">
+				<field description = "Name" type = "String">Gas SurCharge</field>
+				<field description = "Tariff Name" type = "String">PECO_Gas_GC</field>
+				<field description = "Source Variable" type = "String">totalEnergy</field>
+				<field description = "Season" type = "String">Annual</field>
+				<field description = "Category Variable Name" type = "String">EnergyCharges</field>
+				<field description = "Cost per Unit Value or Variable Name" type = "Double" minimum="" maximum="">5.73</field>
+			</object>
+			<object description = "UtilityCost:Charge:Block" reference = "PECO Utility Tariff">
+				<field description = "Name" type = "String">Gas_Rate</field>
+				<field description = "Tariff Name" type = "String">PECO_Gas_GC</field>
+				<field description = "Source Variable" type = "String">totalEnergy</field>
+				<field description = "Season" type = "String">Annual</field>
+				<field description = "Category Variable Name" type = "String">EnergyCharges</field>
+				<field description = "Remaining Into Variable" type = "String"/>
+				<field description = "Block Size Multiplier Value or Variable Name" type = "String/Double"/>
+				<field description = "Block Size 1 Value or Variable Name" type = "String/Double">200</field>
+				<field description = "Block 1 Cost per Unit Value or Variable Name" type = "String/Double">3.66</field>
+				<field description = "Block Size 2 Value or Variable Name" type = "String/Double">remaining</field>
+				<field description = "Block 2 Cost per Unit Value or Variable Name" type = "String/Double">2.507</field>
+			</object>			
+		</dataset>
+	</utilitycost>
+	<currency>
+		<dataset setname = "Template" category = "Currency">
+			<object description = "CurrencyType" reference = "Template">
+				<field description="Monetary Unit">
+					<usd>USD</usd>
+					<eur>EUR</eur>
+					<cny>CNY</cny>
+				</field>
+			</object>
+		</dataset>
+	</currency>
+	<lifecyclecost>
+		<dataset setname = "Template" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:Parameters" reference="Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Discounting Convention" type = "String">
+					<end>EndOfYear</end>
+					<mid>MidYear</mid>
+					<beg>BeginningOfYear</beg>
+				</field>
+				<field description = "Inflation Approach" type="String">
+					<con>ConstantDollar</con>
+					<cur>CurrentDollar</cur>
+				</field>
+				<field description = "Real Discount Rate" type = "Integer" minimum = "" maximum = ""/>
+				<field description = "Nominal Discount Rate" type = "Integer" minimum = "" maximum = ""/>
+				<field description = "Inflation" type = "Integer" minimum = "" maximum = ""/>
+				<field description = "Base Date Month" type = "String">
+					<jan>January</jan>
+					<feb>February</feb>
+					<mar>March</mar>
+					<apr>April</apr>
+					<may>May</may>
+					<jun>June</jun>
+					<jul>July</jul>
+					<aug>August</aug>
+					<sep>September</sep>
+					<oct>October</oct>
+					<nov>November</nov>
+					<dec>December</dec>
+				</field>
+				<field description = "Base Date Year" type = "Integer" minimum="1900" maximum="2100"/>
+				<field description = "Service Date Month" type = "String">
+					<jan>January</jan>
+					<feb>February</feb>
+					<mar>March</mar>
+					<apr>April</apr>
+					<may>May</may>
+					<jun>June</jun>
+					<jul>July</jul>
+					<aug>August</aug>
+					<sep>September</sep>
+					<oct>October</oct>
+					<nov>November</nov>
+					<dec>December</dec>
+				</field>
+				<field description = "Service Date Year" type = "Integer" minimum="1900" maximum="2100"/>
+				<field description = "Length of Study Period in Years" type = "Integer" minimum = "1" maximum = "100"/>
+				<field description = "Tax rate" type = "Integer" minimum="0" maximum=""/>
+				<field description = "Depreciation Method">
+					<none>None</none>
+					<year3>ModifiedAcceleratedCostRecoverySystem-3year</year3>
+					<year5>ModifiedAcceleratedCostRecoverySystem-5year</year5>
+					<year7>ModifiedAcceleratedCostRecoverySystem-5year</year7>
+					<year10>ModifiedAcceleratedCostRecoverySystem-10year</year10>
+					<year15>ModifiedAcceleratedCostRecoverySystem-15year</year15>
+					<year20>ModifiedAcceleratedCostRecoverySystem-20year</year20>
+					<year27>StraightLine-27year</year27>
+					<year31>StraightLine-31year</year31>
+					<year39>StraightLine-39year</year39>
+					<year40>StraightLine-40year</year40>
+				</field>
+			</object>
+			<object description = "LifeCycleCost:RecurringCosts" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Category" type = "String">
+					<maintenance>Maintenance</maintenance>
+					<repair>Repair</repair>
+					<operation>Operation</operation>
+					<replacement>Replacement</replacement>
+					<minoroverhaul>MinorOverhaul</minoroverhaul>
+					<majoroverhaul>MajorOverhaul</majoroverhaul>
+					<otheroperational>OtherOperational</otheroperational>
+				</field>
+				<field description = "Cost" type = "Integer" minimum="" maximum=""/>
+				<field description = "Start of Costs" type = "String">
+					<service>ServicePeriod</service>
+					<base>BasePeriod</base>
+				</field>
+				<field description = "Years from Start" type = "Integer" minimum="0" maximum="100"/>
+				<field description = "Months from Start" type = "Integer" minimum="0" maximum="1200"/>
+				<field description = "Repeat Period Years" type = "Integer" minimum="0" maximum="100"/>
+				<field description = "Repeat Period Months" type = "Integer" minimum="0" maximum="1200"/>
+				<field description = "Annual escalation rate" type = "Integer" minimum="-0.3" maximum="0.3"/>
+			</object>
+			<object description = "LifeCycleCost:NonrecurringCost" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Category" type = "String">
+					<construction>Construction</construction>
+					<salvage>Salvage</salvage>
+					<othercapital>OtherCapital</othercapital>
+				</field>
+				<field description = "Cost" type = "Integer" minimum="" maximum=""/>
+				<field description = "Start of Costs" type = "String">
+					<service>ServicePeriod</service>
+					<base>BasePeriod</base>
+				</field>
+				<field description = "Years from Start" type = "Integer" minimum="0" maximum="100"/>
+				<field description = "Months from Start" type = "Integer" minimum="0" maximum="1200"/>
+			</object>
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Resource" type = "String">
+					<electricity>Electricity</electricity>
+					<naturalgas>NaturalGas</naturalgas>
+					<steam>Steam</steam>
+					<gasoline>Gasoline</gasoline>
+					<diesel>Diesel</diesel>
+					<coal>Coal</coal>
+					<fueloil1>FuelOil#1</fueloil1>
+					<fueloil2>FuelOil#2</fueloil2>
+					<propane>Propane</propane>
+					<otherfuel1>OtherFuel1</otherfuel1>
+					<otherfuel2>OtherFuel2</otherfuel2>
+					<water>Water</water>
+				</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100"/>
+				<field description = "Escalation Start Month" type = "String">
+					<jan>January</jan>
+					<feb>February</feb>
+					<mar>March</mar>
+					<apr>April</apr>
+					<may>May</may>
+					<jun>June</jun>
+					<jul>July</jul>
+					<aug>August</aug>
+					<sep>September</sep>
+					<oct>October</oct>
+					<nov>November</nov>
+					<dec>December</dec>
+				</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum=""/>
+			</object>
+			<object description = "LifeCycleCost:UseAdjustment" reference = "Template">
+				<field description = "Name" type = "String"/>
+				<field description = "Resource" type = "String">
+					<electricity>Electricity</electricity>
+					<naturalgas>NaturalGas</naturalgas>
+					<steam>Steam</steam>
+					<gasoline>Gasoline</gasoline>
+					<diesel>Diesel</diesel>
+					<coal>Coal</coal>
+					<fueloil1>FuelOil#1</fueloil1>
+					<fueloil2>FuelOil#2</fueloil2>
+					<propane>Propane</propane>
+					<otherfuel1>OtherFuel1</otherfuel1>
+					<otherfuel2>OtherFuel2</otherfuel2>
+					<water>Water</water>
+				</field>
+				<field description = "Year 1 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 2 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 3 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 4 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 5 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 6 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 7 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 8 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 9 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 10 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 11 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 12 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 13 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 14 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 15 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 16 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 17 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 18 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 19 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 20 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 21 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 22 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 23 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 24 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 25 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 26 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 27 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 28 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 29 Multiplier" type = "Double" minimum="" maximum=""/>
+				<field description = "Year 30 Multiplier" type = "Double" minimum="" maximum=""/>
+			</object>
+		</dataset>
+		<dataset setname = "Census Region 1 Commercial Electricity" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Electricity Price Indices</field>
+				<field description = "Resource" type = "String">Electricity</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">1.02</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">1.02</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.02</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.16</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.17</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.19</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.21</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.22</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.23</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.24</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.25</field>
+			</object>
+		</dataset>
+		<dataset setname = "Census Region 1 Commercial Natural Gas" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Natural Gas Price Indices</field>
+				<field description = "Resource" type = "String">NaturalGas</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.11</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.17</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.21</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.26</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.29</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.33</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.37</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.41</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.42</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.36</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.35</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.36</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.37</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.40</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.42</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.44</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.49</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.55</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.58</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.60</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.63</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.65</field>
+			</object>
+		</dataset>
+		<dataset setname = "Census Region 2 Commercial Electricity" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85" >
+				<field description = "Name" type = "String">Electricity Price Indices</field>
+				<field description = "Resource" type = "String">Electricity</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.11</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.11</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.16</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.16</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.17</field>
+			</object>
+		</dataset>
+		<dataset setname = "Census Region 2 Commercial Natural Gas" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Natural Gas Price Indices</field>
+				<field description = "Resource" type = "String">NaturalGas</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">0.98</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.18</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.11</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.18</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.20</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.22</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.24</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.26</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.29</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.32</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.34</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.35</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.37</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.40</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.43</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.46</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.48</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.51</field>
+			</object>
+		</dataset>
+		<dataset setname = "Census Region 3 Commercial Electricity" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Electricity Price Indices</field>
+				<field description = "Resource" type = "String">Electricity</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">1.02</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.11</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.16</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.16</field>
+			</object>
+		</dataset>
+		<dataset setname = "Census Region 3 Commercial Natural Gas" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Natural Gas Price Indices</field>
+				<field description = "Resource" type = "String">NaturalGas</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">0.98</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.16</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.17</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.19</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.21</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.23</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.25</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.28</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.30</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.32</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.34</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.35</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.36</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.37</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.40</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.42</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.45</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.47</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.49</field>
+			</object>
+		</dataset>
+		<dataset setname = "Census Region 4 Commercial Electricity" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Electricity Price Indices</field>
+				<field description = "Resource" type = "String">Electricity</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">0.99</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">0.98</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">0.98</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">0.97</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">0.96</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">0.95</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">0.95</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">0.94</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">0.94</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">0.94</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">0.94</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">0.94</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">0.94</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">0.94</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">0.94</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">0.95</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">0.96</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">0.96</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">0.97</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">0.97</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">0.99</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">0.99</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.00</field>
+			</object>
+		</dataset>
+		<dataset setname = "Census Region 4 Commercial Natural Gas" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Natural Gas Price Indices</field>
+				<field description = "Resource" type = "String">NaturalGas</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">0.97</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">0.99</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.14</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.17</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.20</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.22</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.24</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.27</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.34</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.39</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.44</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.47</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.47</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.49</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.51</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.53</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.56</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.58</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.60</field>
+			</object>
+		</dataset>
+		<dataset setname = "US Average Commercial Electricity" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Electricity Price Indices</field>
+				<field description = "Resource" type = "String">Electricity</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">1.02</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">1.02</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.02</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.03</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.04</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.06</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.09</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.11</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.11</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.12</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+			</object>
+		</dataset>
+		<dataset setname = "US Average Commercial Natural Gas" category = "Life Cycle Cost">
+			<object description = "LifeCycleCost:UsePriceEscalation" reference = "2014NISTIR85">
+				<field description = "Name" type = "String">Natural Gas Price Indices</field>
+				<field description = "Resource" type = "String">NaturalGas</field>
+				<field description = "Escalation Start Year" type = "Integer" minimum="1900" maximum="2100">2014</field>
+				<field description = "Escalation Start Month" type = "String">April</field>
+				<field description = "Year 1 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 2 Escalation" type = "Double" minimum="" maximum="">0.99</field>
+				<field description = "Year 3 Escalation" type = "Double" minimum="" maximum="">1.01</field>
+				<field description = "Year 4 Escalation" type = "Double" minimum="" maximum="">1.05</field>
+				<field description = "Year 5 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 6 Escalation" type = "Double" minimum="" maximum="">1.07</field>
+				<field description = "Year 7 Escalation" type = "Double" minimum="" maximum="">1.08</field>
+				<field description = "Year 8 Escalation" type = "Double" minimum="" maximum="">1.10</field>
+				<field description = "Year 9 Escalation" type = "Double" minimum="" maximum="">1.11</field>
+				<field description = "Year 10 Escalation" type = "Double" minimum="" maximum="">1.13</field>
+				<field description = "Year 11 Escalation" type = "Double" minimum="" maximum="">1.15</field>
+				<field description = "Year 12 Escalation" type = "Double" minimum="" maximum="">1.17</field>
+				<field description = "Year 13 Escalation" type = "Double" minimum="" maximum="">1.18</field>
+				<field description = "Year 14 Escalation" type = "Double" minimum="" maximum="">1.19</field>
+				<field description = "Year 15 Escalation" type = "Double" minimum="" maximum="">1.22</field>
+				<field description = "Year 16 Escalation" type = "Double" minimum="" maximum="">1.25</field>
+				<field description = "Year 17 Escalation" type = "Double" minimum="" maximum="">1.27</field>
+				<field description = "Year 18 Escalation" type = "Double" minimum="" maximum="">1.27</field>
+				<field description = "Year 19 Escalation" type = "Double" minimum="" maximum="">1.29</field>
+				<field description = "Year 20 Escalation" type = "Double" minimum="" maximum="">1.31</field>
+				<field description = "Year 21 Escalation" type = "Double" minimum="" maximum="">1.34</field>
+				<field description = "Year 22 Escalation" type = "Double" minimum="" maximum="">1.37</field>
+				<field description = "Year 23 Escalation" type = "Double" minimum="" maximum="">1.39</field>
+				<field description = "Year 24 Escalation" type = "Double" minimum="" maximum="">1.40</field>
+				<field description = "Year 25 Escalation" type = "Double" minimum="" maximum="">1.43</field>
+				<field description = "Year 26 Escalation" type = "Double" minimum="" maximum="">1.46</field>
+				<field description = "Year 27 Escalation" type = "Double" minimum="" maximum="">1.49</field>
+				<field description = "Year 28 Escalation" type = "Double" minimum="" maximum="">1.51</field>
+				<field description = "Year 29 Escalation" type = "Double" minimum="" maximum="">1.54</field>
+				<field description = "Year 30 Escalation" type = "Double" minimum="" maximum="">1.56</field>
+			</object>
+		</dataset>
+	</lifecyclecost>
+</economic>
