@@ -52,21 +52,43 @@ public class DesignBuilderThermalZone implements ThermalZone{
 	originalZoneName = zoneName;
 	String[] zoneCharacters = originalZoneName.split(seperator);
 	//ventilation is in the same system with heating and cooling
-	if(zoneCharacters.length == 4){
-		block = zoneCharacters[blockIndex];
-		floor = null;
-		zoneType = zoneCharacters[zoneTypeIndex];
-		zoneIdentification = zoneCharacters[zoneIdentificationIndex];
-		hvac = zoneCharacters[zoneHVACOrVentIndex];
-	}else if(zoneCharacters.length ==5){
-		block = zoneCharacters[blockIndex];
-		floor = null;
-		zoneType = zoneCharacters[zoneTypeIndex];
-		zoneIdentification = zoneCharacters[zoneIdentificationIndex];
-		vent = zoneCharacters[zoneHVACOrVentIndex];
-		hvac = zoneCharacters[zoneHVACIndex];
-	}else{
-	    //plenum zone condition
+	if (zoneCharacters.length == 1) {
+	    block = zoneCharacters[blockIndex];
+	    floor = null;
+	    zoneType = zoneCharacters[zoneTypeIndex];
+	    zoneIdentification = null;
+	    hvac = null;
+	    vent = null;
+	} else if (zoneCharacters.length == 2) {
+	    block = zoneCharacters[blockIndex];
+	    floor = null;
+	    zoneType = zoneCharacters[zoneTypeIndex];
+	    zoneIdentification = null;
+	    hvac = null;
+	    vent = null;	    
+	} else if (zoneCharacters.length == 3) {
+	   block = zoneCharacters[blockIndex];
+	    floor = null;
+	    zoneType = zoneCharacters[zoneTypeIndex];
+	    zoneIdentification = zoneCharacters[zoneIdentificationIndex];
+	    hvac = null;
+	    vent = null;	    
+	} else if (zoneCharacters.length == 4) {
+	    block = zoneCharacters[blockIndex];
+	    floor = null;
+	    zoneType = zoneCharacters[zoneTypeIndex];
+	    zoneIdentification = zoneCharacters[zoneIdentificationIndex];
+	    hvac = zoneCharacters[zoneHVACOrVentIndex];
+	    vent = null;	    
+	} else if (zoneCharacters.length == 5) {
+	    block = zoneCharacters[blockIndex];
+	    floor = null;
+	    zoneType = zoneCharacters[zoneTypeIndex];
+	    zoneIdentification = zoneCharacters[zoneIdentificationIndex];
+	    vent = zoneCharacters[zoneHVACOrVentIndex];
+	    hvac = zoneCharacters[zoneHVACIndex];
+	} else {
+	    // plenum zone condition
 	    block = null;
 	    zoneType = null;
 	    floor = null;
