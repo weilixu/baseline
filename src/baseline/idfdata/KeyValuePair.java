@@ -1,4 +1,4 @@
-package baseline.generator;
+package baseline.idfdata;
 /**
  * This class stores one key and value pair under an EnergyPlus object
  * key indicates the variable's name

@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import baseline.generator.EplusObject;
-import baseline.generator.KeyValuePair;
 import baseline.hvac.HVACSystemImplUtil;
-import baseline.idfdata.EnergyPlusBuilding;
-import baseline.idfdata.ThermalZone;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.KeyValuePair;
+import baseline.idfdata.building.EnergyPlusBuilding;
+import baseline.idfdata.thermalzone.ThermalZone;
 
 /**
  * The class creates the HVAC System 7. It provides the basic linkages among

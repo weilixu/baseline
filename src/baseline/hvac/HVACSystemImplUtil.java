@@ -2,9 +2,9 @@ package baseline.hvac;
 
 import java.util.ArrayList;
 
-import baseline.generator.EplusObject;
-import baseline.generator.KeyValuePair;
 import baseline.htmlparser.SizingHTMLParser;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.KeyValuePair;
 
 /**
  * This class helps to establish, modify, or implement control logic which are

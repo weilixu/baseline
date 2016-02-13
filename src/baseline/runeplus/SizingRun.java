@@ -51,8 +51,6 @@ public class SizingRun {
     public void setEplusFile(File idf) {
 	idfFile = idf;
 	folder = idfFile.getParentFile();
-	System.out.println(idfFile.getAbsolutePath());
-	System.out.println(folder.getAbsolutePath());
     }
 
     public void setBaselineSizing() {
@@ -76,7 +74,6 @@ public class SizingRun {
 	File eplusBatFile = createBatchFile();
 	String[] commandline = { eplusBatFile.getAbsolutePath(), pathToIDF,
 		weather};
-	
 	 System.out.println(Arrays.toString(commandline));
 
 	try {

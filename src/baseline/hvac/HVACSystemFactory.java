@@ -4,7 +4,7 @@ import baseline.hvac.system3.HVACSystem3Factory;
 import baseline.hvac.system5.HVACSystem5Factory;
 import baseline.hvac.system7.HVACSystem7Factory;
 import baseline.hvac.system8.HVACSystem8Factory;
-import baseline.idfdata.EnergyPlusBuilding;
+import baseline.idfdata.building.EnergyPlusBuilding;
 
 public class HVACSystemFactory {
     private String systemType;

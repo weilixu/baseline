@@ -1,4 +1,4 @@
-package baseline.generator;
+package baseline.idfdata;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;

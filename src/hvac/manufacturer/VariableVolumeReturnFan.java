@@ -1,8 +1,8 @@
 package hvac.manufacturer;
 
 
-import baseline.generator.EplusObject;
-import baseline.generator.KeyValuePair;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.KeyValuePair;
 
 public class VariableVolumeReturnFan {
     private EplusObject object;

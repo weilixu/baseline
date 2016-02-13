@@ -1,6 +1,6 @@
-package baseline.idfdata;
+package baseline.idfdata.thermalzone;
 
-import baseline.generator.EplusObject;
+import baseline.idfdata.EplusObject;
 
 /**
  * a generic thermal zone interface that represents different types of thermal zone representations defined in EnergyPlus

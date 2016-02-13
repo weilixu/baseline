@@ -1,6 +1,6 @@
 package baseline.construction.opaque;
 
-import baseline.idfdata.BuildingConstruction;
+import baseline.idfdata.building.BuildingConstruction;
 
 public class BaselineEnvelope {
     private BuildingConstruction building;

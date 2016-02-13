@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import baseline.generator.IdfReader;
-import baseline.generator.IdfReader.ValueNode;
 import baseline.htmlparser.SizingHTMLParser;
-import baseline.idfdata.EnergyPlusBuilding;
+import baseline.idfdata.IdfReader;
+import baseline.idfdata.IdfReader.ValueNode;
+import baseline.idfdata.building.EnergyPlusBuilding;
 
 public class ReturnFanDetector implements Detector{
     

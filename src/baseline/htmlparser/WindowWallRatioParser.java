@@ -6,11 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import baseline.generator.IdfReader;
-import baseline.generator.IdfReader.ValueNode;
 import baseline.geometry.Coordinate3D;
 import baseline.geometry.Wall;
 import baseline.geometry.Window;
+import baseline.idfdata.IdfReader;
+import baseline.idfdata.IdfReader.ValueNode;
 
 /**
  * Implement later

@@ -5,9 +5,9 @@ import hvac.manufacturer.Manufacturer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import baseline.generator.EplusObject;
 import baseline.hvac.HVACSystemImplUtil;
-import baseline.idfdata.EnergyPlusBuilding;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.building.EnergyPlusBuilding;
 
 
 /**

@@ -1,4 +1,4 @@
-package baseline.idfdata;
+package baseline.idfdata.building;
 
 public interface BuildingLight {
     /**

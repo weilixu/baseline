@@ -1,6 +1,6 @@
 package baseline.exception.detector;
 
-import baseline.idfdata.EnergyPlusBuilding;
+import baseline.idfdata.building.EnergyPlusBuilding;
 
 public interface Detector {
     

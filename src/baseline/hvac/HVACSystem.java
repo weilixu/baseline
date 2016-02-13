@@ -3,7 +3,7 @@ package baseline.hvac;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import baseline.generator.EplusObject;
+import baseline.idfdata.EplusObject;
 
 /**
  * This interface represents an HVAC System in the EnergyPlus

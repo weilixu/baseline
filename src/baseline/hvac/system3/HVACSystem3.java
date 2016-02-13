@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import baseline.generator.EplusObject;
 import baseline.hvac.HVACSystemImplUtil;
-import baseline.idfdata.EnergyPlusBuilding;
-import baseline.idfdata.ThermalZone;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.building.EnergyPlusBuilding;
+import baseline.idfdata.thermalzone.ThermalZone;
 
 public class HVACSystem3 implements SystemType3 {
     // recording all the required data for HVAC system type 3

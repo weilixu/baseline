@@ -1,6 +1,6 @@
 package baseline.lighting;
 
-import baseline.idfdata.BuildingLight;
+import baseline.idfdata.building.BuildingLight;
 
 /**
  * This class modifies the lighting power density

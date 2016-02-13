@@ -3,9 +3,9 @@ package baseline.hvac.system3;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import baseline.generator.EplusObject;
 import baseline.hvac.SystemParser;
-import baseline.idfdata.EnergyPlusBuilding;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.building.EnergyPlusBuilding;
 /**
  * This class represent HVAC system type 3 manufacturer
  * The class behaviors includes

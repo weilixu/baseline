@@ -1,4 +1,4 @@
-package baseline.idfdata;
+package baseline.idfdata.building;
 
 import baseline.construction.opaque.OpaqueEnvelopeParser;
 import baseline.util.ClimateZone;

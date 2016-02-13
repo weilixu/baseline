@@ -3,9 +3,9 @@ package baseline.hvac.system8;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import baseline.generator.EplusObject;
 import baseline.hvac.SystemParser;
-import baseline.idfdata.EnergyPlusBuilding;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.building.EnergyPlusBuilding;
 
 public class HVACSystem8Factory {
     //extract the template system

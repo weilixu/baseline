@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import baseline.generator.EplusObject;
-import baseline.generator.IdfReader;
-import baseline.idfdata.EnergyPlusBuilding;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.IdfReader;
+import baseline.idfdata.building.EnergyPlusBuilding;
 import baseline.util.BaselineUtils;
 import baseline.util.BuildingType;
 

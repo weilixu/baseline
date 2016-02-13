@@ -3,8 +3,8 @@ package baseline.hvac.system7;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import baseline.generator.EplusObject;
-import baseline.idfdata.EnergyPlusBuilding;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.building.EnergyPlusBuilding;
 
 /**
  * decorator class, decorates the system with purchased heat system G3.1.1.3.1:

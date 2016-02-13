@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import baseline.hvac.SystemParser;
-import baseline.idfdata.EnergyPlusBuilding;
-import baseline.generator.EplusObject;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.building.EnergyPlusBuilding;
 
 /**
  * This class represents HVAC System type 5 manufacturer

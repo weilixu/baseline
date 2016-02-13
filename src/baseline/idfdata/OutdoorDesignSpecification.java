@@ -1,4 +1,4 @@
-package baseline.generator;
+package baseline.idfdata;
 
 /**
  * inheritant from EplusObject, represents DesignSpecification:OutdoorAir object

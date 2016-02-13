@@ -1,7 +1,7 @@
 package hvac.manufacturer;
 
-import baseline.generator.EplusObject;
-import baseline.generator.KeyValuePair;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.KeyValuePair;
 
 public final class Manufacturer {
     private static int branchComponent1ObjectTypeIndex = 3;

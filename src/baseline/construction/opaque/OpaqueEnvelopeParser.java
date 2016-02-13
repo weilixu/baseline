@@ -9,8 +9,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 
-import baseline.generator.EplusObject;
-import baseline.generator.KeyValuePair;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.KeyValuePair;
 import baseline.util.BaselineUtils;
 import baseline.util.ClimateZone;
 

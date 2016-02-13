@@ -1,4 +1,4 @@
-package baseline.generator;
+package baseline.idfdata;
 
 import java.util.ArrayList;
 

@@ -8,10 +8,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import baseline.idfdata.AssetScoreThermalZone;
-import baseline.idfdata.DesignBuilderThermalZone;
-import baseline.idfdata.EnergyPlusBuilding;
-import baseline.idfdata.ThermalZone;
+import baseline.idfdata.building.EnergyPlusBuilding;
+import baseline.idfdata.thermalzone.AssetScoreThermalZone;
+import baseline.idfdata.thermalzone.DesignBuilderThermalZone;
+import baseline.idfdata.thermalzone.ThermalZone;
 
 /**
  * This class extracts the sizing results. This includes: Window-wall ratio,

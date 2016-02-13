@@ -1,4 +1,4 @@
-package baseline.idfdata;
+package baseline.idfdata.building;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,11 +10,13 @@ import java.util.Set;
 import baseline.construction.opaque.OpaqueEnvelopeParser;
 import baseline.exception.detector.Detector;
 import baseline.exception.detector.ReturnFanDetector;
-import baseline.generator.EplusObject;
-import baseline.generator.IdfReader;
-import baseline.generator.IdfReader.ValueNode;
-import baseline.generator.OutdoorDesignSpecification;
 import baseline.htmlparser.SizingHTMLParser;
+import baseline.idfdata.BaselineInfo;
+import baseline.idfdata.EplusObject;
+import baseline.idfdata.IdfReader;
+import baseline.idfdata.OutdoorDesignSpecification;
+import baseline.idfdata.IdfReader.ValueNode;
+import baseline.idfdata.thermalzone.ThermalZone;
 import baseline.util.ClimateZone;
 
 public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
