@@ -49,6 +49,23 @@ public class SystemParser {
 	systemBuilder();
     }
     
+    public SystemParser(String systemType, String file){
+	builder = new SAXBuilder();
+	system = new File(BaselineUtils.getAbsolutionDir()+file);
+	
+	this.systemType = systemType;
+	
+	//read the file
+	try{
+	    document = (Document) builder.build(system);
+	}catch(Exception e){
+	    e.printStackTrace();
+	}
+	
+	objects = new ArrayList<EplusObject>();
+	systemBuilder();
+    }
+    
     public ArrayList<EplusObject> getSystem(){
 	return objects;
     }

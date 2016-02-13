@@ -276,7 +276,6 @@ SetpointManager:SingleZone:OneStageHeating
 SetpointManager:SingleZone:Reheat
 SetpointManager:Warmest
 SetpointManager:WarmestTemperatureFlow
-ScheduleTypeLimits
 Sizing:Parameters
 Sizing:Plant
 Sizing:System

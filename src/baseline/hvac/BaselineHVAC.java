@@ -114,7 +114,6 @@ public class BaselineHVAC {
 		systemType = "System Type 3";
 		factory = new HVACSystemFactory("System Type 3", building);
 		System.out.println("We select System Type 3");
-
 		system = factory.createSystem();
 	    } else {
 		systemType = "System Type 5";

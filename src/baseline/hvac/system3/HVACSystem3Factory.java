@@ -46,7 +46,7 @@ public class HVACSystem3Factory {
     
     private void processSystem(){
 	if(building.getBaselineModel().getObjectList("DistrictHeating")!=null){
-	    
+	    systemType3 = new DistrictHeatHVACSystem3(systemType3, building);
 	}
     }
     

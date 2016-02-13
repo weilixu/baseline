@@ -19,7 +19,7 @@ public class DesignBuilderThermalZone implements ThermalZone{
     private final static int zoneHVACIndex = 4;
     //private final static int zoneHVACIndex = 3;
     
-    private final static String seperator = "%";
+    private final static String seperator = ":";
     
     private String block;
     private String zoneType;
@@ -56,7 +56,7 @@ public class DesignBuilderThermalZone implements ThermalZone{
 	if (zoneCharacters.length == 1) {
 	    block = zoneCharacters[blockIndex];
 	    floor = null;
-	    zoneType = zoneCharacters[zoneTypeIndex];
+	    zoneType = null;
 	    zoneIdentification = null;
 	    hvac = null;
 	    vent = null;

@@ -88,7 +88,7 @@ public class SizingRun {
 
 	    errStr.join();
 	    outStr.join();
-	    //eplusBatFile.delete();
+	    eplusBatFile.delete();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}

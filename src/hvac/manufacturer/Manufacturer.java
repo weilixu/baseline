@@ -1,5 +1,7 @@
 package hvac.manufacturer;
 
+import java.util.ArrayList;
+
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
 
@@ -15,7 +17,12 @@ public final class Manufacturer {
     private static int branchComponent2OutletNodeIndex = 11;
     private static int branchComponent2ControlTypeIndex = 12;
     
-    
+    /**
+     * when receive manufacturer an object inquire
+     * @param object
+     * @param hvacName
+     * @return
+     */
     public static EplusObject generateObject(String object, String hvacName){
 	if(object.equals("Return Fan")){
 	    VariableVolumeReturnFan fan = new VariableVolumeReturnFan(hvacName,"Fan:VariableVolume","Supply Side System");
@@ -33,6 +40,19 @@ public final class Manufacturer {
 	KeyValuePair kvp = eo.getKeyValuePair(branchComponent2InletNodeIndex);
 	kvp.setValue(hvacName + " Return Fan Outlet");
 	return eo;
+    }
+    
+    /**
+     * when receive manufacturing a entire system inquiry
+     * @param system
+     * @return
+     */
+    public static ArrayList<EplusObject> generateSystem(String system){
+	if(system.equals("District Heat")){
+	    DistrictHeatingPlant plant = new DistrictHeatingPlant();
+	    return plant.getObject();
+	}
+	return null;
     }
 
 }
