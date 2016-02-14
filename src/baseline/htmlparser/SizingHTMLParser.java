@@ -111,8 +111,6 @@ public final class SizingHTMLParser {
 	}
     }
     
-    
-    
     /**
      * Get the ratio of supply fan power in the total fan power. This method is only useful when
      * the system has supply fan and return fan / supply fan and exhaust fan only.
@@ -142,7 +140,7 @@ public final class SizingHTMLParser {
 		//System.out.println(supplyFanPower);
 	    }
 	}
-	System.out.println(supplyFanPower + " " + anotherFanPower);
+	//System.out.println("Supply Fan?" + supplyFanPower + " " + anotherFanPower);
 
 	return supplyFanPower / (supplyFanPower + anotherFanPower);
     }

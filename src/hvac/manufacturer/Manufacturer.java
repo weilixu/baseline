@@ -51,6 +51,9 @@ public final class Manufacturer {
 	if(system.equals("District Heat")){
 	    DistrictHeatingPlant plant = new DistrictHeatingPlant();
 	    return plant.getObject();
+	}else if(system.equals("District Cool")){
+	    DistrictCoolingPlant plant = new DistrictCoolingPlant();
+	    return plant.getObject();
 	}
 	return null;
     }

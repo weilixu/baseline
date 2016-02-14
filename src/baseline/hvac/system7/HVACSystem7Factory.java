@@ -52,7 +52,7 @@ public class HVACSystem7Factory {
     
     private void processSystem(){
 	//judge if it is purchased heat or not
-	if(building.getBaselineModel().getObjectList("DistrictHeating")!=null){
+	if(building.isDistrictHeat()){
 	    
 	}else if(building.hasReturnFan()){
 	    systemType7 = new ReturnFanHVACSystem7(systemType7,building);

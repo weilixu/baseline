@@ -74,7 +74,7 @@ public class SizingRun {
 	File eplusBatFile = createBatchFile();
 	String[] commandline = { eplusBatFile.getAbsolutePath(), pathToIDF,
 		weather};
-	 System.out.println(Arrays.toString(commandline));
+	//System.out.println(Arrays.toString(commandline));
 
 	try {
 	    Process p = Runtime.getRuntime().exec(commandline, null, folder);

@@ -47,7 +47,7 @@ public class HVACSystem6Factory {
     }
     
     private void processSystem(){
-	if(building.getBaselineModel().getObjectList("DistrictHeating")!= null){
+	if(building.isDistrictHeat()){
 	    
 	}else if(building.hasReturnFan()){
 	    

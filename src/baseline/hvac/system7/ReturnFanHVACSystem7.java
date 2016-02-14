@@ -111,5 +111,26 @@ public class ReturnFanHVACSystem7 implements SystemType7 {
 	//System.out.println("Ratio! " + building.getSupplyReturnFanRatio());
 	HVACSystemImplUtil.updatedFanPowerforSystem5To8TwoFans(supplyFan,
 		returnFan, maxAirFlow, returnFanFlow, building.getSupplyReturnFanRatio());
+	
+	double supplyFanPower = 0.0;
+	double returnFanPower = 0.0;
+	
+	for (int i = 0; i < supplyFan.getSize(); i++) {
+	    if (supplyFan.getKeyValuePair(i).getKey().equals("Pressure Rise")) {
+		double supplyPressureRise = Double.parseDouble(supplyFan
+			.getKeyValuePair(i).getValue());
+		double returnPressureRise = Double.parseDouble(returnFan
+			.getKeyValuePair(i).getValue());		
+		supplyFanPower += (supplyPressureRise / 0.6 * building
+			.getFloorMaximumFlowRate(floor));
+		returnFanPower += (returnPressureRise / 0.6 * building
+			.getFloorMaximumFlowRate(floor));
+	    }
+	}
+	
+	if(building.getInfoObject()!=null){
+		building.getInfoObject().setFanPower(supplyFanPower);	  
+		building.getInfoObject().setReturnFanPower(returnFanPower);	    
+	}
     }
 }

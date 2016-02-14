@@ -81,6 +81,7 @@ public class HVACSystem5 implements SystemType5{
 	Iterator<String> floorMapIterator = floorMapSet.iterator();
 	
 	int roomCounter = 0;
+	int floorCounter = 0;
 	while(floorMapIterator.hasNext()){
 	    zoneSplitterList.clear();
 	    zoneMixerList.clear();
@@ -95,7 +96,12 @@ public class HVACSystem5 implements SystemType5{
 		roomCounter++;
 	    }
 	  //then process the supply side system and their connections to plant
+	    floorCounter ++;
 	    supplySideSystem.addAll(processSupplyTemp(floor, supplySideSystemTemplate));
+	}
+	// number of similar systems
+	if (building.getInfoObject() != null) {
+	    building.getInfoObject().setNumOfSystem(floorCounter);
 	}
 	
 	plantSystem.addAll(processPlantTemp(plantSystemTemplate));
@@ -128,10 +134,14 @@ public class HVACSystem5 implements SystemType5{
 	// determine the economizers.
 	double economizer = building.getClimateZone()
 		.getEconomizerShutoffLimit();
+	double totalFanPower = 0;
 	for (EplusObject eo : supplySystem) {
 	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {
 		if (economizer > -1) {
 		    HVACSystemImplUtil.economizer(eo, economizer);
+		    if(building.getInfoObject()!=null){
+			building.getInfoObject().setHasEconomizer(economizer);
+		    }
 		}
 	    } else if (eo.getObjectName()
 		    .equalsIgnoreCase("Fan:VariableVolume")) {
@@ -139,7 +149,18 @@ public class HVACSystem5 implements SystemType5{
 		String floor = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		HVACSystemImplUtil.updateFanPowerforSystem5To8(eo,
 			building.getFloorMaximumFlowRate(floor));
+		for (int i = 0; i < eo.getSize(); i++) {
+		    if (eo.getKeyValuePair(i).getKey().equals("Pressure Rise")) {
+			double pressureRise = Double.parseDouble(eo
+				.getKeyValuePair(i).getValue());
+			totalFanPower += (pressureRise / 0.6 * building
+				.getFloorMaximumFlowRate(floor));
+		    }
+		}
 	    }
+	}
+	if(building.getInfoObject()!=null){
+		building.getInfoObject().setFanPower(totalFanPower);	    
 	}
     }
     

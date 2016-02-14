@@ -85,6 +85,27 @@ public class Generator {
 	//
 	// debug purpose
 	//
+	IdfReader temp = baselineModel.cloneIdf();
+	building = new EnergyPlusBuilding(bldgType,cZone,temp, null);
+	SizingHTMLParser.setTool(this.tool);
+	SizingHTMLParser.processOutputs(htmlOutput);
+	SizingHTMLParser.extractBldgBasicInfo(building);
+	SizingHTMLParser.extractThermalZones(building);
+	building.processModelInfo();
+	envelopeProcessor = new BaselineEnvelope(building);
+	lightGenerator = new LightingGenerator(building);
+	// change the envelope materials and lighting power densities
+	processOpaqueEnvelope();
+	lightGenerator.processBuildingTypeLPD();
+	// modify lighting and WWR Skylights
+	processWindowToWallRatio();
+	try{
+	    sizingRun();
+	}catch(IOException e){
+	    e.printStackTrace();
+	}
+	System.out.println("Finish second round sizing");
+	
 	building = new EnergyPlusBuilding(bldgType, cZone, baselineModel, info);
 	// reprocess the building abstract information
 	SizingHTMLParser.setTool(this.tool);
@@ -92,6 +113,7 @@ public class Generator {
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);
 	building.processModelInfo();
+	
 	envelopeProcessor = new BaselineEnvelope(building);
 	lightGenerator = new LightingGenerator(building);
 	// change the envelope materials and lighting power densities
@@ -183,15 +205,15 @@ public class Generator {
 
     }
 
-//    private void sizingRun() throws IOException {
-//	building.generateEnergyPlusModel(energyplusFile.getParentFile()
-//		.getAbsolutePath(), "Baseline_0","0");
-//	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
-//		.getAbsolutePath() + "\\Baseline_0.idf"));
-//	eplusSizing.setBaselineSizing();
-//	htmlOutput = eplusSizing.runEnergyPlus();
-//	System.out.println(htmlOutput.getAbsolutePath());
-//    }
+    private void sizingRun() throws IOException {
+	building.generateEnergyPlusModel(energyplusFile.getParentFile()
+		.getAbsolutePath(), "Baseline_0","0");
+	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
+		.getAbsolutePath() + "\\Baseline_0.idf"));
+	eplusSizing.setBaselineSizing();
+	htmlOutput = eplusSizing.runEnergyPlus();
+	//System.out.println(htmlOutput.getAbsolutePath());
+    }
 
     // simple write out method, needs to be update later
     private void firstSizingRun() throws IOException {
@@ -200,7 +222,7 @@ public class Generator {
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
 		.getAbsolutePath() + "\\Baseline_0.idf"));
 	htmlOutput = eplusSizing.runEnergyPlus();
-	System.out.println(htmlOutput.getAbsolutePath());
+	//System.out.println(htmlOutput.getAbsolutePath());
     }
 
     private void baselineSimulation() throws IOException {
@@ -230,6 +252,8 @@ public class Generator {
 	}else if(building.getInfoObject().getSystemType().equals("System Type 8")){
 	    building.getInfoObject().setChwPumpFlow(SizingHTMLParser.getPumpWaterFlowRate("CHW"));
 	    building.getInfoObject().setCwPumpFlow(SizingHTMLParser.getPumpWaterFlowRate("CNDW"));	    
+	}else if(building.getInfoObject().getSystemType().equals("System Type 5")){
+	    building.getInfoObject().setHwPumpFlow(SizingHTMLParser.getPumpWaterFlowRate("HW"));
 	}
     }
 }

@@ -93,7 +93,7 @@ public class BaselineHVAC {
 	String systemType = null;
 	if (bldgType.toString().equalsIgnoreCase("NONRESIDENTIAL")) {
 	    // second exam the floor size and area
-	    System.out.println(floorNumber + " " + floorSize);
+	    System.out.println("We identified floor number: " + floorNumber + " and total floor size: " + floorSize);
 	    // haven't implement the heating resource to distinguish the
 	    // two different types of systems
 	    // factory = new HVACSystemFactory("System Type 7", building);

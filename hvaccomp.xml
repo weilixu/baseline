@@ -16,7 +16,23 @@
 			<field description = "Rated Outlet Water Temperature" type = "Double">71.1</field>
 			<field description = "Rated Outlet Air Temperature" type = "Double">32.2</field>
 			<field description = "Rated Ratio for Air and Water Convection" type = "Double">0.5</field>
-		</object>	
+		</object>
+		<object description = "Controller:WaterCoil" reference = "Supply Side System">
+			<field description = "Name" type = "String">Floor% Heating Coil Controller</field>
+			<field description = "Control Variable" type = "String">Temperature</field>
+			<field description = "Action" type = "String">Normal</field>
+			<field description = "Actuator Variable" type = "String">Flow</field>
+			<field description = "Sensor Node Name" type = "String">Floor% Heating Coil Outlet</field>
+			<field description = "Actuator Node Name" type = "String">Floor% Heating Coil HW Inlet</field>
+			<field description = "Controller Convergence Tolerance" type = "Double or String">autosize</field>
+			<field description = "Maximum Actuated Flow" type = "Double or String">autosize</field>
+			<field description = "Minimum Actuated Flow" type = "Double">0.0</field>	
+		</object>		
+		<object description = "AirLoopHVAC:ControllerList" reference = "Supply Side System">
+			<field description = "Name" type = "String">Floor% Controllers</field>
+			<field description = "Controller 1 Object Type" type = "String">Controller:WaterCoil</field>
+			<field description = "Controller 1 Name" type = "String">Floor% Heating Coil Controller</field>	
+		</object>
 		<object description = "Branch" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Heating Coil HW Branch</field>
 			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
@@ -271,4 +287,292 @@
 			<field description = "Outlet Node Name" type = "String">Hot Water Loop HW Demand Outlet</field>
 		</object>
 	</dataset>
+	<dataset setname="DistrictCool" category="8.3">
+		<object description = "Coil:Cooling:Water" reference = "Supply Side System">
+			<field description = "Name" type = "String">Floor% Cooling Coil</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
+			<field description = "Design Water Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Design Air Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Design Inlet Water Temperature" type = "Double or String">autosize</field>
+			<field description = "Design Inlet Air Temperature" type = "Double or String">autosize</field>
+			<field description = "Design Outlet Air Temperature" type = "Double or String">autosize</field>
+			<field description = "Design Inlet Air Humidity Ratio" type = "Double or String">autosize</field>
+			<field description = "Design Outlet Air Humidity Ratio" type = "Double or String">autosize</field>
+			<field description = "Water Inlet Node Name" type = "String">Floor% Cooling Coil CHW Inlet</field>
+			<field description = "Water Outlet Node Name" type = "String">Floor% Cooling Coil CHW Outlet</field>
+			<field description = "Air Inlet Node Name" type = "String">Floor% Supply Fan Outlet</field>
+			<field description = "Air Outlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
+			<field description = "Type of Analysis" type = "String">SimpleAnalysis</field>
+			<field description = "Condensate Collection Water Storage Tank Name" type = "String"/>
+		</object>
+		<object description = "Controller:WaterCoil" reference = "Supply Side System">
+			<field description = "Name" type = "String">Floor% Cooling Coil Controller</field>
+			<field description = "Control Variable" type = "String">Temperature</field>
+			<field description = "Action" type = "String">Normal</field>
+			<field description = "Actuator Variable" type = "String">Flow</field>
+			<field description = "Sensor Node Name" type = "String">Floor% Cooling Coil Outlet</field>
+			<field description = "Actuator Node Name" type = "String">Floor% Cooling Coil CHW Inlet</field>
+			<field description = "Controller Convergence Tolerance" type = "Double or String">autosize</field>
+			<field description = "Maximum Actuated Flow" type = "Double or String">autosize</field>
+			<field description = "Minimum Actuated Flow" type = "Double">0.0</field>	
+		</object>		
+		<object description = "AirLoopHVAC:ControllerList" reference = "Supply Side System">
+			<field description = "Name" type = "String">Floor% Controllers</field>
+			<field description = "Controller 1 Object Type" type = "String">Controller:WaterCoil</field>
+			<field description = "Controller 1 Name" type = "String">Floor% Cooling Coil Controller</field>	
+		</object>
+		<object description = "Branch" reference = "Supply Side System">
+			<field description = "Name" type = "String">Floor% Cooling Coil CHW Branch</field>
+			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Pressure Drop Curve Name" type = "String"/>
+			<field description = "Component 1 Object Type" type = "String">Coil:Cooling:Water</field>
+			<field description = "Component 1 Name" type = "String">Floor% Cooling Coil</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">Floor% Cooling Coil CHW Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Floor% Cooling Coil CHW Outlet</field>
+			<field description = "Component 1 Branch Control Type" type = "String">Active</field>
+		</object>	
+		<object description = "Sizing:Plant" reference = "Plant">
+			<field description = "Plant or Condenser Loop Name" type = "String">Chilled Water Loop</field>
+			<field description = "Loop Type" type = "String">Cooling</field>
+			<field description = "Design Loop Exit Temperature" type = "Double">6.7</field>
+			<field description = "Loop Design Temperature Difference" type = "Double">6.3</field>
+		</object>
+		<object description = "HeaderedPumps:ConstantSpeed" reference="Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Pump</field>
+			<field description = "Inlet Node Name" type = "String">Chilled Water Loop CHW Supply Inlet</field>
+			<field description = "Outlet Node Name" type = "String">Chilled Water Loop CHW Pump Outlet</field>
+			<field description = "Total Rated Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Number of Pumps in Bank" type = "Integer">1</field>
+			<field description = "Flow Sequencing Control Scheme" type = "String">Sequential</field>
+			<field description = "Rated Pump Head" type = "Double">211302</field>
+			<field description = "Rated Power Consumption" type = "Double or String">autosize</field>
+			<field description = "Motor Efficiency" type = "Double">0.9</field>
+			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type="Double">0.0</field>
+			<field description = "Pump Control Type" type = "String">Intermittent</field>
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>
+		</object>	
+		<object description = "HeaderedPumps:VariableSpeed" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Pump</field>
+			<field description = "Inlet Node Name" type = "String">Chilled Water Loop CHW Supply Inlet</field>
+			<field description = "Outlet Node Name" type = "String">Chilled Water Loop CHW Pump Outlet</field>
+			<field description = "Total Rated Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Number of Pumps in Bank" type = "Integer">1</field>
+			<field description = "Flow Sequencing Control Scheme" type = "String">Sequential</field>
+			<field description = "Rated Pump Head" type = "Double">211302</field>
+			<field description = "Rated Power Consumption" type = "Double or String">autosize</field>
+			<field description = "Motor Efficiency" type = "Double">0.9</field>
+			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
+			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
+			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
+			<field description = "Pump Control Type" type = "String">Intermittent</field>
+			<field description = "Pump Flow Rate Schedule Name" type = "String">On_BAS</field>			
+		</object>
+		<object description = "DistrictCooling" reference = "Plant">
+			<field description = "Name" type = "String">District Cooling</field>
+			<field description = "Chilled Water Inlet Node Name" type = "String">District Cooling CHW Inlet</field>
+			<field description = "Chilled Water Outlet Node Name" type = "Double or String">District Cooling CHW Outlet</field>
+			<field description = "Nominal Capacity" type = "Double">1000000</field>
+			<field description = "Capacity Fraction Schedule Name" type = "String">On_BAS</field>
+		</object>
+		<object description = "PlantLoop" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop</field>
+			<field description = "Fluid Type" type = "String">Water</field>
+			<field description = "User Defined Fluid Type" type = "String"/>
+			<field description = "Plant Equipment Operation Scheme Name" type = "String">Chilled Water Loop Operation</field>
+			<field description = "Loop Temperature Setpoint Node Name" type = "String">Chilled Water Loop CHW Supply Outlet</field>
+			<field description = "Maximum Loop Temperature" type = "Double">98</field>
+			<field description = "Minimum Loop Temperature" type = "Double">1</field>
+			<field description = "Maximum Loop Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Minimum Loop Flow Rate" type = "Double or String">0.0</field>
+			<field description = "Plant Loop Volume" type = "Double or String">autosize</field>
+			<field description = "Plant Side Inlet Node Name" type = "String">Chilled Water Loop CHW Supply Inlet</field>
+			<field description = "Plant Side Outlet Node Name" type = "String">Chilled Water Loop CHW Supply Outlet</field>
+			<field description = "Plant Side Branch List Name" type = "String">Chilled Water Loop CHW Supply Side Branches</field>
+			<field description = "Plant Side Connector List Name" type = "String">Chilled Water Loop CHW Supply Side Connectors</field>
+			<field description = "Demand Side Inlet Node Name" type = "String">Chilled Water Loop CHW Demand Inlet</field>
+			<field description = "Demand Side Outlet Node Name" type = "String">Chilled Water Loop CHW Demand Outlet</field>
+			<field description = "Demand Side Branch List Name" type = "String">Chilled Water Loop CHW Demand Side Branches</field>
+			<field description = "Demand Side Connector List Name" type = "String">Chilled Water Loop CHW Demand Side Connectors</field>
+			<field description = "Load Distribution Scheme" type = "String">SequentialLoad</field>
+			<field description = "Availability Manager List Name" type = "String"/>
+			<field description = "Plant Loop Demand Calculation Scheme" type = "String">SingleSetpoint</field>
+		</object>	
+		<object description = "PlantEquipmentList" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop All Equipment</field>
+			<field description = "Equipment 1 Object Type" type = "String">DistrictCooling</field>
+			<field description = "Equipment 1 Name" type = "String">District Cooling</field>
+		</object>	
+		<object description = "PlantEquipmentOperation:CoolingLoad" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop Operation All Hours</field>
+			<field description = "Load Range 1 Lower Limit" type = "Double">0.0</field>
+			<field description = "Load Range 1 Upper Limit" type = "Double">1e+15</field>
+			<field description = "Range 1 Equipment List Name" type = "String">Chilled Water Loop All Equipment</field>			
+		</object>	
+		<object description = "PlantEquipmentOperationSchemes" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop Operation</field>
+			<field description = "Control Scheme 1 Object Type" type = "String">PlantEquipmentOperation:CoolingLoad</field>
+			<field description = "Control Scheme 1 Name" type = "String">Chilled Water Loop Operation All Hours</field>
+			<field description = "Control Scheme 1 Schedule Name" type = "String">Always 1_BAS</field>
+		</object>	
+		<object description = "SetpointManager:OutdoorAirReset" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Temp Manager</field>
+			<field description = "Control Variable" type = "String">Temperature</field>
+			<field description = "Setpoint at Outdoor Low Temperature" type = "Double">82</field>
+			<field description = "Outdoor Low Temperature" type = "Double">-7</field>
+			<field description = "Setpoint at Outdoor High Temperature" type="Double">66</field>
+			<field description = "Outdoor High Temperature" type = "Double">10</field>
+			<field description = "Setpoint Node or NodeList Name" type = "String">Chilled Water Loop CHW Supply Setpoint Nodes</field>
+		</object>	
+		<object description = "Branch" reference = "Plant">
+			<field description = "Name" type = "String">District Cooling CHW Branch</field>
+			<field description = "Maximum Flow Rate" type = "Double or String"/>
+			<field description = "Pressure Drop Curve Name" type = "String"/>
+			<field description = "Component 1 Object Type" type = "String">DistrictCooling</field>
+			<field description = "Component 1 Name" type = "String">District Cooling</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">District Cooling CHW Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">District Cooling CHW Outlet</field>
+			<field description = "Component 1 Branch Control Type" type = "String">Active</field>
+		</object>	
+		<object description = "Branch" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Bypass Branch</field>
+			<field description = "Maximum Flow Rate" type = "Double or String"/>
+			<field description = "Pressure Drop Curve Name" type = "String"/>
+			<field description = "Component 1 Object Type" type = "String">Pipe:Adiabatic</field>
+			<field description = "Component 1 Name" type = "String">Chilled Water Loop CHW Supply Side Bypass Pipe</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">Chilled Water Loop CHW Supply Bypass Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Chilled Water Loop CHW Supply Bypass Outlet</field>
+			<field description = "Component 1 Branch Control Type" type = "String">Bypass</field>
+		</object>	
+		<object description = "Branch" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Inlet Branch</field>
+			<field description = "Maximum Flow Rate" type = "Double or String"/>
+			<field description = "Pressure Drop Curve Name" type = "String"/>
+			<field description = "Component 1 Object Type" type = "String">HeaderedPumps:ConstantSpeed</field>
+			<field description = "Component 1 Name" type = "String">Chilled Water Loop CHW Supply Pump</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">Chilled Water Loop CHW Supply Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Chilled Water Loop CHW Pump Outlet</field>
+			<field description = "Component 1 Branch Control Type" type = "String">Active</field>
+		</object>	
+		<object description = "Branch" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Outlet Branch</field>
+			<field description = "Maximum Flow Rate" type = "Double or String"/>
+			<field description = "Pressure Drop Curve Name" type = "String"/>
+			<field description = "Component 1 Object Type" type = "String">Pipe:Adiabatic</field>
+			<field description = "Component 1 Name" type = "String">Chilled Water Loop CHW Supply Outlet Pipe</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">Chilled Water Loop CHW Supply Outlet Pipe Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Chilled Water Loop CHW Supply Outlet</field>
+			<field description = "Component 1 Branch Control Type" type = "String">Passive</field>
+		</object>	
+		<object description = "Branch" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Inlet Branch</field>
+			<field description = "Maximum Flow Rate" type = "Double or String"/>
+			<field description = "Pressure Drop Curve Name" type = "String"/>
+			<field description = "Component 1 Object Type" type = "String">Pipe:Adiabatic</field>
+			<field description = "Component 1 Name" type = "String">Chilled Water Loop CHW Demand Inlet Pipe</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">Chilled Water Loop CHW Demand Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Chilled Water Loop CHW Demand Inlet Pipe Outlet</field>
+			<field description = "Component 1 Branch Control Type" type = "String">Passive</field>
+		</object>	
+		<object description = "Branch" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Bypass Branch</field>
+			<field description = "Maximum Flow Rate" type = "Double or String"/>
+			<field description = "Pressure Drop Curve Name" type = "String"/>
+			<field description = "Component 1 Object Type" type = "String">Pipe:Adiabatic</field>
+			<field description = "Component 1 Name" type = "String">Chilled Water Loop CHW Demand Side Bypass Pipe</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">Chilled Water Loop CHW Demand Bypass Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Chilled Water Loop CHW Demand Bypass Outlet</field>
+			<field description = "Component 1 Branch Control Type" type = "String">Passive</field>
+		</object>		
+		<object description = "Branch" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Outlet Branch</field>
+			<field description = "Maximum Flow Rate" type = "Double or String"/>
+			<field description = "Pressure Drop Curve Name" type = "String"/>
+			<field description = "Component 1 Object Type" type = "String">Pipe:Adiabatic</field>
+			<field description = "Component 1 Name" type = "String">Chilled Water Loop CHW Demand Outlet Pipe</field>
+			<field description = "Component 1 Inlet Node Name" type = "String">Chilled Water Loop CHW Demand Outlet Pipe Inlet</field>
+			<field description = "Component 1 Outlet Node Name" type = "String">Chilled Water Loop CHW Demand Outlet</field>
+			<field description = "Component 1 Branch Control Type" type = "String">Passive</field>
+		</object>
+		<object description = "BranchList" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Side Branches</field>
+			<field description = "Branch 1 Name" type = "String">Chilled Water Loop CHW Supply Inlet Branch</field>
+			<field description = "Branch 2 Name" type = "String">Chilled Water Loop CHW Supply Bypass Branch</field>
+			<field description = "Branch 3 Name" type = "String">District Cooling CHW Branch</field>
+			<field description = "Branch 4 Name" type = "String">Chilled Water Loop CHW Supply Outlet Branch</field>
+		</object>	
+		<object description = "BranchList" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Side Branches</field>
+			<field description = "Branch 1 Name" type = "String">Chilled Water Loop CHW Demand Inlet Branch</field>
+			<field description = "Branch 4 Name" type = "String">Chilled Water Loop CHW Demand Bypass Branch</field>
+			<field description = "Branch 5 Name" type = "String">Chilled Water Loop CHW Demand Outlet Branch</field>
+		</object>
+		<object description = "Connector:Splitter" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Splitter</field>
+			<field description = "Inlet Branch Name" type ="String">Chilled Water Loop CHW Supply Inlet Branch</field>
+			<field description = "Outlet Branch 1 Name" type = "String">Chilled Water Loop CHW Supply Bypass Branch</field>
+			<field description = "outlet Branch 2 Name" type = "String">District Cooling CHW Branch</field>
+		</object>
+		<object description = "Connector:Splitter" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Splitter</field>
+			<field description = "Inlet Branch Name" type ="String">Chilled Water Loop CHW Demand Inlet Branch</field>
+			<field description = "Outlet Branch Name" type = "String">Chilled Water Loop CHW Demand Bypass Branch</field>
+		</object>	
+		<object description = "Connector:Mixer" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Mixer</field>
+			<field description = "Outlet Branch Name" type ="String">Chilled Water Loop CHW Supply Outlet Branch</field>
+			<field description = "Inlet Branch 1 Name" type = "String">District Cooling CHW Branch</field>			
+			<field description = "Inlet Branch 2 Name" type = "String">Chilled Water Loop CHW Supply Bypass Branch</field>
+		</object>
+		<object description = "Connector:Mixer" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Mixer</field>
+			<field description = "Outlet Branch Name" type ="String">Chilled Water Loop CHW Demand Outlet Branch</field>
+			<field description = "Inlet Branch 1 Name" type = "String">Chilled Water Loop CHW Demand Bypass Branch</field>
+		</object>	
+		<object description = "ConnectorList" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Side Connectors</field>
+			<field description = "Connector 1 Object Type" type = "String">Connector:Splitter</field>
+			<field description = "Connector 1 Name" type = "String">Chilled Water Loop CHW Supply Splitter</field>
+			<field description = "Connector 2 Object Type" type = "String">Connector:Mixer</field>
+			<field description = "Connector 2 Name" type = "String">Chilled Water Loop CHW Supply Mixer</field>
+		</object>
+		<object description = "ConnectorList" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Side Connectors</field>
+			<field description = "Connector 1 Object Type" type = "String">Connector:Splitter</field>
+			<field description = "Connector 1 Name" type = "String">Chilled Water Loop CHW Demand Splitter</field>
+			<field description = "Connector 2 Object Type" type = "String">Connector:Mixer</field>
+			<field description = "Connector 2 Name" type = "String">Chilled Water Loop CHW Demand Mixer</field>
+		</object>		
+		<object description = "NodeList" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Setpoint Nodes</field>
+			<field description = "Node 2 Name" type = "String">Chilled Water Loop CHW Supply Outlet</field>
+		</object>	
+		<object description = "Pipe:Adiabatic" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Side Bypass Pipe</field>
+			<field description = "Inlet Node Name" type = "String">Chilled Water Loop CHW Supply Bypass Inlet</field>
+			<field description = "Outlet Node Name" type = "String">Chilled Water Loop CHW Supply Bypass Outlet</field>
+		</object>
+		<object description = "Pipe:Adiabatic" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Supply Outlet Pipe</field>
+			<field description = "Inlet Node Name" type = "String">Chilled Water Loop CHW Supply Outlet Pipe Inlet</field>
+			<field description = "Outlet Node Name" type = "String">Chilled Water Loop CHW Supply Outlet</field>
+		</object>	
+		<object description = "Pipe:Adiabatic" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Inlet Pipe</field>
+			<field description = "Inlet Node Name" type = "String">Chilled Water Loop CHW Demand Inlet</field>
+			<field description = "Outlet Node Name" type = "String">Chilled Water Loop CHW Demand Inlet Pipe Outlet</field>
+		</object>
+		<object description = "Pipe:Adiabatic" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Side Bypass Pipe</field>
+			<field description = "Inlet Node Name" type = "String">Chilled Water Loop CHW Demand Bypass Inlet</field>
+			<field description = "Outlet Node Name" type = "String">Chilled Water Loop CHW Demand Bypass Outlet</field>
+		</object>	
+		<object description = "Pipe:Adiabatic" reference = "Plant">
+			<field description = "Name" type = "String">Chilled Water Loop CHW Demand Outlet Pipe</field>
+			<field description = "Inlet Node Name" type = "String">Chilled Water Loop CHW Demand Outlet Pipe Inlet</field>
+			<field description = "Outlet Node Name" type = "String">Chilled Water Loop CHW Demand Outlet</field>
+		</object>
+	</dataset>	
 </hvac>

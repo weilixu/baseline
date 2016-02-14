@@ -9,8 +9,8 @@ import java.util.Set;
 
 import baseline.construction.opaque.OpaqueEnvelopeParser;
 import baseline.exception.detector.Detector;
+import baseline.exception.detector.DistrictHeatingDetector;
 import baseline.exception.detector.ReturnFanDetector;
-import baseline.htmlparser.SizingHTMLParser;
 import baseline.idfdata.BaselineInfo;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.IdfReader;
@@ -38,7 +38,10 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     //return fan information
     private double numberOfSystem = 0.0;
     private double supplyReturnRatio = 0.0;
-    private boolean hasReturnFan;
+    private boolean hasReturnFan = false;
+    
+    //District System
+    private boolean districtHeat = false;
     
     private BaselineInfo info;
 
@@ -151,6 +154,8 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    info.setSystemType("System Type 5");
 	    info.setFanControlType("Variable Control Fans");
 	    info.setCoolingEER(10.78);
+	    info.setCoolingIEER(11.15);
+	    info.setBoilerEfficiency(0);
 	} else if (system.equals("System Type 8")) {
 	    info.setSystemType("System Type 8");
 	    info.setFanControlType("Variable Control Fans");
@@ -216,6 +221,10 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     public void setReturnFanIndicator(boolean has){
 	hasReturnFan = has;
     }
+    
+    public void setDistrictHeat(boolean dist){
+	districtHeat = dist;
+    }
     /**
      * add thermal zones to the data structure
      * 
@@ -262,11 +271,9 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    info.setCoolingCapacity(totalCoolingLoad);
 	    info.setHeatingCpacity(totalHeatingLoad);
 	}
-	//search for return fan and set-up data
+	//search for exceptions
 	for(Detector detector: detectorList){
-	    if(detector.getDetectorName().equals("ReturnFan")){
-		detector.foundException(this);
-	    }
+	    detector.foundException(this);
 	}
     }
 
@@ -336,6 +343,10 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 
     public boolean hasReturnFan() {
 	return hasReturnFan;
+    }
+    
+    public boolean isDistrictHeat(){
+	return districtHeat;
     }
 
     /**
@@ -857,6 +868,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     private void registerExceptionDetectors(){
 	detectorList = new ArrayList<Detector>();
 	detectorList.add(new ReturnFanDetector());
+	detectorList.add(new DistrictHeatingDetector());
     }
 
 }
