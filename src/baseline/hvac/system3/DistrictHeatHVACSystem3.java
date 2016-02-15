@@ -3,10 +3,12 @@ package baseline.hvac.system3;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
+import baseline.idfdata.thermalzone.ThermalZone;
 import hvac.manufacturer.Manufacturer;
 
 /**
@@ -27,6 +29,9 @@ public class DistrictHeatHVACSystem3 implements SystemType3 {
     private SystemType3 system;
 
     private final EnergyPlusBuilding building;
+
+    private final static int objectSizeLimit = 13; // differentiate the air loop
+						   // branch with other branches
 
     // threshold for determine the HVAC components.
     private static final double heatingFloorThreshold = 11150; // m2
@@ -75,23 +80,21 @@ public class DistrictHeatHVACSystem3 implements SystemType3 {
 
 	// data use for plant system connection
 	ArrayList<String> zoneHeatCoilBranchList = new ArrayList<String>();
-
-	for (int i = 0; i < building.getNumberOfZone(); i++) {
+	
+	for(int i=0; i<building.getNumberOfZone(); i++){
+	    String zone = building.getZoneNamebyIndex(i);
 	    for (EplusObject eo : supplySystem) {
 		EplusObject cl = eo.clone();
-		if (!cl.getObjectName().equals("Controller:WaterCoil") && !cl
-			.getObjectName().equals("AirLoopHVAC:ControllerList")) {
-		    // System.out.println(cl.getObjectName());
-		    if (cl.hasSpecialCharacters()) {
-			cl.replaceSpecialCharacters(
-				building.getZoneNamebyIndex(i));
-		    }
-		    if (cl.getObjectName().equals("Branch")) {
-			String name = cl.getKeyValuePair(0).getValue();
-			zoneHeatCoilBranchList.add(name);
-		    }
-		    supplyTemp.add(cl);
+
+		// System.out.println(cl.getObjectName());
+		if (cl.hasSpecialCharacters()) {
+		    cl.replaceSpecialCharacters(zone);
 		}
+		if (cl.getObjectName().equals("Branch")) {
+		    String name = cl.getKeyValuePair(0).getValue();
+		    zoneHeatCoilBranchList.add(name);
+		}
+		supplyTemp.add(cl);
 	    }
 	}
 
@@ -151,24 +154,25 @@ public class DistrictHeatHVACSystem3 implements SystemType3 {
 	    // delete the original heating coil
 	    if (eo.getObjectName().equals("Coil:Heating:Gas")) {
 		supplySystemIterator.remove();
-	    } else if (eo.getObjectName()
-		    .equals("AirLoopHVAC:Unitary:Furnace:HeatCool")) {
+	    } else if (eo.getObjectName().equals("Branch")
+		    && eo.getSize() >= objectSizeLimit) {
 		for (int i = 0; i < eo.getSize(); i++) {
-		    if (eo.getKeyValuePair(i).getKey()
-			    .equals("Heating Coil Object Type")) {
+		    if (eo.getKeyValuePair(i).getValue()
+			    .equals("Coil:Heating:Gas")) {
 			eo.getKeyValuePair(i).setValue("Coil:Heating:Water");
 		    }
 		}
+	    } else if (eo.getObjectName().equals("AirLoopHVAC")) {
+		String zonename = eo.getKeyValuePair(0).getValue()
+			.split(" ")[0];
+		for (int i = 0; i < eo.getSize(); i++) {
+		    if (eo.getKeyValuePair(i).getKey()
+			    .equals("Controller List Name")) {
+			eo.getKeyValuePair(i)
+				.setValue(zonename + " Controllers");
+		    }
+		}
 	    }
-	    // else if(eo.getObjectName().equals("AirLoopHVAC")){
-	    // String zonename = eo.getKeyValuePair(0).getValue().split(" ")[0];
-	    // for(int i=0; i<eo.getSize(); i++){
-	    // if(eo.getKeyValuePair(i).getKey().equals("Controller List
-	    // Name")){
-	    // eo.getKeyValuePair(i).setValue(zonename + " Controllers");
-	    // }
-	    // }
-	    // }
 	}
     }
 
@@ -177,7 +181,7 @@ public class DistrictHeatHVACSystem3 implements SystemType3 {
      */
     private void processTemplate(ArrayList<EplusObject> template) {
 	for (EplusObject eo : template) {
-	    //System.out.println(eo.getObjectName());
+	    // System.out.println(eo.getObjectName());
 	    if (eo.getReference().equals("Supply Side System")) {
 		if (!plantObjects.containsKey("Supply Side System")) {
 		    plantObjects.put("Supply Side System",

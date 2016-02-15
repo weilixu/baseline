@@ -23,7 +23,7 @@ public class Test {
 		win.add(new Coordinate3D(9, 1, 0));
 		
 		Wall testWall = new Wall(wall);
-		testWall.addWindow(win, "win_name");
+		testWall.addWindow(win, "win_name","d");
 		
 		double wallArea = testWall.getWallArea();
 		System.out.println("Before wall: "+wallArea);

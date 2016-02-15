@@ -9,6 +9,7 @@ import java.util.Set;
 
 import baseline.construction.opaque.OpaqueEnvelopeParser;
 import baseline.exception.detector.Detector;
+import baseline.exception.detector.DistrictCoolingDetector;
 import baseline.exception.detector.DistrictHeatingDetector;
 import baseline.exception.detector.ReturnFanDetector;
 import baseline.idfdata.BaselineInfo;
@@ -42,6 +43,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     
     //District System
     private boolean districtHeat = false;
+    private boolean districtCool = false;
     
     private BaselineInfo info;
 
@@ -225,6 +227,10 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     public void setDistrictHeat(boolean dist){
 	districtHeat = dist;
     }
+    
+    public void setDistrictCool(boolean dist){
+	districtCool = dist;
+    }
     /**
      * add thermal zones to the data structure
      * 
@@ -347,6 +353,10 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
     
     public boolean isDistrictHeat(){
 	return districtHeat;
+    }
+    
+    public boolean isDistrictCool(){
+	return districtCool;
     }
 
     /**
@@ -869,6 +879,7 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	detectorList = new ArrayList<Detector>();
 	detectorList.add(new ReturnFanDetector());
 	detectorList.add(new DistrictHeatingDetector());
+	detectorList.add(new DistrictCoolingDetector());
     }
 
 }

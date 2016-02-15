@@ -41,8 +41,8 @@ public class Wall extends Polygon{
 	 * @param fenestration
 	 * @return
 	 */
-	public boolean addWindow(List<Coordinate3D> points, String name){
-		Window win = new Window(points, name);
+	public boolean addWindow(List<Coordinate3D> points, String name, String id){
+		Window win = new Window(points, name, id);
 		this.windows.add(win);
 		
 		return this.isInWall(points);

@@ -1,4 +1,4 @@
-package baseline.hvac.system3;
+package baseline.hvac.system4;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.HashMap;
 import baseline.hvac.SystemParser;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
+
 /**
  * This class represent HVAC system type 3 manufacturer
  * The class behaviors includes
@@ -14,41 +15,37 @@ import baseline.idfdata.building.EnergyPlusBuilding;
  * 	G3.1.2.2; G3.1.2.4 (Not implemented); G3.1.2.5; G3.1.2.7;G3.1.2.8;G3.1.2.9(Not completed);
  * 	G3.1.2.11(Not implemented yet)
  * 3. Check exceptions includes
- * 	G3.1.1; G3.1.1.1 (Not implemented); G3.1.1.2 (Not implemented)
+ * 	G3.1.1 (not implemented); G3.1.1.1 (Not implemented); G3.1.1.2 (Not implemented)
  * 	G3.1.1.3 (nOT implemented)
  * 4. Manufacture correct system type 3 based on design case and merge it back to the whole building
  *    energy model
  * @author Weili
  *
  */
-
-public class HVACSystem3Factory {
+public class HVACSystem4Factory {
     //extract the template system
-    private final SystemParser system = new SystemParser("System Type 3");
+    private final SystemParser system = new SystemParser("System Type 4");
     
     private HashMap<String,ArrayList<EplusObject>> systemObjects;
-    private SystemType3 systemType3;
+    private SystemType4 systemType4;
     
     private EnergyPlusBuilding building;
     
-    public HVACSystem3Factory(EnergyPlusBuilding building){
+    public HVACSystem4Factory(EnergyPlusBuilding building){
 	systemObjects = new HashMap<String,ArrayList<EplusObject>>();
 	this.building = building;
 	processTemplate();
-	systemType3 = new HVACSystem3(systemObjects, building);
-	
+	systemType4 = new HVACSystem4(systemObjects, building);
     }
     
-    public SystemType3 getSystem(){
+    public SystemType4 getSystem(){
 	processSystem();
-	return systemType3;
+	return systemType4;
     }
     
     private void processSystem(){
-	if(building.isDistrictHeat() && !building.isDistrictCool()){
-	    systemType3 = new DistrictHeatHVACSystem3(systemType3, building);
-	}else if(building.isDistrictCool() && !building.isDistrictHeat()){
-	    systemType3 = new DistrictCoolHVACSystem3(systemType3, building);
+	if(building.isDistrictHeat()){
+	    //systemType4 = new DistrictHeatHVACSystem4(systemType4, building);
 	}
     }
     

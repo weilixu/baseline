@@ -55,8 +55,10 @@ public final class HVACSystemImplUtil {
 	    double airflowRate) {
 	Double fanPower = FanPowerCalculation
 		.getFanPowerForSystem3To4(airflowRate);
-	// 0.5 is the assumed fan total efficiency
+	//System.out.println("This is airflow: " + airflowRate + " and fan power: " + fanPower);
+	// 0.6 is the assumed fan total efficiency
 	Double pressureDrop = fanPower / airflowRate * 0.6;
+	//System.out.println("This is pressure drop: " + pressureDrop);
 	Double motorEff = FanPowerCalculation
 		.getFanMotorEfficiencyForSystem3To4(airflowRate);
 	for (int i = 0; i < eo.getSize(); i++) {
@@ -403,6 +405,21 @@ public final class HVACSystemImplUtil {
 		    || name.equals("Hot Water Loop HW Demand Mixer")) {
 		insertHeatingCoils(eo.getSize(), eo, null,
 			heatCoilList);// insert to the last index
+	    }
+	}
+    }
+    
+    public static void plantConnectionForDistrictCooling(ArrayList<EplusObject> plantSystem, ArrayList<String> coolCoilList){
+	for(EplusObject eo: plantSystem){
+	    //System.out.println(eo.getObjectName());
+	    String name = eo.getKeyValuePair(0).getValue();
+	    if(name.equals("Chilled Water Loop CHW Demand Side Branches")) {
+		insertCoolingCoils(2, eo,
+			coolCoilList);
+	    } else if (name.equals("Chilled Water Loop CHW Demand Splitter")
+		    || name.equals("Chilled Water Loop CHW Demand Mixer")) {
+		insertCoolingCoils(eo.getSize(), eo,
+			coolCoilList);// insert to the last index
 	    }
 	}
     }

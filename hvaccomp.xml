@@ -8,7 +8,7 @@
 			<field description = "Water Inlet Node Name" type = "String">Floor% Heating Coil HW Inlet</field>
 			<field description = "Water Outlet Node Name" type = "String">Floor% Heating Coil HW Outlet</field>
 			<field description = "Air Inlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
-			<field description = "Air Outlet Node Name" type = "String">Floor% Air Loop Outlet</field>
+			<field description = "Air Outlet Node Name" type = "String">Floor% Heating Coil Outlet</field>
 			<field description = "Performance Input Method" type = "String">UFactorTimesAreaAndDesignWaterFlowRate</field>
 			<field description = "Rated Capacity" type = "Double or String">autosize</field>
 			<field description = "Rated Inlet Water Temperature" type = "Double">82.2</field>
@@ -289,7 +289,7 @@
 	</dataset>
 	<dataset setname="DistrictCool" category="8.3">
 		<object description = "Coil:Cooling:Water" reference = "Supply Side System">
-			<field description = "Name" type = "String">Floor% Cooling Coil</field>
+			<field description = "Name" type = "String">Floor% AHU Cooling Coil</field>
 			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "Design Water Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Design Air Flow Rate" type = "Double or String">autosize</field>
@@ -300,7 +300,7 @@
 			<field description = "Design Outlet Air Humidity Ratio" type = "Double or String">autosize</field>
 			<field description = "Water Inlet Node Name" type = "String">Floor% Cooling Coil CHW Inlet</field>
 			<field description = "Water Outlet Node Name" type = "String">Floor% Cooling Coil CHW Outlet</field>
-			<field description = "Air Inlet Node Name" type = "String">Floor% Supply Fan Outlet</field>
+			<field description = "Air Inlet Node Name" type = "String">Floor% Mixed Air Outlet</field>
 			<field description = "Air Outlet Node Name" type = "String">Floor% Cooling Coil Outlet</field>
 			<field description = "Type of Analysis" type = "String">SimpleAnalysis</field>
 			<field description = "Condensate Collection Water Storage Tank Name" type = "String"/>
@@ -308,7 +308,7 @@
 		<object description = "Controller:WaterCoil" reference = "Supply Side System">
 			<field description = "Name" type = "String">Floor% Cooling Coil Controller</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Action" type = "String">Normal</field>
+			<field description = "Action" type = "String">Reverse</field>
 			<field description = "Actuator Variable" type = "String">Flow</field>
 			<field description = "Sensor Node Name" type = "String">Floor% Cooling Coil Outlet</field>
 			<field description = "Actuator Node Name" type = "String">Floor% Cooling Coil CHW Inlet</field>
@@ -326,7 +326,7 @@
 			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Pressure Drop Curve Name" type = "String"/>
 			<field description = "Component 1 Object Type" type = "String">Coil:Cooling:Water</field>
-			<field description = "Component 1 Name" type = "String">Floor% Cooling Coil</field>
+			<field description = "Component 1 Name" type = "String">Floor% AHU Cooling Coil</field>
 			<field description = "Component 1 Inlet Node Name" type = "String">Floor% Cooling Coil CHW Inlet</field>
 			<field description = "Component 1 Outlet Node Name" type = "String">Floor% Cooling Coil CHW Outlet</field>
 			<field description = "Component 1 Branch Control Type" type = "String">Active</field>
