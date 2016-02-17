@@ -3,6 +3,7 @@ package baseline.hvac.system4;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import baseline.hvac.HVACSystem;
 import baseline.hvac.SystemParser;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
@@ -38,14 +39,16 @@ public class HVACSystem4Factory {
 	systemType4 = new HVACSystem4(systemObjects, building);
     }
     
-    public SystemType4 getSystem(){
+    public HVACSystem getSystem(){
 	processSystem();
 	return systemType4;
     }
     
     private void processSystem(){
-	if(building.isDistrictHeat()){
-	    //systemType4 = new DistrictHeatHVACSystem4(systemType4, building);
+	if(building.isDistrictHeat() && !building.isDistrictCool()){
+	    systemType4 = new DistrictHeatSystem4(building);
+	}else if(building.isDistrictCool() && !building.isDistrictHeat()){
+	    systemType4 = new DistrictHeatSystem4(building);
 	}
     }
     

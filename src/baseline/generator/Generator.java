@@ -244,7 +244,6 @@ public class Generator {
     
     private void postprocessInfo(){
 	SizingHTMLParser.processOutputs(htmlOutput);
-
 	if(building.getInfoObject().getSystemType().equals("System Type 7")){
 	    building.getInfoObject().setChwPumpFlow(SizingHTMLParser.getPumpWaterFlowRate("CHW"));
 	    building.getInfoObject().setCwPumpFlow(SizingHTMLParser.getPumpWaterFlowRate("CNDW"));

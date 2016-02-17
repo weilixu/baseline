@@ -164,13 +164,17 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	    info.setChillerCOP(6.1);
 	    info.setChillerIPLV(6.4);
 	    info.setChillerCapacity(info.getCoolingCapacity());
-
 	} else if (system.equals("System Type 6")) {
 	    info.setSystemType("System Type 6");
 	    info.setFanControlType("Variable Control Fans");
 	    info.setCoolingEER(10.78);
 	} else if (system.equals("System Type 3")) {
 	    info.setSystemType("System Type 3");
+	    info.setFanControlType("Constant Control Fans");
+	    info.setCoolingEER(10.78);
+	    info.setUnitaryHeatingCOP(3.2);
+	}else if(system.equals("System Type 4")){
+	    info.setSystemType("System Type 4");
 	    info.setFanControlType("Constant Control Fans");
 	    info.setCoolingEER(10.78);
 	    info.setUnitaryHeatingCOP(3.2);

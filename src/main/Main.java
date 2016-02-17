@@ -26,8 +26,11 @@ public class Main {
 	ClimateZone zone = ClimateZone.CLIMATEZONE3A;
 	//String tool = "DesignBuilder";
 	//String tool = "Asset Score Tool";
-	File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 3\\DistrictCool\\Sys3_Sample.idf");
-	File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 3\\DistrictCool\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");	
+	File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 4\\Sys4_Sample.idf");
+	File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 4\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");
+
+	//File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 3\\DistrictCool\\Sys3_Sample.idf");
+	//File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 3\\DistrictCool\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");	
 
 	Generator generator = new Generator(energyplusFile,weatherFile,zone,"Office",false, "DesignBuilder");
 	System.out.println("done!");

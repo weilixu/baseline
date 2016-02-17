@@ -3,6 +3,7 @@ package baseline.hvac.system8;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import baseline.hvac.HVACSystem;
 import baseline.hvac.SystemParser;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
@@ -28,7 +29,7 @@ public class HVACSystem8Factory {
      * Control the creation of the system type 8
      * @return
      */
-    public SystemType8 getSystem(){
+    public HVACSystem getSystem(){
 	processSystem();
 	return systemType8;
     }

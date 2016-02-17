@@ -3,6 +3,7 @@ package baseline.hvac.system3;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import baseline.hvac.HVACSystem;
 import baseline.hvac.SystemParser;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
@@ -39,7 +40,7 @@ public class HVACSystem3Factory {
 	
     }
     
-    public SystemType3 getSystem(){
+    public HVACSystem getSystem(){
 	processSystem();
 	return systemType3;
     }

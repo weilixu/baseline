@@ -18,23 +18,20 @@ public class HVACSystem4 implements SystemType4{
     // building object contains building information and energyplus data
     private EnergyPlusBuilding building;
     
-    // supply air connection list
-    private ArrayList<String> zoneSplitterList;
-    private ArrayList<String> zoneMixerList;
-    
     public HVACSystem4(HashMap<String, ArrayList<EplusObject>> objects,
 	    EnergyPlusBuilding bldg){
 	objectLists = objects;
 	building = bldg;
 	
-	//Set-up all the data structures
-	zoneSplitterList = new ArrayList<String>();
-	zoneMixerList = new ArrayList<String>();
-	
 	processSystems();
 	
     }
     
+    @Override
+    public HashMap<String, ArrayList<EplusObject>> getSystemData() {
+	return objectLists;
+    }
+
     private void processSystems() {
 	ArrayList<EplusObject> supplySideSystem = new ArrayList<EplusObject>();
 	ArrayList<EplusObject> demandSideSystem = new ArrayList<EplusObject>();
@@ -46,33 +43,29 @@ public class HVACSystem4 implements SystemType4{
 
 	HashMap<String, ArrayList<ThermalZone>> floorMap = building
 		.getFloorMap();
-	
+
 	Set<String> floorMapSet = floorMap.keySet();
 	Iterator<String> floorMapIterator = floorMapSet.iterator();
-	
+
 	int zoneCounter = 0;
-	int floorCounter = 0;
 	while (floorMapIterator.hasNext()) {
-	    zoneSplitterList.clear();
-	    zoneMixerList.clear();
-	    
+
 	    String floor = floorMapIterator.next();
-	    //first process the demand side system and their connection to supply side system
+	    // first process the demand side system and their connection to
+	    // supply side system
 	    ArrayList<ThermalZone> zones = floorMap.get(floor);
 	    for (ThermalZone zone : zones) {
-		zoneCounter ++;
+		zoneCounter++;
 		demandSideSystem.addAll(processDemandTemp(zone.getFullName(),
 			demandSideSystemTemplate));
 		// add the outdoor air object for demand zone
 		demandSideSystem.add(zone.getOutdoorAirObject());
-	    }
-	    //then process the supply side system
-	    floorCounter ++;
-	    supplySideSystem.addAll(processSupplyTemp(floor,
+		supplySideSystem.addAll(processSupplyTemp(zone.getFullName(),
 			supplySideSystemTemplate));
+	    }
 	}
-	if(building.getInfoObject()!=null){
-		building.getInfoObject().setNumOfSystem(floorCounter);	    
+	if (building.getInfoObject() != null) {
+	    building.getInfoObject().setNumOfSystem(zoneCounter);
 	}
 	System.out.println("Counting the rooms: " + zoneCounter);
 	objectLists.put("Supply Side System", supplySideSystem);
@@ -80,7 +73,7 @@ public class HVACSystem4 implements SystemType4{
 	System.out.println("Re-tunning the supply side system...");
 	checkSupplySideSystem();
     }
-    
+
     /**
      * updates the supply side system parameters. Check economizer, fan power
      */
@@ -99,23 +92,27 @@ public class HVACSystem4 implements SystemType4{
 		}
 	    } else if (eo.getObjectName()
 		    .equalsIgnoreCase("Fan:ConstantVolume")) {
-		//get the floor name
-		String floor = eo.getKeyValuePair(0).getValue().split(" ")[0];
+		// get the floor name
+		String zone = eo.getKeyValuePair(0).getValue().split(" ")[0];
 		HVACSystemImplUtil.updateFanPowerforSystem3To4(eo,
-			building.getFloorMaximumFlowRate(floor));
-		for(int i=0; i<eo.getSize(); i++){
-		    if(eo.getKeyValuePair(i).getKey().equals("Pressure Rise")){
-			double pressureRise = Double.parseDouble(eo.getKeyValuePair(i).getValue());
-			totalFanPower += (pressureRise/0.6 * building.getFloorMaximumFlowRate(floor));
+			building.getZoneMaximumFlowRate(zone));
+		for (int i = 0; i < eo.getSize(); i++) {
+		    if (eo.getKeyValuePair(i).getKey()
+			    .equals("Pressure Rise")) {
+			double pressureRise = Double
+				.parseDouble(eo.getKeyValuePair(i).getValue());
+			totalFanPower += (pressureRise / 0.6
+				* building.getZoneMaximumFlowRate(zone));
 		    }
 		}
 	    }
 	    building.getInfoObject().setFanPower(totalFanPower);
 	}
     }
-    
+
     /**
      * process the HVAC supply air side system
+     * 
      * @param zone
      * @param supplySideSystemTemplate
      * @return
@@ -132,26 +129,25 @@ public class HVACSystem4 implements SystemType4{
 	    if (temp.hasSpecialCharacters()) {
 		temp.replaceSpecialCharacters(zone);
 	    }
-	    
-	    // check if this is the connection between supply side and demand side systems
-	    if(temp.getObjectName().equalsIgnoreCase("AirLoopHVAC:ZoneSplitter")){
-		for(String s: zoneSplitterList){
-		    KeyValuePair splitterPair = new KeyValuePair(
-			    "Outlet Node Name", s);
-		    temp.addField(splitterPair);
-		}
-	    }
-	    
+
 	    // check if this is the connection between supply side and demand
 	    // side systems
-	    if (temp.getObjectName().equalsIgnoreCase("AirLoopHVAC:ZoneMixer")) {
-		for (String s : zoneMixerList) {
-		    KeyValuePair mixerPair = new KeyValuePair(
-			    "Intlet Node Name", s);
-		    temp.addField(mixerPair);
-		}
+	    if (temp.getObjectName()
+		    .equalsIgnoreCase("AirLoopHVAC:ZoneSplitter")) {
+		KeyValuePair splitterPair = new KeyValuePair("Outlet Node Name",
+			zone + " Zone Equip Inlet");
+		temp.addField(splitterPair);
 	    }
 
+	    // check if this is the connection between supply side and demand
+	    // side systems
+	    if (temp.getObjectName()
+		    .equalsIgnoreCase("AirLoopHVAC:ZoneMixer")) {
+
+		KeyValuePair mixerPair = new KeyValuePair("Intlet Node Name",
+			zone + " Return Outlet");
+		temp.addField(mixerPair);
+	    }
 	    supplyTemp.add(temp);
 	}
 	return supplyTemp;
@@ -176,22 +172,7 @@ public class HVACSystem4 implements SystemType4{
 	    }
 	    demandTemp.add(temp);
 	}
-	
-	// record the connection links in the HVAC system
-	String zoneSplitter = zone + " Zone Equip Inlet";
-	String zoneMixer = zone + " Return Outlet";
-	
-	// add the connection links to another data lists for later
-	// processing
-	zoneSplitterList.add(zoneSplitter);
-	zoneMixerList.add(zoneMixer);
-	
 	return demandTemp;
-    }
-    
-    @Override
-    public HashMap<String, ArrayList<EplusObject>> getSystemData() {
-	return objectLists;
     }
 
 }
