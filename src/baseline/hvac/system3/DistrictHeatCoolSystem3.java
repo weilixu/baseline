@@ -7,24 +7,23 @@ import java.util.Iterator;
 import baseline.hvac.HVACSystem;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
+import baseline.idfdata.KeyValuePair;
 import baseline.idfdata.building.EnergyPlusBuilding;
 import hvac.manufacturer.Manufacturer;
 
 /**
- * This class should not be implemented since the coil:cooling:water is not
- * supported in AirLoopHVAC:Unitary:Furnace:HeatCool object This class modifies
- * the standard ASHRAE HVAC System Type 3's cooling source to district cooling.
- * This involves two step contruction: First: remove the original
- * coil:cooling:DX:SingleSpeed object and its related objects Second: insert a
- * plant side system as cooling source
+ * This class modifies the standard ASHRAE HVAC System Type 3's heating source
+ * to district heating and cooling source to district cooling. This involves two
+ * step constructions: First: remove the original coil:heating:gas object and
+ * coil:cooling:dx:singlespeed object and its related objects Second: insert a
+ * plant side system as heating source AND a plant side system as cooling source
  * 
  * @author Weili
  *
  */
-public class DistrictCoolHVACSystem3 implements SystemType3 {
+public class DistrictHeatCoolSystem3 implements SystemType3 {
     // recording all the required data for HVAC system type 7
     private HashMap<String, ArrayList<EplusObject>> objectLists;
-
     private HashMap<String, ArrayList<EplusObject>> plantObjects;
 
     private HVACSystem system;
@@ -35,26 +34,31 @@ public class DistrictCoolHVACSystem3 implements SystemType3 {
     private final static int objectSizeLimit = 13; // differentiate the air loop
 						   // branch with other branches
     // threshold for determine the HVAC components.
+    private static final double heatingFloorThreshold = 11150; // m2
+    private String heatingPump = "HeaderedPumps:ConstantSpeed";
+    // threshold for determine the HVAC components.
     private String coolingPump = "HeaderedPumps:ConstantSpeed";
 
-    public DistrictCoolHVACSystem3(SystemType3 sys, EnergyPlusBuilding bldg) {
+    public DistrictHeatCoolSystem3(SystemType3 sys, EnergyPlusBuilding bldg) {
 	system = sys;
 	objectLists = system.getSystemData();
 	building = bldg;
 
-	// remove original cooling system
-	removeCoolingSystem();
+	// remove the old systems
+	removeOldSystem();
 
-	// inquire district heat plant manufacturer
 	plantObjects = new HashMap<String, ArrayList<EplusObject>>();
-	processTemplate(Manufacturer.generateSystem("District Cool"));
+	ArrayList<EplusObject> template = new ArrayList<EplusObject>();
+	template.addAll(Manufacturer.generateSystem("District Heat"));
+	template.addAll(Manufacturer.generateSystem("District Cool"));
+	processTemplate(template);
 
 	// insert systems
-	insertDistrictCoolingSystem();
+	insertDistrictSystems();
 
     }
 
-    private void insertDistrictCoolingSystem() {
+    private void insertDistrictSystems() {
 	// now we should have plant template, include supply system and plant
 	// system,
 	// lets deal with supply system first, also record the necessary parts
@@ -63,40 +67,84 @@ public class DistrictCoolHVACSystem3 implements SystemType3 {
 	ArrayList<EplusObject> supplySystem = plantObjects
 		.get("Supply Side System");
 	ArrayList<EplusObject> supplyTemp = new ArrayList<EplusObject>();
-
 	// data use for plant system connection
+	ArrayList<String> zoneHeatCoilBranchList = new ArrayList<String>();
 	ArrayList<String> zoneCoolCoilBranchList = new ArrayList<String>();
-
 	for (int i = 0; i < building.getNumberOfZone(); i++) {
 	    String zone = building.getZoneNamebyIndex(i);
+	    boolean builtController = false;
 	    for (EplusObject eo : supplySystem) {
-		EplusObject cl = eo.clone();
+		EplusObject cl = null;
+		if (eo.getObjectName().equals("AirLoopHVAC:ControllerList") && !builtController) {
+		    cl = Manufacturer
+			    .generateObject("AirLoopHVACControllerList", zone);
+		    cl.addField(new KeyValuePair("Controller 1 Object Type",
+			    "Controller:WaterCoil"));
+		    cl.addField(new KeyValuePair("Controller 1 Name",
+			    zone + " Cooling Coil Controller"));
+		    cl.addField(new KeyValuePair("Controller 2 Object Type",
+			    "Controller:WaterCoil"));
+		    cl.addField(new KeyValuePair("Controller 2 Name",
+			    zone + " Heating Coil Controller"));
+		    builtController = true;
+		} else if(eo.getObjectName().equals("AirLoopHVAC:ControllerList") && builtController){
+		    continue;
+		}else{
+		    cl = eo.clone();
 
-		if (cl.hasSpecialCharacters()) {
-		    cl.replaceSpecialCharacters(zone);
-		}
-		if (cl.getObjectName().equals("Branch")) {
-		    String name = cl.getKeyValuePair(0).getValue();
-		    zoneCoolCoilBranchList.add(name);
+		    // System.out.println(cl.getObjectName());
+		    if (cl.hasSpecialCharacters()) {
+			cl.replaceSpecialCharacters(zone);
+		    }
+		    if (cl.getObjectName().equals("Branch")) {
+			// need to distinguish heating coil with cooling coil
+			// branch
+			String name = cl.getKeyValuePair(0).getValue();
+			if (name.contains("Heating")) {
+			    zoneHeatCoilBranchList.add(name);
+			} else {
+			    zoneCoolCoilBranchList.add(name);
+			}
+		    }
 		}
 		supplyTemp.add(cl);
 	    }
 	}
 
 	plantObjects.put("Supply Side System", supplyTemp);
-	// deal with plant connection
+	// deal with plant connections
+	double floorArea = building.getConditionedFloorArea(); // G3.1.3.5,
 	double coolLoad = building.getTotalCoolingLoad();
-	// G3.1.3.2
+
 	ArrayList<EplusObject> plantSideTemp = plantObjects.get("Plant");
 	ArrayList<EplusObject> plantTemp = new ArrayList<EplusObject>();
+
 	// we use iterator because we will delete some objects in this loop
 	// (pumps)
 	Iterator<EplusObject> eoIterator = plantSideTemp.iterator();
 	while (eoIterator.hasNext()) {
 	    EplusObject temp = eoIterator.next().clone();
+
 	    // select pumps from Templates based on the inputs
-	    // choose chilled water loop pumps
+	    // choose hot water loop pumps
 	    if (temp.getKeyValuePair(0).getValue()
+		    .equals("Hot Water Loop HW Supply Pump")) {
+		if (floorArea <= heatingFloorThreshold) {
+		    // smaller than thresh hold, remove the variable speed
+		    if (temp.getObjectName()
+			    .equalsIgnoreCase("HeaderedPumps:VariableSpeed")) {
+			eoIterator.remove();
+			continue;
+		    }
+		} else {
+		    if (temp.getObjectName()
+			    .equalsIgnoreCase("HeaderedPumps:ConstantSpeed")) {
+			eoIterator.remove();
+			heatingPump = "HeaderedPumps:VariableSpeed";
+			continue;
+		    }
+		}
+	    } else if (temp.getKeyValuePair(0).getValue()
 		    .equals("Chilled Water Loop CHW Supply Pump")) {
 		if (coolLoad <= coolingLoadThreshold) {
 		    // smaller than threshold, remove the variable speed
@@ -113,37 +161,44 @@ public class DistrictCoolHVACSystem3 implements SystemType3 {
 			continue;
 		    }
 		}
-
 	    }
 	    plantTemp.add(temp);
+
 	}
 	for (int j = 0; j < plantTemp.size(); j++) {
 	    if (plantTemp.get(j).getKeyValuePair(0).getValue()
+		    .equals("Hot Water Loop HW Supply Inlet Branch")) {
+		plantTemp.get(j).getKeyValuePair(3).setValue(heatingPump);
+	    } else if (plantTemp.get(j).getKeyValuePair(0).getValue()
 		    .equals("Chilled Water Loop CHW Supply Inlet Branch")) {
 		plantTemp.get(j).getKeyValuePair(3).setValue(coolingPump);
 	    }
 	}
+
+	HVACSystemImplUtil.plantConnectionForDistrictHeating(plantTemp,
+		zoneHeatCoilBranchList);
 	HVACSystemImplUtil.plantConnectionForDistrictCooling(plantTemp,
 		zoneCoolCoilBranchList);
-
 	plantObjects.put("Plant", plantTemp);
     }
 
-    private void removeCoolingSystem() {
+    private void removeOldSystem() {
 	ArrayList<EplusObject> supplySystem = objectLists
 		.get("Supply Side System");
 	Iterator<EplusObject> supplySystemIterator = supplySystem.iterator();
 	while (supplySystemIterator.hasNext()) {
 	    EplusObject eo = supplySystemIterator.next();
-	    // delete the original cooling coil
-	    if (eo.getObjectName().equals("Coil:Cooling:DX:SingleSpeed")) {
-		supplySystemIterator.remove();
-	    } else if (eo.getObjectName().equals("CoilSystem:Cooling:DX")) {
+	    if (eo.getObjectName().equals("Coil:Heating:Gas")
+		    || eo.getObjectName().equals("Coil:Cooling:DX:SingleSpeed")
+		    || eo.getObjectName().equals("CoilSystem:Cooling:DX")) {
 		supplySystemIterator.remove();
 	    } else if (eo.getObjectName().equals("Branch")
 		    && eo.getSize() >= objectSizeLimit) {
 		for (int i = 0; i < eo.getSize(); i++) {
 		    if (eo.getKeyValuePair(i).getValue()
+			    .equals("Coil:Heating:Gas")) {
+			eo.getKeyValuePair(i).setValue("Coil:Heating:Water");
+		    } else if (eo.getKeyValuePair(i).getValue()
 			    .equals("CoilSystem:Cooling:DX")) {
 			eo.getKeyValuePair(i).setValue("Coil:Cooling:Water");
 		    }

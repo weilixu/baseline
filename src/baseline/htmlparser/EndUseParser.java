@@ -33,8 +33,8 @@ public class EndUseParser {
 		heatingEndUseMap.put("Electricity", heatingEndUseList.get(i+electricityIndex).text());
 		heatingEndUseMap.put("Natural Gas", heatingEndUseList.get(i+naturalgasIndex).text());
 		heatingEndUseMap.put("Additional Fuel", heatingEndUseList.get(i+additioalfuelIndex).text());
-		heatingEndUseMap.put("Disctrict Cooling", heatingEndUseList.get(i+districtCoolingIndex).text());
-		heatingEndUseMap.put("Disctrict Heating", heatingEndUseList.get(i+distribtHeatingIndex).text());
+		heatingEndUseMap.put("District Cooling", heatingEndUseList.get(i+districtCoolingIndex).text());
+		heatingEndUseMap.put("District Heating", heatingEndUseList.get(i+distribtHeatingIndex).text());
 		heatingEndUseMap.put("Water", heatingEndUseList.get(i+waterIndex).text());
 	    }
 	}

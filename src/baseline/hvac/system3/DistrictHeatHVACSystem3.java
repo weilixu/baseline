@@ -3,12 +3,11 @@ package baseline.hvac.system3;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
+import baseline.hvac.HVACSystem;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import baseline.idfdata.thermalzone.ThermalZone;
 import hvac.manufacturer.Manufacturer;
 
 /**
@@ -26,7 +25,7 @@ public class DistrictHeatHVACSystem3 implements SystemType3 {
 
     private HashMap<String, ArrayList<EplusObject>> plantObjects;
 
-    private SystemType3 system;
+    private HVACSystem system;
 
     private final EnergyPlusBuilding building;
 

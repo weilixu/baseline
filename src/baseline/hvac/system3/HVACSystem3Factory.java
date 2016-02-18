@@ -50,6 +50,8 @@ public class HVACSystem3Factory {
 	    systemType3 = new DistrictHeatHVACSystem3(systemType3, building);
 	}else if(building.isDistrictCool() && !building.isDistrictHeat()){
 	    systemType3 = new DistrictCoolHVACSystem3(systemType3, building);
+	}else if(building.isDistrictCool() && building.isDistrictHeat()){
+	    systemType3 = new DistrictHeatCoolSystem3(systemType3, building);
 	}
     }
     

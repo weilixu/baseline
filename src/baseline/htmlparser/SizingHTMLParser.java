@@ -183,7 +183,8 @@ public final class SizingHTMLParser {
 	HashMap<String, String> heatingEndUse = enduse.getHeatingEndUseMap();
 	Double electricity = Double.parseDouble(heatingEndUse.get("Electricity"));
 	Double naturalgas = Double.parseDouble(heatingEndUse.get("Natural Gas"));
-	if(electricity>naturalgas){
+	Double districtheat = Double.parseDouble(heatingEndUse.get("District Heating"));
+	if(electricity>naturalgas && electricity > districtheat){
 	    building.setElectricHeating();
 	}
     }

@@ -27,6 +27,9 @@ public final class Manufacturer {
 	if(object.equals("Return Fan")){
 	    VariableVolumeReturnFan fan = new VariableVolumeReturnFan(hvacName,"Fan:VariableVolume","Supply Side System");
 	    return fan.getObject();
+	}else if(object.equals("AirLoopHVACControllerList")){
+	    AirLoopHVACControllerList controller = new AirLoopHVACControllerList(hvacName,"AirloopHVAC:ControllerList", "Supply Side System");
+	    return controller.getObject();
 	}
 	return null;
     }
