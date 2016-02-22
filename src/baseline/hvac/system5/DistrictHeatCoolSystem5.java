@@ -26,5 +26,4 @@ public class DistrictHeatCoolSystem5 implements SystemType5{
     public HashMap<String, ArrayList<EplusObject>> getSystemData() {
 	return system.getSystemData();
     }
-
 }

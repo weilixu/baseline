@@ -29,7 +29,18 @@ public class DistrictHeatHVACSystem7 implements SystemType7 {
 	this.system = sys;
 	objectLists = system.getSystemData();
 	building = bldg;
+	
+	//TODO remove original heating system
+	removeHeatingSystem();
+	
+	//TODO inquire district heat plant manufacturer
+	
+	//TODO replace the system with district heat system
 
+    }
+    
+    private void removeHeatingSystem(){
+	
     }
 
     @Override
