@@ -27,7 +27,7 @@ import baseline.idfdata.building.EnergyPlusBuilding;
  */
 public class HVACSystem6Factory {
     //extract the template system
-    private final SystemParser system = new SystemParser("System Type 5");
+    private final SystemParser system = new SystemParser("System Type 6");
     
     private HashMap<String, ArrayList<EplusObject>> systemObjects;
     
