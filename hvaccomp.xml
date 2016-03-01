@@ -420,10 +420,10 @@
 		<object description = "SetpointManager:OutdoorAirReset" reference = "Plant">
 			<field description = "Name" type = "String">Chilled Water Loop CHW Temp Manager</field>
 			<field description = "Control Variable" type = "String">Temperature</field>
-			<field description = "Setpoint at Outdoor Low Temperature" type = "Double">82</field>
-			<field description = "Outdoor Low Temperature" type = "Double">-7</field>
-			<field description = "Setpoint at Outdoor High Temperature" type="Double">66</field>
-			<field description = "Outdoor High Temperature" type = "Double">10</field>
+			<field description = "Setpoint at Outdoor Low Temperature" type = "Double">12</field>
+			<field description = "Outdoor Low Temperature" type = "Double">16</field>
+			<field description = "Setpoint at Outdoor High Temperature" type="Double">7</field>
+			<field description = "Outdoor High Temperature" type = "Double">27</field>
 			<field description = "Setpoint Node or NodeList Name" type = "String">Chilled Water Loop CHW Supply Setpoint Nodes</field>
 		</object>	
 		<object description = "Branch" reference = "Plant">

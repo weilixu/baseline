@@ -19,8 +19,8 @@ public class Main {
 	//File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 3\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");	
 	//File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 5\\Sys5_Sample.idf");
 	//File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 5\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");	
-	File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 7\\Sys7_Sample.idf");
-	File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 7\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");	
+	File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 7\\DistrictCool\\Sys7_Sample.idf");
+	File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 7\\DistrictCool\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");	
 	//File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 8\\Sys8_Sample.idf");
 	//File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 8\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");	
 	ClimateZone zone = ClimateZone.CLIMATEZONE3A;
