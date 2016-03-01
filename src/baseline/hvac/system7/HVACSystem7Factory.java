@@ -55,6 +55,8 @@ public class HVACSystem7Factory {
 	//judge if it is purchased heat or not
 	if(building.isDistrictCool() && !building.isDistrictHeat()){
 	    systemType7 = new DistrictCoolHVACSystem7(systemType7, building);
+	}else if(building.isDistrictHeat() && !building.isDistrictCool()){
+	    systemType7 = new DistrictHeatHVACSystem7(systemType7, building);
 	}
 	if(building.hasReturnFan()){
 	    systemType7 = new ReturnFanHVACSystem7(systemType7,building);
