@@ -36,9 +36,10 @@ public class HVACSystem8Factory {
     
     private void processSystem(){
 	//judge if it is purchased heat or not
-	if(building.isDistrictHeat()){
-	    
-	}else if(building.hasReturnFan()){
+	if(building.isDistrictCool()){
+	    systemType8 = new DistrictCoolHVACSystem8(systemType8, building);
+	}
+	if(building.hasReturnFan()){
 	    //systemType8 = new ReturnFanHVACSystem(systemType7,building);
 	}
     }
