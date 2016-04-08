@@ -39,8 +39,8 @@ public class Main {
 	//File astweatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\PaperTest\\LEED Rating\\KPHL_10074_9999_amy.epw");
 	
 	//Generator astgenerator = new Generator(asteplusFile,astweatherFile,zone,"Office",false, "Asset Score Tool");
-	File domeplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 1\\Standard\\Sys1_Sample.idf");
-	File domweatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 1\\Standard\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");
+	File domeplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 2\\Standard\\Sys2_Sample.idf");
+	File domweatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 2\\Standard\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");
 	
 	Generator domgenerator = new Generator(domeplusFile,domweatherFile,zone,"Residential",false, "DesignBuilder");
 
