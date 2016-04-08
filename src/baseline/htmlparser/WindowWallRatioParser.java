@@ -86,17 +86,19 @@ public class WindowWallRatioParser {
      */
     private List<Coordinate3D> readSurfaceCoords(ArrayList<ValueNode> attrs) {
 	List<Coordinate3D> coords = new LinkedList<Coordinate3D>();
-	int numVertices = Integer
-		.valueOf(attrs.get(SurfaceNumVerticeLoc).getAttribute());
-	for (int i = 0; i < numVertices; i++) {
+	
+	//assume the vertices starts at line 10th
+	int numVertices = SurfaceNumVerticeLoc+1;
+	while(numVertices < attrs.size()){
 	    double x = Double.parseDouble(
-		    attrs.get(i * 3 + SurfaceCoordsOffset).getAttribute());
+		    attrs.get(numVertices).getAttribute());
 	    double y = Double.parseDouble(
-		    attrs.get(i * 3 + SurfaceCoordsOffset + 1).getAttribute());
+		    attrs.get(numVertices + 1).getAttribute());
 	    double z = Double.parseDouble(
-		    attrs.get(i * 3 + SurfaceCoordsOffset + 2).getAttribute());
+		    attrs.get(numVertices + 2).getAttribute());
 	    Coordinate3D coord = new Coordinate3D(x, y, z);
 	    coords.add(coord);
+	    numVertices +=3;
 	}
 	return coords;
     }
@@ -140,8 +142,9 @@ public class WindowWallRatioParser {
 	List<Window> wins = wall.getWindows();
 	for (Window win : wins) {
 	    String name = win.getId();
-
+	    //System.out.println(name);
 	    ArrayList<ValueNode> winInfo = this.feneSurfaces.get(name);
+	    //System.out.println(winInfo.get(0).getAttribute());
 	    List<Coordinate3D> points = win.getCoords();
 	    for (int i = 0; i < points.size(); i++) {
 		Coordinate3D point = points.get(i);

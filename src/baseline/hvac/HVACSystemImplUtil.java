@@ -393,6 +393,30 @@ public final class HVACSystemImplUtil {
 	    }
 	}
     }
+    
+    public static void plantConnectionForSys1(ArrayList<EplusObject> plantSystem, ArrayList<String> boilerList,
+	    ArrayList<String> zoneHeatingCoilList){
+	// use for additional eplus objects
+	for (EplusObject eo : plantSystem) {
+	    String name = eo.getKeyValuePair(0).getValue();
+	    if (name.equals("Hot Water Loop HW Demand Side Branches")) {
+		insertHeatingCoils(2, eo, null,
+			zoneHeatingCoilList);
+	    } else if (name.equals("Hot Water Loop HW Demand Splitter")
+		    || name.equals("Hot Water Loop HW Demand Mixer")) {
+		insertHeatingCoils(eo.getSize(), eo, null,
+			zoneHeatingCoilList);// insert to the last index
+	    } else if (name.equals("Hot Water Loop HW Supply Side Branches")
+		    || name.equals("Hot Water Loop HW Supply Splitter")
+		    || name.equals("Hot Water Loop HW Supply Mixer")) {
+		insertBoilerRelatedInputs(2, eo, " HW Branch", boilerList);
+	    } else if (name.equals("Hot Water Loop HW Supply Setpoint Nodes")) {
+		insertBoilerRelatedInputs(1, eo, " HW Outlet", boilerList);
+	    } else if (name.equals("Hot Water Loop All Equipment")) {
+		insertBoilerEquipmentList(eo, boilerList);
+	    }
+	}
+    }
 
     public static void plantConnectionForDistrictHeating(ArrayList<EplusObject> plantSystem, ArrayList<String> heatCoilList){
 	for(EplusObject eo: plantSystem){

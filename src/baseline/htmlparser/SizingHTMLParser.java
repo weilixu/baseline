@@ -184,7 +184,8 @@ public final class SizingHTMLParser {
 	Double electricity = Double.parseDouble(heatingEndUse.get("Electricity"));
 	Double naturalgas = Double.parseDouble(heatingEndUse.get("Natural Gas"));
 	Double districtheat = Double.parseDouble(heatingEndUse.get("District Heating"));
-	if(electricity>naturalgas && electricity > districtheat){
+	Double addFuel = Double.parseDouble(heatingEndUse.get("Additional Fuel"));
+	if(electricity>naturalgas && electricity > districtheat && electricity > addFuel){
 	    building.setElectricHeating();
 	}
     }

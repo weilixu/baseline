@@ -9,6 +9,7 @@ public class Window extends Polygon{
 	public Window(List<Coordinate3D> coords, String name, String id) {
 		super(coords);
 		this.name = name;
+		this.id = id;
 	}
 
 	public String getName() {

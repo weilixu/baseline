@@ -133,6 +133,19 @@ public class BaselineHVAC {
 		}
 		system = factory.createSystem();
 	    }
+	}else if (bldgType.toString().equalsIgnoreCase("RESIDENTIAL")){
+	    // second exam the floor size and area
+	    System.out.println("We identified floor number: " + floorNumber + " and total floor size: " + floorSize);
+		if (building.getHeatingMethod()) {
+		    systemType = "System Type 2";
+		    factory = new HVACSystemFactory(systemType, building);
+		    System.out.println("We select System Type 2");
+		} else {
+		    systemType = "System Type 1";
+		    factory = new HVACSystemFactory(systemType, building);
+		    System.out.println("We select System Type 1");
+		}
+		system = factory.createSystem();
 	}
 	if (building.getInfoObject() != null) {
 	    building.initialInfoForSystem(systemType);

@@ -194,8 +194,13 @@ public class Generator {
     // }
 
     private void buildingHVAC() {
-	BuildingType bldgType = BuildingType.NONRESIDENTIAL;
-	baselineHVAC = new BaselineHVAC(bldgType, building);
+	BuildingType type;
+	if(bldgType.equals("Residential")){
+	    type = BuildingType.RESIDENTIAL;
+	}else{
+	    type = BuildingType.NONRESIDENTIAL;
+	}
+	baselineHVAC = new BaselineHVAC(type, building);
 	baselineHVAC.selectSystem();
 	try {
 	    baselineHVAC.replaceHVACObjects();
