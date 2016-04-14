@@ -1,4 +1,4 @@
-package baseline.hvac.system5;
+package baseline.hvac.system1;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,14 +11,7 @@ import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
 import hvac.manufacturer.Manufacturer;
 
-/**
- * In ASHRAE 90.1 2007 and 2010 standard, district heating source won't
- * change the setting for system type 5, therefore, this class will not
- * modify the original system struture. 
- * @author Weili
- *
- */
-public class DistrictHeatHVACSystem5 implements SystemType5{
+public class DistrictHeatHVACSystem1 implements SystemType1{
     // recording all the required data for HVAC system type 1
     private HashMap<String, ArrayList<EplusObject>> objectLists;
     private HashMap<String, ArrayList<EplusObject>> plantObjects;
@@ -31,7 +24,7 @@ public class DistrictHeatHVACSystem5 implements SystemType5{
     private static final double heatingFloorThreshold = 11150; // m2
     private String heatingPump = "HeaderedPumps:ConstantSpeed";
 
-    public DistrictHeatHVACSystem5(SystemType5 sys, EnergyPlusBuilding bldg){
+    public DistrictHeatHVACSystem1(SystemType1 sys, EnergyPlusBuilding bldg){
 	this.system = sys;
 	objectLists = system.getSystemData();
 	building = bldg;
@@ -198,4 +191,5 @@ public class DistrictHeatHVACSystem5 implements SystemType5{
 	    }
 	}
     }
+
 }
