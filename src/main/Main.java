@@ -26,14 +26,14 @@ public class Main {
 	ClimateZone zone = ClimateZone.CLIMATEZONE3A;
 	//String tool = "DesignBuilder";
 	//String tool = "Asset Score Tool";
-	File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 8\\Standard\\Sys8_Sample.idf");
-	File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 8\\Standard\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");
+	File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 1\\DistrictCool\\Sys1_Sample.idf");
+	File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 1\\DistrictCool\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");
 
 	//File energyplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 3\\DistrictHeatCool\\Sys3_Sample.idf");
 	//File weatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\Sample Buildings Folder\\System Type 3\\DistrictHeatCool\\USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw");	
 	//File energyplusFile = new File("C:\\Users\\Weili\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\MyWebProject\\74dbe85dd58226b2a5999a021a91b25e\\test.idf");
 	//File weatherFile = new File("C:\\Users\\Weili\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\MyWebProject\\74dbe85dd58226b2a5999a021a91b25e\\weather.epw");	
-	Generator generator = new Generator(energyplusFile,weatherFile,zone,"Office",false, "DesignBuilder");
+	Generator generator = new Generator(energyplusFile,weatherFile,zone,"Residential",false, "DesignBuilder");
 	
 	//File asteplusFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\PaperTest\\LEED Rating\\1mp.idf");
 	//File astweatherFile = new File("E:\\02_Weili\\01_Projects\\12_ILEED\\PaperTest\\LEED Rating\\KPHL_10074_9999_amy.epw");

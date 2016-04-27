@@ -33,6 +33,8 @@ public class HVACSystem1Factory {
     private void processSystem(){
 	if(building.isDistrictHeat()&&!building.isDistrictCool()){
 	    systemType1 = new DistrictHeatHVACSystem1(systemType1, building);
+	}else if(!building.isDistrictHeat()&&building.isDistrictCool()){
+	    systemType1 = new DistrictCoolHVACSystem1(systemType1, building);
 	}
     }
     

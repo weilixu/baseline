@@ -87,7 +87,7 @@
 			<field description = "Air Outlet Node Name" type = "String">Zone% Supply Inlet</field>
 		</object>		
 		<object description = "Coil:Heating:Water" reference = "Demand Side System">
-			<field description = "Name" type = "String">Zone% Heating Coil</field>
+			<field description = "Name" type = "String">Zone% AHU Heating Coil</field>
 			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
 			<field description = "UFactor Times Area Value" type = "Double or String">autosize</field>
 			<field description = "Maximum Water Flow Rate" type = "Double or String">autosize</field>
@@ -146,7 +146,7 @@
 			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
 			<field description = "Pressure Drop Curve Name" type = "String"/>
 			<field description = "Component 1 Object Type" type = "String">Coil:Heating:Water</field>
-			<field description = "Component 1 Name" type = "String">Zone% Heating Coil</field>
+			<field description = "Component 1 Name" type = "String">Zone% AHU Heating Coil</field>
 			<field description = "Component 1 Inlet Node Name" type = "String">Zone% Heating Coil HW Inlet</field>
 			<field description = "Component 1 Outlet Node Name" type = "String">Zone% Heating Coil HW Outlet</field>
 			<field description = "Component 1 Branch Control Type" type = "String">Active</field>
@@ -273,8 +273,8 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
 			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">1.33916</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">-0.33075</field>
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
@@ -2532,8 +2532,8 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
 			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">1.33916</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">-0.33075</field>
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
@@ -3860,8 +3860,8 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
 			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">1.33916</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">-0.33075</field>
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
@@ -3879,8 +3879,8 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
 			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">1.33916</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">-0.33075</field>
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
@@ -3898,8 +3898,8 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
 			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">1.33916</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">-0.33075</field>
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
@@ -5243,8 +5243,8 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
 			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">1.33916</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">-0.33075</field>
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
@@ -5262,8 +5262,8 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
 			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">1.33916</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">-0.33075</field>
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>

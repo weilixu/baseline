@@ -363,8 +363,8 @@
 			<field description = "Motor Efficiency" type = "Double">0.9</field>
 			<field description = "Fraction of Motor Inefficiencies to Fluid Stream" type = "Double">0</field>
 			<field description = "Coefficient 1 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">0.0</field>
-			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">1.0</field>
+			<field description = "Coefficient 2 of the Part Load Performance Curve" type = "Double">1.33916</field>
+			<field description = "Coefficient 3 of the Part Load Performance Curve" type = "Double">-0.33075</field>
 			<field description = "Coefficient 4 of the Part Load Performance Curve" type = "Double">0.0</field>
 			<field description = "Minimum Flow Rate Fraction" type = "Double">0.0</field>
 			<field description = "Pump Control Type" type = "String">Intermittent</field>
@@ -574,5 +574,82 @@
 			<field description = "Inlet Node Name" type = "String">Chilled Water Loop CHW Demand Outlet Pipe Inlet</field>
 			<field description = "Outlet Node Name" type = "String">Chilled Water Loop CHW Demand Outlet</field>
 		</object>
-	</dataset>	
+	</dataset>
+	<dataset setname = "FanCoilUnit" category="8.3">
+		<object description = "ZoneHVAC:FourPipeFanCoil" reference = "Demand Side System">
+			<field description = "Name" type = "String">Zone% FC</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
+			<field description = "Capacity Control Method" type = "String">ConstantFanVariableFlow</field>
+			<field description = "Maximum Supply Air Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Low Speed Supply Air Flow Ratio" type = "Double">0.33</field>
+			<field description = "Medium Speed Supply Air Flow Ratio" type = "Double">0.66</field>
+			<field description = "Maximum Outdoor Air Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Outdoor Air Schedule Name" type = "String"/>
+			<field description = "Air Inlet Node Name" type = "String">Zone% FC Return</field>
+			<field description = "Air Outlet Node Name" type = "String">Zone% Supply Inlet</field>
+			<field description = "Outdoor Air Mixer Object Type" type = "String">OutdoorAir:Mixer</field>
+			<field description = "Outdoor Air Mixer Name" type = "String">Zone% OA Mixing Box</field>
+			<field description = "Supply Air Fan Object Type" type = "String">Fan:ConstantVolume</field>
+			<field description = "Supply Air Fan Name" type = "String">Zone% FC Supply Fan</field>
+			<field description = "Cooling Coil Object Type" type = "String">Coil:Cooling:Water</field>
+			<field description = "Cooling Coil Name" type = "String">Zone% AHU Cooling Coil</field>
+			<field description = "Maximum Cold Water Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Minimum Cold Water Flow Rate" type = "Double"/>
+			<field description = "Cooling Convergence Tolerance" type = "Double">0.001</field>
+			<field description = "Heating Coil Object Type" type = "String">Coil:Heating:Water</field>
+			<field description = "Heating Coil Name" type = "String">Zone% AHU Heating Coil</field>
+			<field description = "Maximum Hot Water Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Minimum Hot Water Flow Rate" type = "Double"/>
+			<field description = "Heating Convergence Tolerance" type = "Double">0.001</field>
+			<field description = "Availability Manager List Name" type = "String"/>
+			<field description = "Design Specification ZoneHVAC Sizing Object Name" type = "String"/>
+		</object>
+		<object description = "Fan:ConstantVolume" reference = "Demand Side System">
+			<field description = "Name" type = "String">Zone% FC Supply Fan</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
+			<field description = "Fan Total Efficiency" type = "Double">0.6</field>
+			<field description = "Pressure Rise" type = "Double">343.4</field>
+			<field description = "Maximum Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Motor Efficiency" type = "Double">0.9</field>
+			<field description = "Motor In Airstream Fraction" type = "Double">1</field>
+			<field description = "Air Inlet Node Name" type = "String">Zone% Mixed Air Outlet</field>
+			<field description = "Air Outlet Node Name" type = "String">Zone% FC Supply Fan Outlet</field>
+			<field description = "End-Use Subcategory" type = "String">General</field>
+		</object>
+		<object description = "Coil:Cooling:Water" reference = "Demand Side System">
+			<field description = "Name" type = "String">Zone% AHU Cooling Coil</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
+			<field description = "Design Water Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Design Air Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Design Inlet Water Temperature" type = "Double or String">autosize</field>
+			<field description = "Design Inlet Air Temperature" type = "Double or String">autosize</field>
+			<field description = "Design Outlet Air Temperature" type = "Double or String">autosize</field>
+			<field description = "Design Inlet Air Humidity Ratio" type = "Double or String">autosize</field>
+			<field description = "Design Outlet Air Humidity Ratio" type = "Double or String">autosize</field>
+			<field description = "Water Inlet Node Name" type = "String">Zone% Cooling Coil CHW Inlet</field>
+			<field description = "Water Outlet Node Name" type = "String">Zone% Cooling Coil CHW Outlet</field>
+			<field description = "Air Inlet Node Name" type = "String">Zone% FC Supply Fan Outlet</field>
+			<field description = "Air Outlet Node Name" type = "String">Zone% FC Cooling Coil Outlet</field>
+			<field description = "Type of Analysis" type = "String">SimpleAnalysis</field>
+			<field description = "Heat Exchanger Configuration" type = "String">CounterFlow</field>
+			<field description = "Condensate Collection Water Storage Tank Name" type = "String"></field>
+		</object>
+		<object description = "Coil:Heating:Water" reference = "Demand Side System">
+			<field description = "Name" type = "String">Zone% AHU Heating Coil</field>
+			<field description = "Availability Schedule Name" type = "String">Always 1_BAS</field>
+			<field description = "U-Factor Times Area Value" type = "Double or String">autosize</field>
+			<field description = "Maximum Water Flow Rate" type = "Double or String">autosize</field>
+			<field description = "Water Inlet Node Name" type = "String">Zone% Heating Coil HW Inlet</field>
+			<field description = "Water Outlet Node Name" type = "String">Zone% Heating Coil HW Outlet</field>
+			<field description = "Air Inlet Node Name" type = "String">Zone% FC Cooling Coil Outlet</field>
+			<field description = "Air Outlet Node Name" type = "String">Zone% Supply Inlet</field>
+			<field description = "Performance Input Method" type = "Double or String">UFactorTimesAreaAndDesignWaterFlowRate</field>
+			<field description = "Rated Capacity" type = "Double or String">autosize</field>
+			<field description = "Rated Inlet Water Temperature" type = "Double">82.2</field>
+			<field description = "Rated Inlet Air Temperature" type = "Double">16.6</field>			
+			<field description = "Rated Outlet Water Temperature" type = "Double">71.1</field>
+			<field description = "Rated Outlet Air Temperature" type = "Double">32.2</field>
+			<field description = "Rated Ratio for Air and Water Convection" type = "Double">0.5</field>
+		</object>	
+	</dataset>
 </hvac>

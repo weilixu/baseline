@@ -57,6 +57,12 @@ public final class Manufacturer {
 	}else if(system.equals("District Cool")){
 	    DistrictCoolingPlant plant = new DistrictCoolingPlant();
 	    return plant.getObject();
+	}else if(system.equals("Fan Coil Unit")){
+	    //the fan coil unit component only includes the important component
+	    //connections are still highly depends on other systems, and the client
+	    //code use this system should address the connections
+	    FourPipeFanCoilUnit fancoil = new FourPipeFanCoilUnit();
+	    return fancoil.getObject();
 	}
 	return null;
     }

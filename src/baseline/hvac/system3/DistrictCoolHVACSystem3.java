@@ -22,7 +22,7 @@ import hvac.manufacturer.Manufacturer;
  *
  */
 public class DistrictCoolHVACSystem3 implements SystemType3 {
-    // recording all the required data for HVAC system type 7
+    // recording all the required data for HVAC system type 3
     private HashMap<String, ArrayList<EplusObject>> objectLists;
 
     private HashMap<String, ArrayList<EplusObject>> plantObjects;
@@ -45,7 +45,7 @@ public class DistrictCoolHVACSystem3 implements SystemType3 {
 	// remove original cooling system
 	removeCoolingSystem();
 
-	// inquire district heat plant manufacturer
+	// inquire district cool plant manufacturer
 	plantObjects = new HashMap<String, ArrayList<EplusObject>>();
 	processTemplate(Manufacturer.generateSystem("District Cool"));
 
