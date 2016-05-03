@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import baseline.hvac.HVACSystem;
 import baseline.hvac.SystemParser;
+import baseline.hvac.system1.DistrictCoolHVACSystem1;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
 
@@ -32,7 +33,9 @@ public class HVACSystem2Factory {
     
     
     private void processSystem(){
-	
+	if(building.isDistrictCool()){
+	    systemType2 = new DistrictCoolHVACSystem2(systemType2, building);
+	}
     }
     
     /**
