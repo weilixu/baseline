@@ -225,6 +225,10 @@ public class HVACSystem1 implements SystemType1{
 	    boilerList.add("Boiler%");
 	}
 	
+	if(building.getInfoObject()!=null){
+	    building.getInfoObject().setNumBoiler(numberOfBoiler);
+	}
+	
 	ArrayList<EplusObject> plantTemp = new ArrayList<EplusObject>();
 	
 	// we use iterator because we will delete some objects in this loop

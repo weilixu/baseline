@@ -37,6 +37,7 @@ public class BaselineInfo {
     private double chwPumpFlow;
     private double cwPumpFlow;
     private double buildingArea;
+    private int numBoiler;
     private double boilerCapacity;
     private double boilerEfficiency = 80;
     private double hwPumpFlow;
@@ -248,6 +249,15 @@ public class BaselineInfo {
     public void setBuildingArea(double buildingArea) {
         this.buildingArea = buildingArea;
     }
+    
+    public void setNumBoiler(int num){
+	numBoiler = num;
+    }
+    
+    public int getNumBoiler(){
+	return numBoiler;
+    }
+    
     public double getBoilerCapacity() {
         return boilerCapacity;
     }

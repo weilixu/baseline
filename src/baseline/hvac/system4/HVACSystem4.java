@@ -106,7 +106,9 @@ public class HVACSystem4 implements SystemType4{
 		    }
 		}
 	    }
-	    building.getInfoObject().setFanPower(totalFanPower);
+	    if(building.getInfoObject()!=null){
+		building.getInfoObject().setFanPower(totalFanPower);
+	    }
 	}
     }
 
@@ -174,5 +176,4 @@ public class HVACSystem4 implements SystemType4{
 	}
 	return demandTemp;
     }
-
 }

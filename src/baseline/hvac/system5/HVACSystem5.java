@@ -207,6 +207,12 @@ public class HVACSystem5 implements SystemType5{
 	//calculate the number of boilers
 	int numberOfBoiler = HVACSystemImplUtil.boilerNumberCalculation(floorArea);
 	System.out.println("We Found " + numberOfBoiler + "Boilers");
+	
+	//Log Change: number of boiler
+	if(building.getInfoObject()!=null){
+	    building.getInfoObject().setNumBoiler(numberOfBoiler);
+	}
+	
 	if(numberOfBoiler==1){
 	    boilerList.add("Boiler%");
 	}

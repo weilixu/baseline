@@ -100,6 +100,12 @@ public class HVACSystem7 implements SystemType7 {
 	int numberOfBoiler = HVACSystemImplUtil
 		.boilerNumberCalculation(floorArea);
 	System.out.println("We Found " + numberOfBoiler + "Boilers");
+	
+	//Log Change: number of boiler
+	if(building.getInfoObject()!=null){
+	    building.getInfoObject().setNumBoiler(numberOfBoiler);
+	}
+	
 	if (numberOfBoiler == 1) {
 	    boilerList.add("Boiler%");
 	}

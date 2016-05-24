@@ -66,7 +66,6 @@ public class HVACSystem8 implements SystemType8{
 	return objectLists;
     }
     
-    
     /**
      * Process the zones in the building
      * 
@@ -92,7 +91,6 @@ public class HVACSystem8 implements SystemType8{
 //		temp.getKeyValuePair(fanFlowRateSizeIndex).setValue(flowRate.toString());
 //	    }
 	    demandTemp.add(temp);
-
 	}
 	// record the connection links in the HVAC system
 	String zoneSplitter = zone + " Splitter Outlet Node";
@@ -174,6 +172,11 @@ public class HVACSystem8 implements SystemType8{
 	// calculate the number of chillers
 	numberOfChiller = HVACSystemImplUtil.chillerNumberCalculation(
 		coolingLoad, building.getTotalFloorArea());
+	
+	//Log the change: number of chillers
+	if (building.getInfoObject() != null) {
+	    building.getInfoObject().setNumChiller(numberOfChiller);
+	}
 
 	System.out.println("We Found " + numberOfChiller + " Chillers");
 
@@ -273,7 +276,7 @@ public class HVACSystem8 implements SystemType8{
 	    supplySideSystem.addAll(processSupplyTemp(floor,
 		    supplySideSystemTemplate));
 	}
-	// number of similar systems
+	// Log the change: number of similar systems
 	if (building.getInfoObject() != null) {
 	    building.getInfoObject().setNumOfSystem(floorCounter);
 	}
@@ -298,6 +301,12 @@ public class HVACSystem8 implements SystemType8{
 	// determine the economizers.
 	double economizer = building.getClimateZone()
 		.getEconomizerShutoffLimit();
+	
+	//Log the change: number of systems
+	if(building.getInfoObject()!=null){
+		building.getInfoObject().setHasEconomizer(economizer);	    
+	}
+	
 	double totalFanPower = 0.0;
 	for (EplusObject eo : supplySystem) {
 	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {

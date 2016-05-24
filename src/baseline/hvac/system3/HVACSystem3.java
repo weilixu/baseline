@@ -88,7 +88,12 @@ public class HVACSystem3 implements SystemType3 {
 	// determine the economizers.
 	double economizer = building.getClimateZone()
 		.getEconomizerShutoffLimit();
-	building.getInfoObject().setHasEconomizer(economizer);
+	
+	//Log changes: economizer
+	if(building.getInfoObject()!=null){
+	    building.getInfoObject().setHasEconomizer(economizer);	    
+	}
+	
 	double totalFanPower = 0;
 	for (EplusObject eo : supplySystem) {
 	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {

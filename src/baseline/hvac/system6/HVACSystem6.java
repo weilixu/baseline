@@ -145,6 +145,12 @@ public class HVACSystem6 implements SystemType6{
 	// determine the economizers.
 	double economizer = building.getClimateZone()
 		.getEconomizerShutoffLimit();
+	
+	//Log Changes, economizer
+	if(building.getInfoObject()!=null){
+	    building.getInfoObject().setHasEconomizer(economizer);
+	}
+	
 	double totalFanPower = 0;
 	for (EplusObject eo : supplySystem) {
 	    if (eo.getObjectName().equalsIgnoreCase("Controller:OutdoorAir")) {
