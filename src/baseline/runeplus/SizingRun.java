@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 import baseline.util.BaselineUtils;
 
@@ -157,6 +156,7 @@ public class SizingRun {
 	return file;
     }
 
+    @SuppressWarnings("unused")
     private class ThreadedInputStream extends Thread {
 	private IOException ioExc;
 	private InputStream is;

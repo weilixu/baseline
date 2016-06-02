@@ -3,13 +3,12 @@ package baseline.hvac.system1;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 import baseline.hvac.HVACSystem;
 import baseline.hvac.HVACSystemImplUtil;
+import baseline.hvac.manufacturer.Manufacturer;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import hvac.manufacturer.Manufacturer;
 /**
  * This class modifies the standard ASHRAE HVAC System Type 1's heating source
  * to district heating and cooling source to district cooling. In addition to this, 

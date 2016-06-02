@@ -2,7 +2,6 @@ package baseline.hvac;
 
 import java.util.ArrayList;
 
-import baseline.htmlparser.SizingHTMLParser;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
 
@@ -14,10 +13,12 @@ import baseline.idfdata.KeyValuePair;
  * @author Weili
  *
  */
+@SuppressWarnings("unused")
 public final class HVACSystemImplUtil {
     // threshold for determine the HVAC components.
     private static final double heatingBoilerThreshold = 1393.55;// m2
-    private static final double coolingChillerSmallThreshold = 10550558;// watt
+   
+	private static final double coolingChillerSmallThreshold = 10550558;// watt
     private static final double coolingChillerLargeThreshold = 21101115;// watt
     private static final double chillerCapacityThreshold = 2813482;
     private static final double coolingSmallFloorArea = 11148;

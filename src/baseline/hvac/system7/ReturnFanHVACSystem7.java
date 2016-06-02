@@ -1,6 +1,6 @@
 package baseline.hvac.system7;
 
-import hvac.manufacturer.Manufacturer;
+import baseline.hvac.manufacturer.Manufacturer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

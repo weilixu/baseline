@@ -1,17 +1,18 @@
-package hvac.manufacturer;
+package baseline.hvac.manufacturer;
 
 import java.util.ArrayList;
 
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
 
+@SuppressWarnings("unused")
 public final class Manufacturer {
     private static int branchComponent1ObjectTypeIndex = 3;
     private static int branchComponent1NameIndex = 4;
     private static int branchComponent1InletNodeIndex = 5;
     private static int branchComponent1OutletNodeIndex = 6;
     private static int branchComponent1ControlTypeIndex = 7;
-    private static int branchComponent2ObjectTypeIndex = 8;
+	private static int branchComponent2ObjectTypeIndex = 8;
     private static int branchComponent2NameIndex = 9;
     private static int branchComponent2InletNodeIndex = 10;
     private static int branchComponent2OutletNodeIndex = 11;

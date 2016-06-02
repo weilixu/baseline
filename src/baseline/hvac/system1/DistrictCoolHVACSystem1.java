@@ -8,7 +8,7 @@ import baseline.hvac.HVACSystem;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import hvac.manufacturer.Manufacturer;
+import baseline.hvac.manufacturer.Manufacturer;
 
 public class DistrictCoolHVACSystem1 implements SystemType1 {
 

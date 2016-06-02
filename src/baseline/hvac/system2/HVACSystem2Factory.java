@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import baseline.hvac.HVACSystem;
 import baseline.hvac.SystemParser;
-import baseline.hvac.system1.DistrictCoolHVACSystem1;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
 

@@ -51,7 +51,8 @@ public class ReturnFanDetector implements Detector{
     }
     
 
-    private void checkForReturnFans(IdfReader baselineModel) {
+    @SuppressWarnings("unused")
+	private void checkForReturnFans(IdfReader baselineModel) {
 	HashMap<String, ArrayList<ValueNode>> airLoops;
 	try {
 	    airLoops = baselineModel.getObjectList("AirLoopHVAC").get(
@@ -73,8 +74,7 @@ public class ReturnFanDetector implements Detector{
 				.getAttribute();
 		    } else if (airLoops.get(airloop).get(i).getDescription()
 			    .equals("Demand Side Outlet Node Name")) {
-			demandSideOutletName = airLoops.get(airloop).get(i)
-				.getAttribute();
+			demandSideOutletName = airLoops.get(airloop).get(i).getAttribute();
 		    }
 		}
 		// branch list to check system return fan

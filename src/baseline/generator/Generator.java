@@ -1,6 +1,7 @@
 package baseline.generator;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import baseline.construction.opaque.BaselineEnvelope;
@@ -14,6 +15,7 @@ import baseline.lighting.LightingGenerator;
 import baseline.runeplus.SizingRun;
 import baseline.util.BuildingType;
 import baseline.util.ClimateZone;
+import lepost.shared.StatusMonitor;
 
 public class Generator {
 
@@ -42,8 +44,16 @@ public class Generator {
     private String tool;
     private BaselineInfo info;
 
-    public Generator(File idfFile, File wea, ClimateZone zone,
-	    String buildingType, boolean existing, String tool) {
+    public Generator(File idfFile, 
+    				 File wea, 
+    				 ClimateZone zone,
+    				 String buildingType, 
+    				 boolean existing, 
+    				 String tool,
+    				 StatusMonitor monitor,
+    				 String key,
+    				 GeneratorStatusReport report) {
+    	
 	// identify the climate zone
 	cZone = zone;
 	isExisting = existing;
@@ -62,6 +72,8 @@ public class Generator {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    // cannot read the design file, check directory
+	    
+	    report.processError("Reading uploaed design model has error: "+e.getMessage(), null);
 	}
 	// set-up sizing simulator
 
@@ -69,18 +81,27 @@ public class Generator {
 
 	eplusSizing = new SizingRun(weatherFile);
 	modifyOutput();
+	
+	monitor.updateStatus(key, "Analyze design case...", false);
 
 	// run first sizing simulations-
 	// this simulation is mainly to create abstract building info
 	// on top of the basic data structure
 	try {
-	    firstSizingRun();
+	    if(!firstSizingRun()){
+	    	report.processError("Runing design model encounters problem", "Baseline_0.err");
+	    	return;
+	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
 	// creating the abstract building info for deeper level information
 	// process
 	System.out.println("Finish first round sizing");
+	
+	monitor.updateStatus(key, "Analyze complete", false);
+	monitor.updateStatus(key, "Generate baseline models...", false);
+	
 	//
 	//
 	// debug purpose
@@ -92,6 +113,7 @@ public class Generator {
 	SizingHTMLParser.extractBldgBasicInfo(building);
 	SizingHTMLParser.extractThermalZones(building);
 	building.processModelInfo();
+	
 	envelopeProcessor = new BaselineEnvelope(building);
 	lightGenerator = new LightingGenerator(building);
 	// change the envelope materials and lighting power densities
@@ -99,12 +121,18 @@ public class Generator {
 	lightGenerator.processBuildingTypeLPD();
 	// modify lighting and WWR Skylights
 	processWindowToWallRatio();
+	
 	try{
-	    sizingRun();
+	    if(!sizingRun()){
+	    	report.processError("Runing generated Baseline 0 encountered error", "Baseline_0.err");
+	    }
 	}catch(IOException e){
 	    e.printStackTrace();
 	}
 	System.out.println("Finish second round sizing");
+	
+	monitor.updateStatus(key, "Baseline models generation complete", false);
+	monitor.updateStatus(key, "Run simulation on baseline models...", false);
 	
 	building = new EnergyPlusBuilding(bldgType, cZone, baselineModel, info);
 	// reprocess the building abstract information
@@ -125,11 +153,18 @@ public class Generator {
 	// build HVAC system
 	buildingHVAC();
 	try {
-	    baselineSimulation();
+	    baselineSimulation(monitor, key, report);
+	    if(!report.isSuccess()){
+	    	return;
+	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
 	postprocessInfo();
+	
+	monitor.updateStatus(key, "Simulations on baseline models complete", true);
+	
+	fileCleaner();
     }
     
     public BaselineInfo getBaselineInfo(){
@@ -210,29 +245,39 @@ public class Generator {
 
     }
 
-    private void sizingRun() throws IOException {
+    private boolean sizingRun() throws IOException {
 	building.generateEnergyPlusModel(energyplusFile.getParentFile()
 		.getAbsolutePath(), "Baseline_0","0");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
 		.getAbsolutePath() + "\\Baseline_0.idf"));
 	eplusSizing.setBaselineSizing();
 	htmlOutput = eplusSizing.runEnergyPlus();
-	//System.out.println(htmlOutput.getAbsolutePath());
+	
+	if(htmlOutput != null){
+		return true;
+	}
+	return false;
     }
 
     // simple write out method, needs to be update later
-    private void firstSizingRun() throws IOException {
+    private boolean firstSizingRun() throws IOException {
 	baselineModel.WriteIdf(
 		energyplusFile.getParentFile().getAbsolutePath(), "Baseline_0");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
 		.getAbsolutePath() + "\\Baseline_0.idf"));
 	htmlOutput = eplusSizing.runEnergyPlus();
-	//System.out.println(htmlOutput.getAbsolutePath());
+
+	if(htmlOutput != null){
+		return true;
+	}
+	return false;
     }
 
-    private void baselineSimulation() throws IOException {
+    private void baselineSimulation(StatusMonitor monitor, String key, GeneratorStatusReport report) throws IOException {
 	String[] baselineList = { "0", "90", "180", "270" };
 	for (String degree : baselineList) {
+		monitor.updateStatus(key, "Doing simulation on orientation "+degree+" degree...", false);
+		
 	    String filename = "Baseline" + "_" + degree;
 		building.generateEnergyPlusModel(energyplusFile.getParentFile()
 			.getAbsolutePath(), filename,degree);
@@ -243,6 +288,8 @@ public class Generator {
 	    }else{
 		eplusSizing.runEnergyPlus();
 	    }
+	    
+	    monitor.updateStatus(key, "Simulation on orientation "+degree+" degree finished", false);
 	}
 	building.getInfoObject().setBaselineDirectory(energyplusFile.getParentFile().getAbsolutePath());
     }
@@ -259,5 +306,29 @@ public class Generator {
 	}else if(building.getInfoObject().getSystemType().equals("System Type 5")){
 	    building.getInfoObject().setHwPumpFlow(SizingHTMLParser.getPumpWaterFlowRate("HW"));
 	}
+    }
+    
+    protected void fileCleaner(){
+    	FileFilter ff = new FileFilter(){
+			@Override
+			public boolean accept(File f) {
+				String name = f.getName().toLowerCase();
+				
+				if(name.endsWith("idf") || name.endsWith("html")
+						|| name.endsWith("err") || name.endsWith("epw")
+						|| name.endsWith("savedinfo")){
+					return false;
+				}
+				
+				return true;
+			}
+    	};
+    	
+    	File dir = new File(energyplusFile.getParent()+"\\");
+    	File[] files = dir.listFiles(ff);
+    	
+    	for(File f : files){
+    		f.delete();
+    	}
     }
 }

@@ -51,6 +51,9 @@ public class BaselineInfo {
     private final String BASELINE180 = "baseline_180";
     private final String BASELINE270 = "baseline_270";
     
+    private String ASHRAEBuildingType = "";
+    private double processLoadPercent = 0;
+    
     public BaselineInfo(){
 	
     }
@@ -294,4 +297,20 @@ public class BaselineInfo {
     public String getBASELINE270() {
         return BASELINE270;
     } 
+    
+    public String getASHRAEBuildingType() {
+		return ASHRAEBuildingType;
+	}
+
+	public void setASHRAETBuildingType(String ASHRAEBuildingType) {
+		this.ASHRAEBuildingType = ASHRAEBuildingType;
+	}
+
+	public double getProcessLoadPercent() {
+		return processLoadPercent;
+	}
+
+	public void setProcessLoadPercent(double processLoadPercent) {
+		this.processLoadPercent = processLoadPercent;
+	}
 }

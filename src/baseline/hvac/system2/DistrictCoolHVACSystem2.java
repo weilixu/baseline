@@ -16,6 +16,7 @@ import baseline.idfdata.building.EnergyPlusBuilding;
  * @author Weili
  *
  */
+@SuppressWarnings("unused")
 public class DistrictCoolHVACSystem2 implements SystemType2{
     
     private HVACSystem system;
@@ -23,7 +24,7 @@ public class DistrictCoolHVACSystem2 implements SystemType2{
     private final EnergyPlusBuilding building;
 
     // threshold for determine the HVAC components.
-    private String coolingPump = "HeaderedPumps:ConstantSpeed";
+	private String coolingPump = "HeaderedPumps:ConstantSpeed";
     
     public DistrictCoolHVACSystem2(SystemType2 sys, EnergyPlusBuilding bldg){
 	system = sys;

@@ -9,7 +9,7 @@ import baseline.hvac.HVACSystem;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import hvac.manufacturer.Manufacturer;
+import baseline.hvac.manufacturer.Manufacturer;
 
 /**
  * In ASHRAE 90.1 2007 and 2010 standard, district heating source won't

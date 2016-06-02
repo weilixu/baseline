@@ -9,7 +9,7 @@ import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import hvac.manufacturer.Manufacturer;
+import baseline.hvac.manufacturer.Manufacturer;
 
 /**
  * This class modifies the standard ASHRAE HVAC System Type 3's heating source
