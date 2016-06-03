@@ -1,4 +1,4 @@
-package hvac.manufacturer;
+package baseline.hvac.manufacturer;
 
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;

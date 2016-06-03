@@ -8,13 +8,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.IdfReader;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import baseline.util.BaselineUtils;
 import baseline.util.BuildingType;
+import lepost.config.FilesPath;
 
 public class BaselineHVAC {
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     // HVAC related objects
     private HVACSystemFactory factory;
@@ -93,7 +97,7 @@ public class BaselineHVAC {
 	String systemType = null;
 	if (bldgType.toString().equalsIgnoreCase("NONRESIDENTIAL")) {
 	    // second exam the floor size and area
-	    System.out.println("We identified floor number: " + floorNumber + " and total floor size: " + floorSize);
+	    LOG.info("We identified floor number: " + floorNumber + " and total floor size: " + floorSize);
 	    // haven't implement the heating resource to distinguish the
 	    // two different types of systems
 	    // factory = new HVACSystemFactory("System Type 7", building);
@@ -102,11 +106,11 @@ public class BaselineHVAC {
 		if (building.getHeatingMethod()) {
 		    systemType = "System Type 8";
 		    factory = new HVACSystemFactory(systemType, building);
-		    System.out.println("We select System Type 8");
+		    LOG.info("We select System Type 8");
 		} else {
 		    systemType = "System Type 7";
 		    factory = new HVACSystemFactory("System Type 7", building);
-		    System.out.println("We select System Type 7");
+		    LOG.info("We select System Type 7");
 		}
 		system = factory.createSystem();
 	    } else if (floorNumber <= smallFloorNumber
@@ -114,36 +118,36 @@ public class BaselineHVAC {
 		if(building.getHeatingMethod()){
 		    systemType = "System Type 4";
 		    factory = new HVACSystemFactory("System Type 4", building);
-		    System.out.println("We select System Type 4");
+		    LOG.info("We select System Type 4");
 		}else{
 		    systemType = "System Type 3";
 		    factory = new HVACSystemFactory("System Type 3", building);
-		    System.out.println("We select System Type 3");		    
+		    LOG.info("We select System Type 3");		    
 		}
 		system = factory.createSystem();
 	    } else {
 		if(building.getHeatingMethod()){
 			systemType = "System Type 6";
 			factory = new HVACSystemFactory("System Type 6", building);
-			System.out.println("We select System Type 6");		
+			LOG.info("We select System Type 6");		
 		}else{
 			systemType = "System Type 5";
 			factory = new HVACSystemFactory("System Type 5", building);
-			System.out.println("We select System Type 5");		    
+			LOG.info("We select System Type 5");		    
 		}
 		system = factory.createSystem();
 	    }
 	}else if (bldgType.toString().equalsIgnoreCase("RESIDENTIAL")){
 	    // second exam the floor size and area
-	    System.out.println("We identified floor number: " + floorNumber + " and total floor size: " + floorSize);
+		LOG.info("We identified floor number: " + floorNumber + " and total floor size: " + floorSize);
 		if (building.getHeatingMethod()) {
 		    systemType = "System Type 2";
 		    factory = new HVACSystemFactory(systemType, building);
-		    System.out.println("We select System Type 2");
+		    LOG.info("We select System Type 2");
 		} else {
 		    systemType = "System Type 1";
 		    factory = new HVACSystemFactory(systemType, building);
-		    System.out.println("We select System Type 1");
+		    LOG.info("We select System Type 1");
 		}
 		system = factory.createSystem();
 	}
@@ -154,7 +158,7 @@ public class BaselineHVAC {
 
     // HVAC objects list is read from local list file
     private void processObjectLists() throws IOException {
-	BufferedReader br = new BufferedReader(new FileReader(BaselineUtils.getAbsolutionDir()+FILE_NAME));
+	BufferedReader br = new BufferedReader(new FileReader(FilesPath.readProperty("ResourcePath_baseline")+FILE_NAME));
 
 	try {
 	    StringBuilder sb = new StringBuilder();

@@ -2,16 +2,11 @@ package baseline.hvac.system4;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 import baseline.hvac.HVACSystem;
-import baseline.hvac.HVACSystemImplUtil;
 import baseline.hvac.system3.HVACSystem3Factory;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import baseline.idfdata.thermalzone.ThermalZone;
-import hvac.manufacturer.Manufacturer;
 
 /**
  * This class modifies the standard ASHRAE HVAC System Type 4's heating source

@@ -1,7 +1,11 @@
 package baseline.idfdata;
 
-public class BaselineInfo {
-    private String heatSource;
+import java.io.Serializable;
+
+public class BaselineInfo implements Serializable{
+	private static final long serialVersionUID = -384806632598963367L;
+
+	private String heatSource;
     
     /*
      * System 1-10 data
@@ -50,6 +54,9 @@ public class BaselineInfo {
     private final String BASELINE90 = "baseline_90";
     private final String BASELINE180 = "baseline_180";
     private final String BASELINE270 = "baseline_270";
+    
+    private String ASHRAEBuildingType = "";
+    private double processLoadPercent = 0;
     
     public BaselineInfo(){
 	
@@ -294,4 +301,20 @@ public class BaselineInfo {
     public String getBASELINE270() {
         return BASELINE270;
     } 
+    
+    public String getASHRAEBuildingType() {
+		return ASHRAEBuildingType;
+	}
+
+	public void setASHRAETBuildingType(String ASHRAEBuildingType) {
+		this.ASHRAEBuildingType = ASHRAEBuildingType;
+	}
+
+	public double getProcessLoadPercent() {
+		return processLoadPercent;
+	}
+
+	public void setProcessLoadPercent(double processLoadPercent) {
+		this.processLoadPercent = processLoadPercent;
+	}
 }

@@ -5,9 +5,6 @@ import java.util.HashMap;
 
 import baseline.hvac.HVACSystem;
 import baseline.hvac.SystemParser;
-import baseline.hvac.system7.DistrictCoolHVACSystem7;
-import baseline.hvac.system7.DistrictHeatCoolSystem7;
-import baseline.hvac.system7.DistrictHeatHVACSystem7;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
 /**
@@ -54,7 +51,6 @@ public class HVACSystem5Factory {
     }
     
     private void processSystem(){
-	//System.out.println("###########################################" + building.hasReturnFan());
 	//judge if it is purchased heat or not
 	//judge if it is purchased heat or not
 	if(building.isDistrictCool() && !building.isDistrictHeat()){
@@ -66,7 +62,6 @@ public class HVACSystem5Factory {
 	}
 	
 	if(building.hasReturnFan()){
-	    //System.out.println("I am here->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Sys5");
 	    systemType5 = new ReturnFanHVACSystem5(systemType5, building);
 	}
     }

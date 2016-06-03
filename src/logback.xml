@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<configuration scan="false" debug="true" scanPerod="10 seconds">
+
+<!-- This appender prints to stdout: -->
+<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+	<Target>System.out</Target>
+	<encoder>
+		<pattern>%p %d{dd.MM.yyyy HH:mm:ss} [%c] \(%line\) - %m%n</pattern>
+	</encoder>
+</appender>
+
+<!-- Log levels for specific packages or classes -->
+<logger name="default" level="INFO" />
+
+<!-- Log levels for all packages and classes can be controlled here: -->
+<root level="DEBUG">
+	<!-- add more appenders (rolling file, email, ...) here: -->
+	<appender-ref ref="stdout" />
+</root>
+
+</configuration>

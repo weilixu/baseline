@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import baseline.construction.opaque.OpaqueEnvelopeParser;
 import baseline.exception.detector.Detector;
 import baseline.exception.detector.DistrictCoolingDetector;
@@ -21,6 +24,7 @@ import baseline.idfdata.thermalzone.ThermalZone;
 import baseline.util.ClimateZone;
 
 public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     /**
      * basic information about the building
@@ -312,7 +316,6 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 		heatingFlowRate = zone.getHeatingAirFlow();
 	    }
 	}
-	// System.out.println(coolingFlowRate + " " + heatingFlowRate);
 	return Math.max(coolingFlowRate, heatingFlowRate);
     }
 
@@ -627,11 +630,11 @@ public class EnergyPlusBuilding implements BuildingLight, BuildingConstruction {
 	}
 
 	// change the EnergyPlus object that relates to the constructions
-	System.out.println("Start replacing the building surfaces...");
+	LOG.info("Start replacing the building surfaces...");
 	replaceBuildingSurface();
-	System.out.println("Start replacing the fenestration surfaces...");
+	LOG.info("Start replacing the fenestration surfaces...");
 	replaceFenestrationSurface();
-	System.out.println("Start replacing the internal mass...");
+	LOG.info("Start replacing the internal mass...");
 	replaceInternalMass();
     }
 

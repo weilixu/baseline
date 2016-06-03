@@ -8,7 +8,7 @@ import baseline.hvac.HVACSystem;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import hvac.manufacturer.Manufacturer;
+import baseline.hvac.manufacturer.Manufacturer;
 
 public class DistrictCoolHVACSystem1 implements SystemType1 {
 
@@ -91,7 +91,6 @@ public class DistrictCoolHVACSystem1 implements SystemType1 {
 		    String field = eo.getKeyValuePair(i).getValue();
 		    if (field.contains("PTAC")) {
 			field = field.replace("PTAC", "FC");
-			//System.out.println(field);
 			eo.getKeyValuePair(i).setValue(field);
 		    }
 		}
@@ -235,7 +234,6 @@ public class DistrictCoolHVACSystem1 implements SystemType1 {
 	    ArrayList<EplusObject> template) {
 	HashMap<String, ArrayList<EplusObject>> map = new HashMap<String, ArrayList<EplusObject>>();
 	for (EplusObject eo : template) {
-	    // System.out.println(eo.getObjectName());
 	    if (eo.getReference().equals("Supply Side System")) {
 		if (!map.containsKey("Supply Side System")) {
 		    map.put("Supply Side System", new ArrayList<EplusObject>());

@@ -7,7 +7,7 @@ import baseline.hvac.HVACSystem;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import hvac.manufacturer.Manufacturer;
+import baseline.hvac.manufacturer.Manufacturer;
 
 public class ReturnFanHVACSystem8 implements SystemType8{
     
@@ -94,7 +94,6 @@ public class ReturnFanHVACSystem8 implements SystemType8{
 		supplyFan = eo;
 	    }
 	}
-	//System.out.println("Ratio! " + building.getSupplyReturnFanRatio());
 	HVACSystemImplUtil.updatedFanPowerforSystem5To8TwoFans(supplyFan,
 		returnFan, maxAirFlow, returnFanFlow, building.getSupplyReturnFanRatio());
 	

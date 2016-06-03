@@ -9,7 +9,7 @@ import baseline.hvac.HVACSystem;
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.building.EnergyPlusBuilding;
-import hvac.manufacturer.Manufacturer;
+import baseline.hvac.manufacturer.Manufacturer;
 
 /**
  * In ASHRAE 90.1 2007 and 2010 standard, district heating source won't
@@ -167,7 +167,6 @@ public class DistrictHeatHVACSystem5 implements SystemType5{
      */
     private void processTemplate(ArrayList<EplusObject> template) {
 	for (EplusObject eo : template) {
-	    // System.out.println(eo.getObjectName());
 	    if (eo.getReference().equals("Supply Side System")) {
 		if (!plantObjects.containsKey("Supply Side System")) {
 		    plantObjects.put("Supply Side System",

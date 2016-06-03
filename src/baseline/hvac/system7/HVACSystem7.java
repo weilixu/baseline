@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
@@ -19,6 +22,8 @@ import baseline.idfdata.thermalzone.ThermalZone;
  *
  */
 public class HVACSystem7 implements SystemType7 {
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+	
     // recording all the required data for HVAC system type 7
     private HashMap<String, ArrayList<EplusObject>> objectLists;
     // building object contains building information and energyplus data
@@ -99,7 +104,7 @@ public class HVACSystem7 implements SystemType7 {
 	// calculate the number of boilers
 	int numberOfBoiler = HVACSystemImplUtil
 		.boilerNumberCalculation(floorArea);
-	System.out.println("We Found " + numberOfBoiler + "Boilers");
+	LOG.info("We Found " + numberOfBoiler + "Boilers");
 	
 	//Log Change: number of boiler
 	if(building.getInfoObject()!=null){
@@ -116,7 +121,7 @@ public class HVACSystem7 implements SystemType7 {
 	if (building.getInfoObject() != null) {
 	    building.getInfoObject().setNumChiller(numberOfChiller);
 	}
-	System.out.println("We Found " + numberOfChiller + " Chillers");
+	LOG.info("We Found " + numberOfChiller + " Chillers");
 
 	ArrayList<EplusObject> plantTemp = new ArrayList<EplusObject>();
 
@@ -220,7 +225,6 @@ public class HVACSystem7 implements SystemType7 {
 	    changedTower = true;
 	    towerList.add("Tower1");
 	    for (int i = 1; i < numberOfChiller; i++) {
-		// System.out.println(chillerList.get(i));
 		EplusObject anotherTower = temp.clone();
 		String towerCount = i + 1 + "";
 		String towerName = "Tower" + towerCount;
@@ -232,7 +236,6 @@ public class HVACSystem7 implements SystemType7 {
 		|| name.equals("Tower% Cooling Tower Outdoor Air Inlet Node")) {
 	    changedTower = true;
 	    for (int i = 1; i < numberOfChiller; i++) {
-		// System.out.println(chillerList.get(i));
 		EplusObject anotherTower = temp.clone();
 		String towerCount = i + 1 + "";
 		String towerName = "Tower" + towerCount;
@@ -269,7 +272,6 @@ public class HVACSystem7 implements SystemType7 {
 		// fix the chiller name from the template
 		anotherChiller.replaceSpecialCharacters(chillerName);
 		// add the branch into the chiller list
-		// System.out.println(chillerName);
 		chillerList.add(chillerName);
 		// add it to the plant plant temp list
 		tempList.add(anotherChiller);
@@ -461,13 +463,13 @@ public class HVACSystem7 implements SystemType7 {
 	}
 
 	plantSystem.addAll(processPlantTemp(plantSystemTemplate));
-	System.out.println("Counting the rooms: " + roomCounter);
+	LOG.info("Counting the rooms: " + roomCounter);
 	objectLists.put("Supply Side System", supplySideSystem);
 	objectLists.put("Demand Side System", demandSideSystem);
 	objectLists.put("Plant", plantSystem);
-	System.out.println("Re-tunning the supply side system...");
+	LOG.info("Re-tunning the supply side system...");
 	checkSupplySideSystem();
-	System.out.println("Connect plans");
+	LOG.info("Connect plans");
 	processConnections();
     }
 

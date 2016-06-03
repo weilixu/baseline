@@ -1,6 +1,6 @@
 package baseline.hvac.system7;
 
-import hvac.manufacturer.Manufacturer;
+import baseline.hvac.manufacturer.Manufacturer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +108,6 @@ public class ReturnFanHVACSystem7 implements SystemType7 {
 		supplyFan = eo;
 	    }
 	}
-	//System.out.println("Ratio! " + building.getSupplyReturnFanRatio());
 	HVACSystemImplUtil.updatedFanPowerforSystem5To8TwoFans(supplyFan,
 		returnFan, maxAirFlow, returnFanFlow, building.getSupplyReturnFanRatio());
 	
