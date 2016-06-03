@@ -40,7 +40,6 @@ public class ReturnFanDetector implements Detector{
 	Iterator<String> returnFanIterator = returnFan.iterator();
 	while (returnFanIterator.hasNext()) {
 	    String fan = returnFanIterator.next();
-	    // System.out.println(fan+" " + returnFanMap.get(fan));
 	    if (returnFanMap.get(fan)) {
 		//if there is, set the supply return fan power ratio
 		building.setSupplyReturnRatio(supplyReturnRatio);
@@ -83,12 +82,10 @@ public class ReturnFanDetector implements Detector{
 		// demand side check thermal zones
 		// processFloorReturnFanMap(demandSideOutletName, returnFan);
 		String supplyFan = getSupplyFanName(baselineModel, branchListName, returnFan);
-		//System.out.println(supplyFan + " " + returnFan);
 		numberOfSystem = numberOfSystem + 1;
 		supplyReturnRatio = supplyReturnRatio
 			+ SizingHTMLParser.getSupplyFanPowerRatio(supplyFan,
 				returnFan);
-		//System.out.println(numberOfSystem + " " + supplyReturnRatio);
 	    }
 	}
     }
@@ -100,15 +97,12 @@ public class ReturnFanDetector implements Detector{
 	String branchName = baselineModel.getValue("BranchList", BranchList,
 		"Branch 1 Name");
 	// 2. check fan object at first component listed on branch
-	// System.out.println(branchName);
 	String componentName = baselineModel.getValue("Branch", branchName,
 		"Component 1 Object Type");
-	// System.out.println(componentName);
 	if (componentName.contains("Fan")) {
 	    returnFan = baselineModel.getValue("Branch", branchName,
 		    "Component 1 Name");
 	}
-	// System.out.println("******************************************************"+returnFan);
 	return returnFan;
     }
 

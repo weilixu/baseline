@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
@@ -12,6 +15,8 @@ import baseline.idfdata.building.EnergyPlusBuilding;
 import baseline.idfdata.thermalzone.ThermalZone;
 
 public class HVACSystem6 implements SystemType6{
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+	
     //recording all the required data for HVAC system type 6
     private HashMap<String, ArrayList<EplusObject>> objectLists;
     // building object contains building information and energyplus data
@@ -67,10 +72,10 @@ public class HVACSystem6 implements SystemType6{
 	    building.getInfoObject().setNumOfSystem(floorCounter);
 	}
 
-	System.out.println("Counting the rooms: " + roomCounter);
+	LOG.info("Counting the rooms: " + roomCounter);
 	objectLists.put("Supply Side System", supplySideSystem);
 	objectLists.put("Demand Side System", demandSideSystem);
-	System.out.println("Re-tunning the supply side system...");	
+	LOG.info("Re-tunning the supply side system...");	
 	checkSupplySideSystem();
     }
 

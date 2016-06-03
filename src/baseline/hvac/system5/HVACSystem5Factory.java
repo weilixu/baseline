@@ -51,7 +51,6 @@ public class HVACSystem5Factory {
     }
     
     private void processSystem(){
-	//System.out.println("###########################################" + building.hasReturnFan());
 	//judge if it is purchased heat or not
 	//judge if it is purchased heat or not
 	if(building.isDistrictCool() && !building.isDistrictHeat()){
@@ -63,7 +62,6 @@ public class HVACSystem5Factory {
 	}
 	
 	if(building.hasReturnFan()){
-	    //System.out.println("I am here->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Sys5");
 	    systemType5 = new ReturnFanHVACSystem5(systemType5, building);
 	}
     }

@@ -161,7 +161,6 @@ public class DistrictHeatCoolSystem7 implements SystemType7{
      */
     private void processTemplate(ArrayList<EplusObject> template) {
 	for (EplusObject eo : template) {
-	    // System.out.println(eo.getObjectName());
 	    if (eo.getReference().equals("Supply Side System")) {
 		if (!plantObjects.containsKey("Supply Side System")) {
 		    plantObjects.put("Supply Side System",

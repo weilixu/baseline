@@ -94,7 +94,6 @@ public class ReturnFanHVACSystem8 implements SystemType8{
 		supplyFan = eo;
 	    }
 	}
-	//System.out.println("Ratio! " + building.getSupplyReturnFanRatio());
 	HVACSystemImplUtil.updatedFanPowerforSystem5To8TwoFans(supplyFan,
 		returnFan, maxAirFlow, returnFanFlow, building.getSupplyReturnFanRatio());
 	

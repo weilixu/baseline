@@ -124,23 +124,15 @@ public final class SizingHTMLParser {
 	double supplyFanPower = 0.0;
 	double anotherFanPower = 0.0;
 	int powerIndex = 5;
-	//System.out.println(supplyFan + " this is another fan: " + anotherFan);
 	for(int i=1; i<fanList.size(); i++){
 	    Elements info = fanList.get(i).getElementsByTag("td");
-	    //System.out.println(info.get(0).text() + " " + info.get(powerIndex).text());
-	    //System.out.println(info.get(0).text() + " " + supplyFan + " " + anotherFan);
 	    if(info.get(0).text().equalsIgnoreCase(supplyFan)){
-		//System.out.println(info.get(0+powerIndex).text());
 		supplyFanPower = Double.parseDouble(info.get(0+powerIndex).text());
-		//System.out.println(supplyFanPower);
 	    }
 	    if(info.get(0).text().equalsIgnoreCase(anotherFan)){
-		//System.out.println(info.get(0+powerIndex).text());
 		anotherFanPower = Double.parseDouble(info.get(0+powerIndex).text());
-		//System.out.println(supplyFanPower);
 	    }
 	}
-	//System.out.println("Supply Fan?" + supplyFanPower + " " + anotherFanPower);
 
 	return supplyFanPower / (supplyFanPower + anotherFanPower);
     }
@@ -277,11 +269,5 @@ public final class SizingHTMLParser {
 		htmlNodes.get(i).attr("tableID", report + ":" + tableName);
 	    }
 	}
-    }
-    
-    public static void main(String[] args){
-	processOutputs(new File("C:\\Users\\Weili\\Desktop\\New folder\\Sys5_SampleTable.html"));
-	System.out.println(getZoneCoolingLoad("3%OFFICE%WEST%1%W1"));
-	System.out.println(getZoneHeatingLoad("4%OFFICE%CORE%1%C1"));
     }
 }

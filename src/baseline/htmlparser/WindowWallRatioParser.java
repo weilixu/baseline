@@ -142,9 +142,7 @@ public class WindowWallRatioParser {
 	List<Window> wins = wall.getWindows();
 	for (Window win : wins) {
 	    String name = win.getId();
-	    //System.out.println(name);
 	    ArrayList<ValueNode> winInfo = this.feneSurfaces.get(name);
-	    //System.out.println(winInfo.get(0).getAttribute());
 	    List<Coordinate3D> points = win.getCoords();
 	    for (int i = 0; i < points.size(); i++) {
 		Coordinate3D point = points.get(i);

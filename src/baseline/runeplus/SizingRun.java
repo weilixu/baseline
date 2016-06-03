@@ -8,7 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import baseline.util.BaselineUtils;
+import lepost.config.FilesPath;
 
 /**
  * This class runs the EnergyPlus file for sizing purpose. The EnergyPlus
@@ -27,6 +31,8 @@ import baseline.util.BaselineUtils;
  *
  */
 public class SizingRun {
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+	
     private static final String EPLUSBAT = "RunEplus.bat";
 
     private File idfFile;
@@ -63,7 +69,7 @@ public class SizingRun {
      * 
      * @throws IOException
      */
-    public File runEnergyPlus() throws IOException {
+    public File runEnergyPlus(String targetHTML) throws IOException {
 	File resultsFile = null;
 
 	String path = idfFile.getAbsolutePath();
@@ -71,9 +77,7 @@ public class SizingRun {
 	String weatherName = weatherFile.getName();
 	String weather = weatherName.substring(0,weatherName.lastIndexOf("."));
 	File eplusBatFile = createBatchFile();
-	String[] commandline = { eplusBatFile.getAbsolutePath(), pathToIDF,
-		weather};
-	//System.out.println(Arrays.toString(commandline));
+	String[] commandline = { eplusBatFile.getAbsolutePath(), pathToIDF, weather};
 
 	try {
 	    Process p = Runtime.getRuntime().exec(commandline, null, folder);
@@ -94,13 +98,13 @@ public class SizingRun {
 
 	for (File f : folder.listFiles()) {
 	    if (baseline) {
-		if (f.getName().contains("Baseline_0Table.html")) {
-		    resultsFile = f;
-		}
+			if (f.getName().contains(targetHTML+".html")) {
+			    resultsFile = f;
+			}
 	    } else {
-		if (f.getName().contains("html")) {
-		    resultsFile = f;
-		}
+			if (f.getName().contains("html")) {
+			    resultsFile = f;
+			}
 	    }
 	}
 	return resultsFile;
@@ -117,9 +121,10 @@ public class SizingRun {
 	String keyWord = "set program_path=";
 	String weaWord = "set weather_path=";
 	File file = new File(folder.getAbsolutePath() + "\\" + EPLUSBAT);
+	LOG.debug("Creating folder: "+folder.getAbsolutePath());
 	file.createNewFile();
 	// reading file and write to the new file
-	File newBat = new File(BaselineUtils.getAbsolutionDir()+ EPLUSBAT);
+	File newBat = new File(FilesPath.readProperty("ResourcePath_baseline")+ EPLUSBAT);
 	BufferedReader br = new BufferedReader(new FileReader(newBat));
 	StringBuilder sb = new StringBuilder();
 

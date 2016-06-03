@@ -11,8 +11,8 @@ import org.jdom2.input.SAXBuilder;
 
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
-import baseline.util.BaselineUtils;
 import baseline.util.ClimateZone;
+import lepost.config.FilesPath;
 
 /**
  * Parse the opaque envelope XML into database
@@ -36,7 +36,7 @@ public class OpaqueEnvelopeParser {
 	cZone = zone;
 
 	builder = new SAXBuilder();
-	envelope = new File(BaselineUtils.getAbsolutionDir()+FILE_NAME);
+	envelope = new File(FilesPath.readProperty("ResourcePath_baseline")+FILE_NAME);
 	// read the file
 	try {
 	    document = (Document) builder.build(envelope);
@@ -73,7 +73,6 @@ public class OpaqueEnvelopeParser {
 	while (iterator.hasNext()) {
 	    Element child = iterator.next();
 	    // if there is an object, find the correct climate dataset
-	    //System.out.println(child.getName());
 	    if (child.getName().equals("dataset")
 		    && cZone.toString().contains(child.getAttributeValue("category"))) {
 		buildObject(child);

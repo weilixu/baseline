@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import baseline.construction.opaque.BaselineEnvelope;
 import baseline.htmlparser.SizingHTMLParser;
 import baseline.htmlparser.WindowWallRatioParser;
@@ -18,6 +21,7 @@ import baseline.util.ClimateZone;
 import lepost.shared.StatusMonitor;
 
 public class Generator {
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private boolean isExisting = false;
 
@@ -97,7 +101,7 @@ public class Generator {
 	}
 	// creating the abstract building info for deeper level information
 	// process
-	System.out.println("Finish first round sizing");
+	LOG.info("Finish first round sizing");
 	
 	monitor.updateStatus(key, "Analyze complete", false);
 	monitor.updateStatus(key, "Generate baseline models...", false);
@@ -125,11 +129,12 @@ public class Generator {
 	try{
 	    if(!sizingRun()){
 	    	report.processError("Runing generated Baseline 0 encountered error", "Baseline_0.err");
+	    	return;
 	    }
 	}catch(IOException e){
 	    e.printStackTrace();
 	}
-	System.out.println("Finish second round sizing");
+	LOG.info("Finish second round sizing");
 	
 	monitor.updateStatus(key, "Baseline models generation complete", false);
 	monitor.updateStatus(key, "Run simulation on baseline models...", false);
@@ -251,7 +256,7 @@ public class Generator {
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
 		.getAbsolutePath() + "\\Baseline_0.idf"));
 	eplusSizing.setBaselineSizing();
-	htmlOutput = eplusSizing.runEnergyPlus();
+	htmlOutput = eplusSizing.runEnergyPlus("Baseline_0Table");
 	
 	if(htmlOutput != null){
 		return true;
@@ -262,10 +267,10 @@ public class Generator {
     // simple write out method, needs to be update later
     private boolean firstSizingRun() throws IOException {
 	baselineModel.WriteIdf(
-		energyplusFile.getParentFile().getAbsolutePath(), "Baseline_0");
+		energyplusFile.getParentFile().getAbsolutePath(), "design_Design");
 	eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
-		.getAbsolutePath() + "\\Baseline_0.idf"));
-	htmlOutput = eplusSizing.runEnergyPlus();
+		.getAbsolutePath() + "\\design_Design.idf"));
+	htmlOutput = eplusSizing.runEnergyPlus("design_DesignTable");
 
 	if(htmlOutput != null){
 		return true;
@@ -278,15 +283,15 @@ public class Generator {
 	for (String degree : baselineList) {
 		monitor.updateStatus(key, "Doing simulation on orientation "+degree+" degree...", false);
 		
-	    String filename = "Baseline" + "_" + degree;
+	    String idfName = "Baseline" + "_" + degree;
 		building.generateEnergyPlusModel(energyplusFile.getParentFile()
-			.getAbsolutePath(), filename,degree);
+			.getAbsolutePath(), idfName, degree);
 	    eplusSizing.setEplusFile(new File(energyplusFile.getParentFile()
-		    .getAbsolutePath() + "\\" + filename + ".idf"));
+		    .getAbsolutePath() + "\\" + idfName + ".idf"));
 	    if(degree == "0"){
-		htmlOutput = eplusSizing.runEnergyPlus();
+	    	htmlOutput = eplusSizing.runEnergyPlus(idfName+"Table");
 	    }else{
-		eplusSizing.runEnergyPlus();
+	    	eplusSizing.runEnergyPlus(idfName+"Table");
 	    }
 	    
 	    monitor.updateStatus(key, "Simulation on orientation "+degree+" degree finished", false);

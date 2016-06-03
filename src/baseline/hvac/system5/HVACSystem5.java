@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import baseline.hvac.HVACSystemImplUtil;
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
@@ -12,6 +15,8 @@ import baseline.idfdata.building.EnergyPlusBuilding;
 import baseline.idfdata.thermalzone.ThermalZone;
 
 public class HVACSystem5 implements SystemType5{
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+	
     // recording all the required data for HVAC system type 5
     private HashMap<String, ArrayList<EplusObject>> objectLists;
     // building object contains building information and energyplus data
@@ -105,13 +110,13 @@ public class HVACSystem5 implements SystemType5{
 	}
 	
 	plantSystem.addAll(processPlantTemp(plantSystemTemplate));
-	System.out.println("Counting the rooms: " + roomCounter);
+	LOG.info("Counting the rooms: " + roomCounter);
 	objectLists.put("Supply Side System", supplySideSystem);
 	objectLists.put("Demand Side System", demandSideSystem);
 	objectLists.put("Plant", plantSystem);
-	System.out.println("Re-tunning the supply side system...");
+	LOG.info("Re-tunning the supply side system...");
 	checkSupplySideSystem();
-	System.out.println("Connect plans");
+	LOG.info("Connect plans");
 	processConnections();
     }
     
@@ -206,7 +211,7 @@ public class HVACSystem5 implements SystemType5{
 	
 	//calculate the number of boilers
 	int numberOfBoiler = HVACSystemImplUtil.boilerNumberCalculation(floorArea);
-	System.out.println("We Found " + numberOfBoiler + "Boilers");
+	LOG.info("We Found " + numberOfBoiler + "Boilers");
 	
 	//Log Change: number of boiler
 	if(building.getInfoObject()!=null){

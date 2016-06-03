@@ -2,6 +2,9 @@ package baseline.hvac;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
 
@@ -15,6 +18,8 @@ import baseline.idfdata.KeyValuePair;
  */
 @SuppressWarnings("unused")
 public final class HVACSystemImplUtil {
+	private final static Logger LOG = LoggerFactory.getLogger(HVACSystemImplUtil.class);
+	
     // threshold for determine the HVAC components.
     private static final double heatingBoilerThreshold = 1393.55;// m2
    
@@ -56,10 +61,8 @@ public final class HVACSystemImplUtil {
 	    double airflowRate) {
 	Double fanPower = FanPowerCalculation
 		.getFanPowerForSystem3To4(airflowRate);
-	//System.out.println("This is airflow: " + airflowRate + " and fan power: " + fanPower);
 	// 0.6 is the assumed fan total efficiency
 	Double pressureDrop = fanPower / airflowRate * 0.6;
-	//System.out.println("This is pressure drop: " + pressureDrop);
 	Double motorEff = FanPowerCalculation
 		.getFanMotorEfficiencyForSystem3To4(airflowRate);
 	for (int i = 0; i < eo.getSize(); i++) {
@@ -119,7 +122,6 @@ public final class HVACSystemImplUtil {
     public static void updatedFanPowerforSystem5To8TwoFans(EplusObject supply,
 	    EplusObject another, double supplyAir, double anotherAir,
 	    double ratio) {
-	// System.out.println("Initial check:Inputs: " + supplyAir);
 
 	Double totalFanPower = FanPowerCalculation
 		.getFanPowerForSystem5To8(supplyAir);
@@ -130,13 +132,9 @@ public final class HVACSystemImplUtil {
 		// SizingHTMLParser.getSupplyFanPowerRatio(supplyFanname,
 		// anotherFanname);
 
-	// System.out.println("First check:Inputs: " + totalFanPower);
 
 	double supplyFanPower = totalFanPower * ratio;
 	double anotherFanPower = totalFanPower - supplyFanPower;
-
-	// System.out.println("Second check:Values: " + supplyFanPower + " " +
-	// anotherFanPower);
 
 	double supplyPressureDrop = supplyFanPower / supplyAir * 0.6;
 	double anotherPressureDrop = anotherFanPower / anotherAir * 0.6;
@@ -146,8 +144,6 @@ public final class HVACSystemImplUtil {
 	double anothermotorEff = FanPowerCalculation
 		.getFanMotorEffciencyForSystem5To8(anotherAir);
 
-	// System.out.println("Third check:Values: " + supplymotorEff + " " +
-	// anothermotorEff);
 
 	for (int i = 0; i < supply.getSize(); i++) {
 	    if (supply.getKeyValuePair(i).getKey()
@@ -193,7 +189,7 @@ public final class HVACSystemImplUtil {
 	    boolean converged = false;
 	    while (!converged) {
 		double singleChillerCapacity = coolingLoad / numberOfChiller;
-		System.out.println("This is single Chiller Capacity "
+		LOG.info("This is single Chiller Capacity "
 			+ singleChillerCapacity);
 		if (singleChillerCapacity < chillerCapacityThreshold) {
 		    converged = true;
@@ -421,7 +417,6 @@ public final class HVACSystemImplUtil {
 
     public static void plantConnectionForDistrictHeating(ArrayList<EplusObject> plantSystem, ArrayList<String> heatCoilList){
 	for(EplusObject eo: plantSystem){
-	    //System.out.println(eo.getObjectName());
 	    String name = eo.getKeyValuePair(0).getValue();
 	    if(name.equals("Hot Water Loop HW Demand Side Branches")) {
 		insertHeatingCoils(2, eo, null,
@@ -436,7 +431,6 @@ public final class HVACSystemImplUtil {
     
     public static void plantConnectionForDistrictCooling(ArrayList<EplusObject> plantSystem, ArrayList<String> coolCoilList){
 	for(EplusObject eo: plantSystem){
-	    //System.out.println(eo.getObjectName());
 	    String name = eo.getKeyValuePair(0).getValue();
 	    if(name.equals("Chilled Water Loop CHW Demand Side Branches")) {
 		insertCoolingCoils(2, eo,

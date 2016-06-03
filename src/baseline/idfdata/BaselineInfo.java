@@ -1,7 +1,11 @@
 package baseline.idfdata;
 
-public class BaselineInfo {
-    private String heatSource;
+import java.io.Serializable;
+
+public class BaselineInfo implements Serializable{
+	private static final long serialVersionUID = -384806632598963367L;
+
+	private String heatSource;
     
     /*
      * System 1-10 data

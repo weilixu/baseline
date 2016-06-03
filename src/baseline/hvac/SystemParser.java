@@ -11,10 +11,10 @@ import org.jdom2.input.SAXBuilder;
 
 import baseline.idfdata.EplusObject;
 import baseline.idfdata.KeyValuePair;
-import baseline.util.BaselineUtils;
+import lepost.config.FilesPath;
 
 /**
- * This class extracts system template from database <file>hvacsystem.xml<file>
+ * This class extracts system template from database <file>hvacsystem_v2.xml</file>
  * according to the specified system type
  * 
  * @author Weili
@@ -34,7 +34,7 @@ public class SystemParser {
     
     public SystemParser(String systemType){
 	builder = new SAXBuilder();
-	system = new File(BaselineUtils.getAbsolutionDir()+FILE_NAME);
+	system = new File(FilesPath.readProperty("ResourcePath_baseline")+FILE_NAME);
 	
 	this.systemType = systemType;
 	
@@ -51,7 +51,7 @@ public class SystemParser {
     
     public SystemParser(String systemType, String file){
 	builder = new SAXBuilder();
-	system = new File(BaselineUtils.getAbsolutionDir()+file);
+	system = new File(FilesPath.readProperty("ResourcePath_baseline")+file);
 	
 	this.systemType = systemType;
 	

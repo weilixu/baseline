@@ -19,7 +19,6 @@ public class DistrictHeatingPlant {
     public DistrictHeatingPlant(){
 	SystemParser parser = new SystemParser("DistrctHeat",FILE_NAME);
 	objects = parser.getSystem(); //get the entire plant system with district heating
-	//System.out.println("3##############$%$#$%#$%#^$@%@#$%%" + objects.size());
     }
     
     public ArrayList<EplusObject> getObject(){
